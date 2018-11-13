@@ -9,13 +9,13 @@ Imports System.Runtime.InteropServices
 ' Controllare i valori degli attributi degli assembly
 
 <Assembly: AssemblyTitle("MultiLibrary")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyDescription("Libreria di controlli custom per quadri elettrici")>
+<Assembly: AssemblyCompany("Alessandro Mandelli")>
 <Assembly: AssemblyProduct("MultiLibrary")>
-<Assembly: AssemblyCopyright("Copyright ©  2018")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyCopyright("Copyright Alessandro Mandelli ©  2018")>
+<Assembly: AssemblyTrademark("Alessandro Mandelli")>
 
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(True)>
 
 'Se il progetto viene esposto a COM, il GUID seguente verrà utilizzato come ID della libreria dei tipi
 <Assembly: Guid("e0de3a43-8901-453e-ac67-6703214f4f44")>
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' È possibile specificare tutti i valori oppure impostare valori predefiniti per i numeri relativi alla revisione e alla build
 ' usando l'asterisco '*' come illustrato di seguito:
 
-<Assembly: AssemblyVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("0.1.0.0")>
 <Assembly: AssemblyFileVersion("1.0.0.0")>

@@ -2,9 +2,9 @@
     Const Pi As Double = Math.PI
     Dim x1, y1, x2, y2 As Integer
     Dim xp1, yp1, xp2, yp2 As Int32
-    Private m_value As Integer
-    Private m_minimum As Integer
-    Private m_maximum As Integer
+    Private m_value As Decimal
+    Private m_minimum As Integer = 0
+    Private m_maximum As Integer = 100
     Private m_WarningThreshold As Integer = 80
     Private m_isLedVisible As Boolean = True
     Private WarningActive As Boolean = False
@@ -39,11 +39,11 @@
             Me.Refresh()
         End Set
     End Property
-    Public Property value As Integer
+    Public Property value As Decimal
         Get
             value = m_value
         End Get
-        Set(value As Integer)
+        Set(value As Decimal)
             If value > maximum Or value < minimum Then
                 MsgBox("Value needs to be between Min and Max")
                 Exit Property
@@ -62,7 +62,7 @@
             minimum = m_minimum
         End Get
         Set(minimum As Integer)
-            If minimum > maximum Then
+            If minimum >= maximum Then
                 MsgBox("Min can't be greater than Max")
                 Exit Property
             End If
@@ -96,7 +96,7 @@
             maximum = m_maximum
         End Get
         Set(maximum As Integer)
-            If maximum < minimum Then
+            If maximum <= minimum Then
                 MsgBox("Max can't be smaller than Min")
                 Exit Property
             End If
@@ -193,7 +193,7 @@
 
     End Sub
     Public Sub redrawLine(e As PaintEventArgs)
-        Dim Lend As Double = 132 - (minimum + value) * 1.2 * (100 / maximum)
+        Dim Lend As Double = 132 - (value - minimum) * 1.2 * (100 / (maximum - minimum))
         Dim Lstart = 132
 
 

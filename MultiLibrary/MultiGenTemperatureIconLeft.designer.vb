@@ -50,7 +50,7 @@ Partial Class MultiGenTemperatureIconLeft
         '
         'pbLED
         '
-        Me.pbLED.Image = My.Resources.Resources.ledoff
+        Me.pbLED.Image = Global.MultiLibrary.My.Resources.Resources.ledoff
         Me.pbLED.Location = New System.Drawing.Point(3, 3)
         Me.pbLED.Name = "pbLED"
         Me.pbLED.Size = New System.Drawing.Size(16, 16)
@@ -60,7 +60,7 @@ Partial Class MultiGenTemperatureIconLeft
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = My.Resources.Resources.thermometer_symbol
+        Me.PictureBox1.Image = Global.MultiLibrary.My.Resources.Resources.thermometer_symbol_transp
         Me.PictureBox1.Location = New System.Drawing.Point(3, 20)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(32, 32)

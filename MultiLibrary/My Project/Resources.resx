@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ledoff" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ledoff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PanelSwitchOnPump1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PanelSwitchOnPump1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PanelSwitchAuto" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PanelSwitchAuto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -130,14 +130,23 @@
   <data name="PanelSwitchOn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PanelSwitchOn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="if_snowflake-alt2_372618" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\if_snowflake-alt2_372618.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PanelSwitchOff-2pos" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PanelSwitchOff-2pos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PanelSwitchOnPump2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PanelSwitchOnPump2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PanelSwitchOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PanelSwitchOff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ledred" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ledred.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="if_icon_3_high_five_329409" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\if_icon_3_high_five_329409.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="led-blue-black" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\led-blue-black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -148,20 +157,17 @@
   <data name="led-green-black" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\led-green-black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="PanelSwitchOnPumpAut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PanelSwitchOnPumpAut.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="led-off-black" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\led-off-black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="if_snowflake-alt2_372618" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\if_snowflake-alt2_372618.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ledoff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ledoff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ledgreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ledgreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="led-red-black" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\led-red-black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PanelSwitchOn-2pos" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PanelSwitchOn-2pos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="led-amber-black" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\led-amber-black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -172,19 +178,16 @@
   <data name="8px-Location_dot_red.svg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\8px-Location_dot_red.svg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="if_icon_3_high_five_329409" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\if_icon_3_high_five_329409.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PanelSwitchOn-2pos" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PanelSwitchOn-2pos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="1024px-Location_dot_red.svg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\1024px-Location_dot_red.svg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PanelSwitchOnPump1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PanelSwitchOnPump1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="led-red-black" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\led-red-black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PanelSwitchOnPump2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PanelSwitchOnPump2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PanelSwitchOnPumpAut" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PanelSwitchOnPumpAut.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="thermometer symbol transp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\thermometer symbol transp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
