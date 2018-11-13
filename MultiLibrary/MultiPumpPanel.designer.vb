@@ -31,7 +31,7 @@ Partial Class MultiPumpPanel
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.lblCounterPump2 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.nupLeadLagTime = New System.Windows.Forms.NumericUpDown()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -39,13 +39,17 @@ Partial Class MultiPumpPanel
         Me.pbPump1LED = New System.Windows.Forms.PictureBox()
         Me.pbSwitchPump = New System.Windows.Forms.PictureBox()
         Me.pbSwitchOnOff = New System.Windows.Forms.PictureBox()
+        Me.chkTestRotation = New System.Windows.Forms.CheckBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.nupRitardi = New System.Windows.Forms.NumericUpDown()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.nupLeadLagTime, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbPump2LED, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbPump1LED, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbSwitchPump, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbSwitchOnOff, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.nupRitardi, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblSwitchTag
@@ -127,34 +131,35 @@ Partial Class MultiPumpPanel
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(158, 79)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(108, 13)
+        Me.Label2.Size = New System.Drawing.Size(107, 13)
         Me.Label2.TabIndex = 6
-        Me.Label2.Text = "Lead-lag rotation time"
+        Me.Label2.Text = "Lead/lag time (hours)"
         '
-        'NumericUpDown1
+        'nupLeadLagTime
         '
-        Me.NumericUpDown1.Font = New System.Drawing.Font("Digital-7 Mono", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown1.Location = New System.Drawing.Point(272, 72)
-        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {999, 0, 0, 0})
-        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(63, 26)
-        Me.NumericUpDown1.TabIndex = 7
-        Me.NumericUpDown1.Value = New Decimal(New Integer() {168, 0, 0, 0})
+        Me.nupLeadLagTime.Font = New System.Drawing.Font("Digital-7 Mono", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.nupLeadLagTime.Location = New System.Drawing.Point(272, 72)
+        Me.nupLeadLagTime.Maximum = New Decimal(New Integer() {999, 0, 0, 0})
+        Me.nupLeadLagTime.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.nupLeadLagTime.Name = "nupLeadLagTime"
+        Me.nupLeadLagTime.Size = New System.Drawing.Size(63, 26)
+        Me.nupLeadLagTime.TabIndex = 7
+        Me.nupLeadLagTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.nupLeadLagTime.Value = New Decimal(New Integer() {168, 0, 0, 0})
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(158, 138)
+        Me.Label4.Location = New System.Drawing.Point(227, 164)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(72, 13)
+        Me.Label4.Size = New System.Drawing.Size(37, 13)
         Me.Label4.TabIndex = 6
-        Me.Label4.Text = "Pump running"
+        Me.Label4.Text = "Status"
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(253, 122)
+        Me.Label5.Location = New System.Drawing.Point(199, 179)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(43, 13)
         Me.Label5.TabIndex = 6
@@ -163,7 +168,7 @@ Partial Class MultiPumpPanel
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(253, 154)
+        Me.Label6.Location = New System.Drawing.Point(253, 179)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(43, 13)
         Me.Label6.TabIndex = 6
@@ -171,8 +176,8 @@ Partial Class MultiPumpPanel
         '
         'pbPump2LED
         '
-        Me.pbPump2LED.Image = My.Resources.Resources.led_off_black
-        Me.pbPump2LED.Location = New System.Drawing.Point(301, 145)
+        Me.pbPump2LED.Image = Global.MultiLibrary.My.Resources.Resources.led_off_black
+        Me.pbPump2LED.Location = New System.Drawing.Point(301, 163)
         Me.pbPump2LED.Name = "pbPump2LED"
         Me.pbPump2LED.Size = New System.Drawing.Size(32, 32)
         Me.pbPump2LED.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -181,8 +186,8 @@ Partial Class MultiPumpPanel
         '
         'pbPump1LED
         '
-        Me.pbPump1LED.Image = My.Resources.Resources.led_green_black
-        Me.pbPump1LED.Location = New System.Drawing.Point(301, 109)
+        Me.pbPump1LED.Image = Global.MultiLibrary.My.Resources.Resources.led_green_black
+        Me.pbPump1LED.Location = New System.Drawing.Point(161, 163)
         Me.pbPump1LED.Name = "pbPump1LED"
         Me.pbPump1LED.Size = New System.Drawing.Size(32, 32)
         Me.pbPump1LED.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -191,7 +196,7 @@ Partial Class MultiPumpPanel
         '
         'pbSwitchPump
         '
-        Me.pbSwitchPump.Image = My.Resources.Resources.PanelSwitchOnPumpAut
+        Me.pbSwitchPump.Image = Global.MultiLibrary.My.Resources.Resources.PanelSwitchOnPumpAut
         Me.pbSwitchPump.Location = New System.Drawing.Point(83, 0)
         Me.pbSwitchPump.Name = "pbSwitchPump"
         Me.pbSwitchPump.Size = New System.Drawing.Size(64, 64)
@@ -201,7 +206,7 @@ Partial Class MultiPumpPanel
         '
         'pbSwitchOnOff
         '
-        Me.pbSwitchOnOff.Image = My.Resources.Resources.PanelSwitchOn_2pos
+        Me.pbSwitchOnOff.Image = Global.MultiLibrary.My.Resources.Resources.PanelSwitchOn_2pos
         Me.pbSwitchOnOff.Location = New System.Drawing.Point(0, 0)
         Me.pbSwitchOnOff.Name = "pbSwitchOnOff"
         Me.pbSwitchOnOff.Size = New System.Drawing.Size(64, 64)
@@ -209,16 +214,49 @@ Partial Class MultiPumpPanel
         Me.pbSwitchOnOff.TabIndex = 3
         Me.pbSwitchOnOff.TabStop = False
         '
+        'chkTestRotation
+        '
+        Me.chkTestRotation.AutoSize = True
+        Me.chkTestRotation.Location = New System.Drawing.Point(161, 95)
+        Me.chkTestRotation.Name = "chkTestRotation"
+        Me.chkTestRotation.Size = New System.Drawing.Size(85, 17)
+        Me.chkTestRotation.TabIndex = 9
+        Me.chkTestRotation.Text = "Test rotation"
+        Me.chkTestRotation.UseVisualStyleBackColor = True
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(157, 123)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(108, 13)
+        Me.Label7.TabIndex = 6
+        Me.Label7.Text = "Start/stop delay (sec)"
+        '
+        'nupRitardi
+        '
+        Me.nupRitardi.Font = New System.Drawing.Font("Digital-7 Mono", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.nupRitardi.Location = New System.Drawing.Point(272, 116)
+        Me.nupRitardi.Maximum = New Decimal(New Integer() {120, 0, 0, 0})
+        Me.nupRitardi.Name = "nupRitardi"
+        Me.nupRitardi.Size = New System.Drawing.Size(63, 26)
+        Me.nupRitardi.TabIndex = 7
+        Me.nupRitardi.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.nupRitardi.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        '
         'MultiPumpPanel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Controls.Add(Me.chkTestRotation)
         Me.Controls.Add(Me.pbPump2LED)
         Me.Controls.Add(Me.pbPump1LED)
-        Me.Controls.Add(Me.NumericUpDown1)
+        Me.Controls.Add(Me.nupRitardi)
+        Me.Controls.Add(Me.nupLeadLagTime)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Panel2)
@@ -235,11 +273,12 @@ Partial Class MultiPumpPanel
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.nupLeadLagTime, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbPump2LED, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbPump1LED, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbSwitchPump, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbSwitchOnOff, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.nupRitardi, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -256,10 +295,13 @@ Partial Class MultiPumpPanel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents lblCounterPump2 As Label
     Friend WithEvents Label2 As Label
-    Friend WithEvents NumericUpDown1 As NumericUpDown
+    Friend WithEvents nupLeadLagTime As NumericUpDown
     Friend WithEvents pbPump1LED As PictureBox
     Friend WithEvents pbPump2LED As PictureBox
     Friend WithEvents Label4 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents Label6 As Label
+    Friend WithEvents chkTestRotation As CheckBox
+    Friend WithEvents Label7 As Label
+    Friend WithEvents nupRitardi As NumericUpDown
 End Class

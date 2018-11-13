@@ -11,8 +11,8 @@
     Private m_positionsPumpSwitch As Integer = 3
     Private m_WarningThreshold As Integer = 80
     Private m_semaphorColor As Color = Color.Yellow
-    Private m_isSemaphorVisible As Boolean
-    Private m_isSemaphorBlinking As Boolean
+    Private m_SemaphorVisible As Boolean
+    Private m_SemaphorBlinking As Boolean
 
     Dim centreX As Double = 32
     Dim centreY As Double = 44
@@ -21,6 +21,7 @@
     Dim angleSwitchOnOff As Double = -3 / 4 * Pi
     Dim angleSwitchPump As Double = -1 / 2 * Pi
     Dim blinkingSemaphorTimer As New Timer
+    Dim pumpRotationTimer As New Timer
     Dim pbSemaphor As New PictureBox
     Dim lblSemaphorText As New Label
     Dim clickAreaOnOffSwitch As Rectangle = New Rectangle(0, 0, 64, 100)
@@ -30,22 +31,42 @@
     Private m_hourCounterPump2 As Integer
     Private m_pump1Running As Boolean
     Private m_pump2Running As Boolean
+
     Private m_pump1Alarm As Boolean
     Private m_pump2Alarm As Boolean
+    Private m_Pump1StartedDateTime As DateTime
+    Private m_Pump2StartedDateTime As DateTime
+    Private hourUpdate As Boolean = True
+
+    Public Event SwitchedON()
+    Public Event SwitchedOFF()
+    Public Event richiestaPartenzaPompa1()
+    Public Event richiestoSpegnimentoPompa1()
+    Public Event richiestaPartenzaPompa2()
+    Public Event richiestoSpegnimentoPompa2()
+
+
 
     Sub New()
 
         ' La chiamata è richiesta dalla finestra di progettazione.
         InitializeComponent()
 
+
+
         ' Aggiungere le eventuali istruzioni di inizializzazione dopo la chiamata a InitializeComponent().
         AddHandler blinkingSemaphorTimer.Tick, AddressOf blinkingSemaphor
+        AddHandler pumpRotationTimer.Tick, AddressOf pumpRotation
+
+        With pumpRotationTimer
+            .Interval = 86400000
+        End With
+
         With pbSemaphor
             .Location = New Point(6, 142)
             .Size = New Size(52, 52)
             .Name = "pbSemaphor"
             .Visible = False
-            .Image = My.Resources.led_amber_black
             .SizeMode = PictureBoxSizeMode.Zoom
         End With
         Me.Controls.Add(pbSemaphor)
@@ -61,23 +82,37 @@
         End With
         Me.Controls.Add(lblSemaphorText)
 
-
-
+        AddHandler Me.SwitchedON, AddressOf pbSwitchOnOff_SwitchedON
+        AddHandler Me.SwitchedOFF, AddressOf pbSwitchOnOff_SwitchedOFF
     End Sub
     Private Sub MultiPumpPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         pbPump1LED.Image = My.Resources.led_off_black
         pbPump2LED.Image = My.Resources.led_off_black
         lbltext = "Switch"
+        lblPumpText = "Mode"
         semaphortext = "Signals"
-        isSemaphorVisible = True
+        SemaphorVisible = True
         semaphorColor = Color.Black
-        lblPumptext = "Mode"
 
         For Each ctl In Me.Controls
             If ctl.name <> pbSwitchOnOff.Name Then
                 ctl.enabled = False
             End If
         Next
+
+        If My.Settings.m_Pump1StartedDateTime.Year <> 1 Then
+            m_Pump1StartedDateTime = My.Settings.m_Pump1StartedDateTime
+        End If
+        If My.Settings.m_Pump2StartedDateTime.Year <> 1 Then
+            m_Pump2StartedDateTime = My.Settings.m_Pump2StartedDateTime
+        End If
+
+        hourCounterPump1 = My.Settings.hourCounterPump1
+        hourCounterPump2 = My.Settings.hourCounterPump2
+        nupLeadLagTime.Value = My.Settings.nupLeadLagtime
+        nupRitardi.Value = My.Settings.nupRitardi
+        chkTestRotation.Checked = My.Settings.chkTestRotation
+
     End Sub
     Private Sub pbSwitchOnOff_click(sender As Object, e As EventArgs) Handles pbSwitchOnOff.Click
         m_selectedPositionOnOffSwitch += 1
@@ -90,6 +125,7 @@
             Next
             angleSwitchOnOff = -3 / 4 * Pi
             Me.Refresh()
+            RaiseEvent SwitchedOFF()
             Exit Sub
         End If
         If m_positionsOnOffSwitch = 2 Then
@@ -99,6 +135,8 @@
                 End If
             Next
             angleSwitchOnOff += Pi / 2
+            Me.Refresh()
+            RaiseEvent SwitchedON()
         End If
 
 
@@ -111,24 +149,28 @@
         If m_selectedPositionPumpSwitch > m_positionsPumpSwitch - 1 Then
             m_selectedPositionPumpSwitch = 0
             angleSwitchPump = -3 / 4 * Pi
+            RaiseEvent SwitchedON()
             Me.Refresh()
             Exit Sub
         End If
         If m_positionsPumpSwitch = 2 Then
             angleSwitchPump += Pi / 2
+            RaiseEvent SwitchedON()
         Else
             angleSwitchPump += Pi / 4
+            RaiseEvent SwitchedON()
         End If
+
 
         Me.Refresh()
     End Sub
-    Public Property isSemaphorVisible As Boolean
+    Public Property SemaphorVisible As Boolean
         Get
-            isSemaphorVisible = m_isSemaphorVisible
+            SemaphorVisible = m_SemaphorVisible
         End Get
-        Set(isSemaphorVisible As Boolean)
-            m_isSemaphorVisible = isSemaphorVisible
-            If isSemaphorVisible Then
+        Set(SemaphorVisible As Boolean)
+            m_SemaphorVisible = SemaphorVisible
+            If SemaphorVisible Then
                 Me.Height = 200
                 pbSemaphor.Visible = True
             Else
@@ -139,12 +181,12 @@
 
         End Set
     End Property
-    Public Property isSemaphorBlinking As Boolean
+    Public Property SemaphorBlinking As Boolean
         Get
-            isSemaphorBlinking = m_isSemaphorBlinking
+            SemaphorBlinking = m_SemaphorBlinking
         End Get
-        Set(isSemaphorBlinking As Boolean)
-            m_isSemaphorBlinking = isSemaphorBlinking
+        Set(SemaphorBlinking As Boolean)
+            m_SemaphorBlinking = SemaphorBlinking
             Me.Refresh()
         End Set
     End Property
@@ -179,18 +221,6 @@
             positions = m_positionsOnOffSwitch
         End Get
     End Property
-    Public Property lblPumptext As String
-        Get
-            lblPumptext = m_lblPumptext
-        End Get
-        Set(lblPumptext As String)
-            If lblPumptext.Length < 10 Then
-                m_lblPumptext = lblPumptext
-                lblPumpTag.Text = lblPumptext
-            End If
-            Me.Refresh()
-        End Set
-    End Property
     Public Property hourCounterPump1 As Integer
         Get
             hourCounterPump1 = m_hourCounterPump1
@@ -213,32 +243,99 @@
             End If
         End Set
     End Property
-    Public Property pump1Running As Boolean
+    Private Sub ritardoP1Start()
+        Dim start As DateTime = DateTime.Now
+        While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
+            Application.DoEvents()
+        End While
+        pbPump1LED.Image = My.Resources.led_green_black
+    End Sub
+    Private Sub ritardoP1Stop()
+        Dim start As DateTime = DateTime.Now
+        While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
+            Application.DoEvents()
+        End While
+        If pump1Alarm Then
+            pbPump1LED.Image = My.Resources.led_red_black
+        Else
+            pbPump1LED.Image = My.Resources.led_off_black
+        End If
+    End Sub
+    Private Sub ritardoP2Start()
+        Dim start As DateTime = DateTime.Now
+        While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
+            Application.DoEvents()
+        End While
+        pbPump2LED.Image = My.Resources.led_green_black
+    End Sub
+    Private Sub ritardoP2Stop()
+        Dim start As DateTime = DateTime.Now
+        While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
+            Application.DoEvents()
+        End While
+        If pump2Alarm Then
+            pbPump2LED.Image = My.Resources.led_red_black
+        Else
+            pbPump2LED.Image = My.Resources.led_off_black
+        End If
+    End Sub
+    Public ReadOnly Property isPump1Running As Boolean
+        Get
+            Return m_pump1Running
+        End Get
+    End Property
+    Public ReadOnly Property isPump2Running As Boolean
+        Get
+            Return m_pump2Running
+        End Get
+    End Property
+    Private Property pump1Running As Boolean
         Get
             pump1Running = m_pump1Running
         End Get
         Set(pump1Running As Boolean)
+            hourUpdate = False
             If Not pump1Alarm Then
+
+                Dim trdDatiStart As Task = New Task(AddressOf ritardoP1Start)
+                Dim trdDatiStop As Task = New Task(AddressOf ritardoP1Stop)
+
+                If m_pump1Running = False And pump1Running = True Then
+                    pbPump1LED.Image = My.Resources.led_blue_black
+                    trdDatiStart.Start()
+                ElseIf m_pump1Running = True And pump1Running = False Then
+                    pbPump1LED.Image = My.Resources.led_blue_black
+                    trdDatiStop.Start()
+                End If
+
                 m_pump1Running = pump1Running
-                pbPump1LED.Image = My.Resources.led_green_black
             End If
-            If Not pump1Running And Not pump1Alarm Then
-                pbPump1LED.Image = My.Resources.led_off_black
-            End If
+            hourUpdate = True
         End Set
     End Property
-    Public Property pump2Running As Boolean
+    Private Property pump2Running As Boolean
         Get
             pump2Running = m_pump2Running
         End Get
         Set(pump2Running As Boolean)
+            hourUpdate = False
             If Not pump2Alarm Then
+
+                Dim trdDatiStart As Task = New Task(AddressOf ritardoP2Start)
+                Dim trdDatiStop As Task = New Task(AddressOf ritardoP2Stop)
+
+
+                If m_pump2Running = False And pump2Running = True Then
+                    pbPump2LED.Image = My.Resources.led_blue_black
+                    trdDatiStart.Start()
+                ElseIf m_pump2Running = True And pump2Running = False Then
+                    pbPump2LED.Image = My.Resources.led_blue_black
+                    trdDatiStop.Start()
+                End If
+
                 m_pump2Running = pump2Running
-                pbPump2LED.Image = My.Resources.led_green_black
             End If
-            If Not pump2Running And Not pump2Alarm Then
-                pbPump2LED.Image = My.Resources.led_off_black
-            End If
+            hourUpdate = True
         End Set
     End Property
     Public Property pump1Alarm As Boolean
@@ -246,13 +343,17 @@
             pump1Alarm = m_pump1Alarm
         End Get
         Set(pump1Alarm As Boolean)
-            If Not pump1Running Then
-                m_pump1Alarm = pump1Alarm
+            m_pump1Alarm = pump1Alarm
+            If m_pump1Alarm Then
+                m_pump1Running = False
                 pbPump1LED.Image = My.Resources.led_red_black
-            End If
-            If Not pump1Running And Not pump1Alarm Then
+            ElseIf Not m_pump1Alarm And m_pump1Running Then
+                pbPump1LED.Image = My.Resources.led_green_black
+            ElseIf Not m_pump1Alarm And Not m_pump1Running Then
                 pbPump1LED.Image = My.Resources.led_off_black
             End If
+            hourUpdate = False
+            pumpRotation()
         End Set
     End Property
     Public Property pump2Alarm As Boolean
@@ -260,13 +361,17 @@
             pump2Alarm = m_pump2Alarm
         End Get
         Set(pump2Alarm As Boolean)
-            If Not pump2Running Then
-                m_pump2Alarm = pump2Alarm
+            m_pump2Alarm = pump2Alarm
+            If m_pump2Alarm Then
+                m_pump2Running = False
                 pbPump2LED.Image = My.Resources.led_red_black
-            End If
-            If Not pump2Running And Not pump2Alarm Then
+            ElseIf Not m_pump2Alarm And m_pump2Running Then
+                pbPump2LED.Image = My.Resources.led_green_black
+            ElseIf Not m_pump2Alarm And Not m_pump2Running Then
                 pbPump2LED.Image = My.Resources.led_off_black
             End If
+            hourUpdate = False
+            pumpRotation()
         End Set
     End Property
     Public Property lbltext As String
@@ -293,6 +398,30 @@
             Me.Refresh()
         End Set
     End Property
+    Public Property lblPumpText As String
+        Get
+            lblPumpText = m_lblPumptext
+        End Get
+        Set(lblPumpText As String)
+            If lblPumpText.Length < 10 Then
+                m_lblPumptext = lblPumpText
+                lblPumpTag.Text = lblPumpText
+            End If
+            Me.Refresh()
+        End Set
+    End Property
+
+    Private Sub chkTestRotation_CheckedChanged(sender As Object, e As EventArgs) Handles chkTestRotation.CheckedChanged
+        If chkTestRotation.Checked Then
+            pumpRotationTimer.Interval = 1000
+        Else
+            pumpRotationTimer.Interval = 86400000
+        End If
+
+        My.Settings.chkTestRotation = chkTestRotation.Checked
+        My.Settings.Save()
+
+    End Sub
     Public ReadOnly Property selectedPositionOnOffSwitch As Integer
         Get
             selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
@@ -321,7 +450,7 @@
         lblSwitchTag.Text = lbltext
 
 
-        If isSemaphorVisible And Not isSemaphorBlinking Then
+        If SemaphorVisible And Not SemaphorBlinking Then
             With blinkingSemaphorTimer
                 .Enabled = False
                 .Stop()
@@ -340,7 +469,7 @@
                     pbSemaphor.Image = My.Resources.led_red_black
             End Select
 
-        ElseIf isSemaphorVisible And isSemaphorBlinking Then
+        ElseIf SemaphorVisible And SemaphorBlinking Then
             If blinkingSemaphorTimer.Enabled = False Then
                 With blinkingSemaphorTimer
                     .Interval = 1000
@@ -350,7 +479,7 @@
             End If
             e.Graphics.DrawRectangle(apen, 1, 115, 62, 21)
             lblSemaphorText.Visible = True
-        ElseIf Not isSemaphorVisible Then
+        ElseIf Not SemaphorVisible Then
             With blinkingSemaphorTimer
                 .Enabled = False
                 .Stop()
@@ -416,5 +545,178 @@
 
 
     End Sub
+
+    Private Sub pbSwitchOnOff_SwitchedON() Handles Me.SwitchedON
+        If selectedPositionPumpSwitch = 0 Then
+            'Pompa 1 in marcia override
+            If Not pump1Alarm Then
+                'Pompa 1 in marcia, determina l'ora di partenza e salvala
+                pump1Running = True
+                m_Pump1StartedDateTime = DateTime.Now
+                My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+                My.Settings.Save()
+
+                'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                pump2Running = False
+                hourCounterPump2 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump2StartedDateTime)
+            End If
+        ElseIf selectedPositionPumpSwitch = 2 Then
+            If Not pump2Alarm Then
+                'Pompa 2 in marcia, determina l'ora di partenza e salvala
+                pump2Running = True
+                m_Pump2StartedDateTime = DateTime.Now
+                My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+                My.Settings.Save()
+
+                'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                pump1Running = False
+                hourCounterPump1 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump1StartedDateTime)
+            End If
+        ElseIf selectedPositionPumpSwitch = 1 Then
+            If Not pump1Alarm And Not pump2Alarm Then
+
+                pumpRotationTimer.Start()
+
+                If hourCounterPump1 > hourCounterPump2 Then
+                    'Pompa 2 in marcia, determina l'ora di partenza e salvala
+                    pump2Running = True
+                    m_Pump2StartedDateTime = DateTime.Now
+                    My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+                    My.Settings.Save()
+
+                    'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                    pump1Running = False
+                    hourCounterPump1 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump1StartedDateTime)
+                Else
+                    'Pompa 1 in marcia, determina l'ora di partenza e salvala
+                    pump1Running = True
+                    m_Pump1StartedDateTime = DateTime.Now
+                    My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+                    My.Settings.Save()
+
+                    'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                    pump2Running = False
+                    hourCounterPump2 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump2StartedDateTime)
+                End If
+            ElseIf pump1Alarm And Not pump2Alarm Then
+                'Pompa 2 in marcia, determina l'ora di partenza e salvala
+                pump2Running = True
+                m_Pump2StartedDateTime = DateTime.Now
+                My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+                My.Settings.Save()
+
+                'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                pump1Running = False
+                hourCounterPump1 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump1StartedDateTime)
+            ElseIf pump2Alarm And Not pump1Alarm Then
+                'Pompa 1 in marcia, determina l'ora di partenza e salvala
+                pump1Running = True
+                m_Pump1StartedDateTime = DateTime.Now
+                My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+                My.Settings.Save()
+
+                'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                pump2Running = False
+                hourCounterPump2 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump2StartedDateTime)
+            ElseIf pump1Alarm And pump2Alarm Then
+                pump1Running = False
+                pump2Running = False
+            End If
+        End If
+
+
+
+    End Sub
+    Private Sub pbSwitchOnOff_SwitchedOFF() Handles Me.SwitchedOFF
+        pump1Running = False
+        pump2Running = False
+        hourCounterPump1 += DateTime.Now.Hour - m_Pump1StartedDateTime.Hour
+        hourCounterPump2 += DateTime.Now.Hour - m_Pump2StartedDateTime.Hour
+
+    End Sub
+    Private Sub pumpRotation()
+
+        If hourUpdate Then
+            If pump1Running And Not pump1Alarm Then
+                hourCounterPump1 += 1
+            ElseIf pump2Running And Not pump2Alarm Then
+                hourCounterPump2 += 1
+            End If
+        End If
+
+        hourUpdate = True
+
+        If pump1Alarm And Not pump2Alarm And (m_selectedPositionPumpSwitch = 2 Or m_selectedPositionPumpSwitch = 1) Then
+            'Pompa 2 in marcia, determina l'ora di partenza e salvala
+            pump2Running = True
+            m_Pump2StartedDateTime = DateTime.Now
+            My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+            My.Settings.Save()
+
+            pump1Running = False
+            Exit Sub
+        End If
+
+        If pump2Alarm And Not pump1Alarm And (m_selectedPositionPumpSwitch = 0 Or m_selectedPositionPumpSwitch = 1) Then
+            'Pompa 1 in marcia, determina l'ora di partenza e salvala
+            pump1Running = True
+            m_Pump1StartedDateTime = DateTime.Now
+            My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+            My.Settings.Save()
+
+            pump2Running = False
+            Exit Sub
+        End If
+
+        If (pump2Alarm And pump1Alarm) Or
+            (pump1Alarm And m_selectedPositionPumpSwitch = 0) Or
+            (pump2Alarm And m_selectedPositionPumpSwitch = 2) Then
+
+            'Pompa 1 a riposo
+            pump1Running = False
+
+            'Pompa 2 a riposo
+            pump2Running = False
+
+            Exit Sub
+        End If
+
+
+        If hourCounterPump1 - hourCounterPump2 > nupLeadLagTime.Value Then
+            If Not pump2Alarm And m_selectedPositionPumpSwitch = 1 Then
+                'Pompa 2 in marcia, determina l'ora di partenza e salvala
+                pump2Running = True
+                m_Pump2StartedDateTime = DateTime.Now
+                My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+                My.Settings.Save()
+
+                'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                pump1Running = False
+                hourCounterPump1 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump1StartedDateTime)
+            End If
+        ElseIf hourCounterPump2 - hourCounterPump1 > nupLeadLagTime.Value Then
+            If Not pump1Alarm And m_selectedPositionPumpSwitch = 1 Then
+                'Pompa 1 in marcia, determina l'ora di partenza e salvala
+                pump1Running = True
+                m_Pump1StartedDateTime = DateTime.Now
+                My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+                My.Settings.Save()
+
+                'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
+                pump2Running = False
+                hourCounterPump2 += DateDiff(DateInterval.Hour, DateTime.Now, m_Pump2StartedDateTime)
+            End If
+        End If
+
+        My.Settings.hourCounterPump1 = hourCounterPump1
+        My.Settings.hourCounterPump2 = hourCounterPump2
+        My.Settings.nupLeadLagtime = nupLeadLagTime.Value
+        My.Settings.nupRitardi = nupRitardi.Value
+        My.Settings.chkTestRotation = chkTestRotation.Checked
+
+        My.Settings.Save()
+
+    End Sub
+
 End Class
 
