@@ -167,6 +167,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="MultiGenPointCalendarClock.Designer.vb">
+      <DependentUpon>MultiGenPointCalendarClock.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MultiGenPointCalendarClock.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="weeklyScheduler.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +220,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiGenPointCalendarClock.resx">
+      <DependentUpon>MultiGenPointCalendarClock.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
