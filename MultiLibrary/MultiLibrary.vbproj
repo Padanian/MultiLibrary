@@ -303,5 +303,8 @@
   <ItemGroup>
     <None Include="Resources\thermometer symbol transp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black-dot-transparent-back.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
