@@ -131,7 +131,7 @@ Partial Class dlgTemperatureCalendar
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Annulla"
+        Me.Cancel_Button.Text = "Cancel"
         '
         'Label1
         '
@@ -182,107 +182,107 @@ Partial Class dlgTemperatureCalendar
         '
         Me.chkDayAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.chkDayAll.AutoSize = True
-        Me.chkDayAll.Location = New System.Drawing.Point(511, 15)
+        Me.chkDayAll.Location = New System.Drawing.Point(495, 15)
         Me.chkDayAll.Name = "chkDayAll"
-        Me.chkDayAll.Size = New System.Drawing.Size(79, 17)
+        Me.chkDayAll.Size = New System.Drawing.Size(61, 17)
         Me.chkDayAll.TabIndex = 1
-        Me.chkDayAll.Text = "Tutti i giorni"
+        Me.chkDayAll.Text = "All days"
         Me.chkDayAll.UseVisualStyleBackColor = True
         '
         'rbFestivo
         '
         Me.rbFestivo.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbFestivo.AutoSize = True
-        Me.rbFestivo.Location = New System.Drawing.Point(653, 14)
+        Me.rbFestivo.Location = New System.Drawing.Point(625, 14)
         Me.rbFestivo.Name = "rbFestivo"
-        Me.rbFestivo.Size = New System.Drawing.Size(52, 17)
+        Me.rbFestivo.Size = New System.Drawing.Size(85, 17)
         Me.rbFestivo.TabIndex = 0
         Me.rbFestivo.TabStop = True
-        Me.rbFestivo.Text = "Festivi"
+        Me.rbFestivo.Text = "Non working"
         Me.rbFestivo.UseVisualStyleBackColor = True
         '
         'rbFeriale
         '
         Me.rbFeriale.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbFeriale.AutoSize = True
-        Me.rbFeriale.Location = New System.Drawing.Point(596, 14)
+        Me.rbFeriale.Location = New System.Drawing.Point(559, 14)
         Me.rbFeriale.Name = "rbFeriale"
-        Me.rbFeriale.Size = New System.Drawing.Size(52, 17)
+        Me.rbFeriale.Size = New System.Drawing.Size(64, 17)
         Me.rbFeriale.TabIndex = 0
         Me.rbFeriale.TabStop = True
-        Me.rbFeriale.Text = "Feriali"
+        Me.rbFeriale.Text = "Working"
         Me.rbFeriale.UseVisualStyleBackColor = True
         '
         'rbDay0
         '
         Me.rbDay0.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbDay0.AutoSize = True
-        Me.rbDay0.Location = New System.Drawing.Point(405, 14)
+        Me.rbDay0.Location = New System.Drawing.Point(401, 14)
         Me.rbDay0.Name = "rbDay0"
-        Me.rbDay0.Size = New System.Drawing.Size(73, 17)
+        Me.rbDay0.Size = New System.Drawing.Size(60, 17)
         Me.rbDay0.TabIndex = 0
         Me.rbDay0.TabStop = True
-        Me.rbDay0.Text = "Domenica"
+        Me.rbDay0.Text = "Sunday"
         Me.rbDay0.UseVisualStyleBackColor = True
         '
         'rbDay6
         '
         Me.rbDay6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbDay6.AutoSize = True
-        Me.rbDay6.Location = New System.Drawing.Point(342, 14)
+        Me.rbDay6.Location = New System.Drawing.Point(334, 14)
         Me.rbDay6.Name = "rbDay6"
-        Me.rbDay6.Size = New System.Drawing.Size(58, 17)
+        Me.rbDay6.Size = New System.Drawing.Size(67, 17)
         Me.rbDay6.TabIndex = 0
         Me.rbDay6.TabStop = True
-        Me.rbDay6.Text = "Sabato"
+        Me.rbDay6.Text = "Saturday"
         Me.rbDay6.UseVisualStyleBackColor = True
         '
         'rbDay5
         '
         Me.rbDay5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbDay5.AutoSize = True
-        Me.rbDay5.Location = New System.Drawing.Point(275, 14)
+        Me.rbDay5.Location = New System.Drawing.Point(281, 14)
         Me.rbDay5.Name = "rbDay5"
-        Me.rbDay5.Size = New System.Drawing.Size(61, 17)
+        Me.rbDay5.Size = New System.Drawing.Size(53, 17)
         Me.rbDay5.TabIndex = 0
         Me.rbDay5.TabStop = True
-        Me.rbDay5.Text = "Venerdì"
+        Me.rbDay5.Text = "Friday"
         Me.rbDay5.UseVisualStyleBackColor = True
         '
         'rbDay4
         '
         Me.rbDay4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbDay4.AutoSize = True
-        Me.rbDay4.Location = New System.Drawing.Point(210, 14)
+        Me.rbDay4.Location = New System.Drawing.Point(213, 14)
         Me.rbDay4.Name = "rbDay4"
-        Me.rbDay4.Size = New System.Drawing.Size(59, 17)
+        Me.rbDay4.Size = New System.Drawing.Size(68, 17)
         Me.rbDay4.TabIndex = 0
         Me.rbDay4.TabStop = True
-        Me.rbDay4.Text = "Giovedì"
+        Me.rbDay4.Text = "Thursday"
         Me.rbDay4.UseVisualStyleBackColor = True
         '
         'rbDay3
         '
         Me.rbDay3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbDay3.AutoSize = True
-        Me.rbDay3.Location = New System.Drawing.Point(136, 14)
+        Me.rbDay3.Location = New System.Drawing.Point(133, 14)
         Me.rbDay3.Name = "rbDay3"
-        Me.rbDay3.Size = New System.Drawing.Size(72, 17)
+        Me.rbDay3.Size = New System.Drawing.Size(80, 17)
         Me.rbDay3.TabIndex = 0
         Me.rbDay3.TabStop = True
-        Me.rbDay3.Text = "Mercoledì"
+        Me.rbDay3.Text = "Wednesday"
         Me.rbDay3.UseVisualStyleBackColor = True
         '
         'rbDay2
         '
         Me.rbDay2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.rbDay2.AutoSize = True
-        Me.rbDay2.Location = New System.Drawing.Point(68, 14)
+        Me.rbDay2.Location = New System.Drawing.Point(70, 14)
         Me.rbDay2.Name = "rbDay2"
-        Me.rbDay2.Size = New System.Drawing.Size(62, 17)
+        Me.rbDay2.Size = New System.Drawing.Size(63, 17)
         Me.rbDay2.TabIndex = 0
         Me.rbDay2.TabStop = True
-        Me.rbDay2.Text = "Martedì"
+        Me.rbDay2.Text = "Tuesday"
         Me.rbDay2.UseVisualStyleBackColor = True
         '
         'rbDay1
@@ -291,10 +291,10 @@ Partial Class dlgTemperatureCalendar
         Me.rbDay1.AutoSize = True
         Me.rbDay1.Location = New System.Drawing.Point(6, 14)
         Me.rbDay1.Name = "rbDay1"
-        Me.rbDay1.Size = New System.Drawing.Size(56, 17)
+        Me.rbDay1.Size = New System.Drawing.Size(64, 17)
         Me.rbDay1.TabIndex = 0
         Me.rbDay1.TabStop = True
-        Me.rbDay1.Text = "Lunedì"
+        Me.rbDay1.Text = "Monday"
         Me.rbDay1.UseVisualStyleBackColor = True
         '
         'GroupBox2
@@ -310,14 +310,14 @@ Partial Class dlgTemperatureCalendar
         Me.GroupBox2.Size = New System.Drawing.Size(130, 104)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Setpoint riscaldamento"
+        Me.GroupBox2.Text = "Setpoint heating"
         '
         'nupHeatT1
         '
         Me.nupHeatT1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.nupHeatT1.DecimalPlaces = 1
         Me.nupHeatT1.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.nupHeatT1.Location = New System.Drawing.Point(55, 18)
+        Me.nupHeatT1.Location = New System.Drawing.Point(55, 74)
         Me.nupHeatT1.Maximum = New Decimal(New Integer() {999, 0, 0, 65536})
         Me.nupHeatT1.Name = "nupHeatT1"
         Me.nupHeatT1.Size = New System.Drawing.Size(47, 22)
@@ -343,7 +343,7 @@ Partial Class dlgTemperatureCalendar
         Me.nupHeatT3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.nupHeatT3.DecimalPlaces = 1
         Me.nupHeatT3.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.nupHeatT3.Location = New System.Drawing.Point(55, 74)
+        Me.nupHeatT3.Location = New System.Drawing.Point(55, 18)
         Me.nupHeatT3.Maximum = New Decimal(New Integer() {999, 0, 0, 65536})
         Me.nupHeatT3.Name = "nupHeatT3"
         Me.nupHeatT3.Size = New System.Drawing.Size(47, 22)
@@ -394,7 +394,7 @@ Partial Class dlgTemperatureCalendar
         Me.GroupBox3.Size = New System.Drawing.Size(133, 104)
         Me.GroupBox3.TabIndex = 4
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Setpoint raffrescamento"
+        Me.GroupBox3.Text = "Setpoint cooling"
         '
         'nupCoolT3
         '
@@ -476,7 +476,7 @@ Partial Class dlgTemperatureCalendar
         Me.GroupBox4.Size = New System.Drawing.Size(165, 104)
         Me.GroupBox4.TabIndex = 4
         Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Bande proporzionali"
+        Me.GroupBox4.Text = "Proportional bands"
         '
         'nupHeatBP
         '
@@ -535,7 +535,7 @@ Partial Class dlgTemperatureCalendar
         Me.GroupBox5.Size = New System.Drawing.Size(172, 104)
         Me.GroupBox5.TabIndex = 4
         Me.GroupBox5.TabStop = False
-        Me.GroupBox5.Text = "Altri setpoint"
+        Me.GroupBox5.Text = "More setpoints"
         '
         'nupFrostProt
         '
@@ -578,27 +578,27 @@ Partial Class dlgTemperatureCalendar
         Me.Label12.AutoSize = True
         Me.Label12.Location = New System.Drawing.Point(10, 20)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(45, 13)
+        Me.Label12.Size = New System.Drawing.Size(79, 13)
         Me.Label12.TabIndex = 0
-        Me.Label12.Text = "Antigelo"
+        Me.Label12.Text = "Frost protection"
         '
         'Label13
         '
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(10, 48)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(92, 13)
+        Me.Label13.Size = New System.Drawing.Size(62, 13)
         Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Eco riscaldamento"
+        Me.Label13.Text = "Eco heating"
         '
         'Label14
         '
         Me.Label14.AutoSize = True
         Me.Label14.Location = New System.Drawing.Point(10, 76)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(98, 13)
+        Me.Label14.Size = New System.Drawing.Size(60, 13)
         Me.Label14.TabIndex = 0
-        Me.Label14.Text = "Eco raffrescamento"
+        Me.Label14.Text = "Eco cooling"
         '
         'Label15
         '
@@ -632,18 +632,18 @@ Partial Class dlgTemperatureCalendar
         Me.Label18.AutoSize = True
         Me.Label18.Location = New System.Drawing.Point(2, 149)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(26, 13)
+        Me.Label18.Size = New System.Drawing.Size(32, 13)
         Me.Label18.TabIndex = 5
-        Me.Label18.Text = "Risc."
+        Me.Label18.Text = "Heat."
         '
         'Label19
         '
         Me.Label19.AutoSize = True
         Me.Label19.Location = New System.Drawing.Point(2, 232)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(26, 13)
+        Me.Label19.Size = New System.Drawing.Size(30, 13)
         Me.Label19.TabIndex = 5
-        Me.Label19.Text = "Raff."
+        Me.Label19.Text = "Cool."
         '
         'PictureBox1
         '
@@ -660,7 +660,7 @@ Partial Class dlgTemperatureCalendar
         Me.btnCopyBack.Name = "btnCopyBack"
         Me.btnCopyBack.Size = New System.Drawing.Size(90, 35)
         Me.btnCopyBack.TabIndex = 7
-        Me.btnCopyBack.Text = "Copia su giorno precedente"
+        Me.btnCopyBack.Text = "Copy on previous day"
         Me.btnCopyBack.UseVisualStyleBackColor = True
         '
         'btnCopyForth
@@ -669,7 +669,7 @@ Partial Class dlgTemperatureCalendar
         Me.btnCopyForth.Name = "btnCopyForth"
         Me.btnCopyForth.Size = New System.Drawing.Size(90, 35)
         Me.btnCopyForth.TabIndex = 7
-        Me.btnCopyForth.Text = "Copia su giorno successivo"
+        Me.btnCopyForth.Text = "Copy to next day"
         Me.btnCopyForth.UseVisualStyleBackColor = True
         '
         'GroupBox1
@@ -680,12 +680,12 @@ Partial Class dlgTemperatureCalendar
         Me.GroupBox1.Size = New System.Drawing.Size(93, 104)
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Manuale"
+        Me.GroupBox1.Text = "Manual"
         '
         'cbManual
         '
         Me.cbManual.FormattingEnabled = True
-        Me.cbManual.Items.AddRange(New Object() {"T3", "T2", "T1", "Antigelo"})
+        Me.cbManual.Items.AddRange(New Object() {"T3", "T2", "T1", "Frost Prot."})
         Me.cbManual.Location = New System.Drawing.Point(6, 40)
         Me.cbManual.Name = "cbManual"
         Me.cbManual.Size = New System.Drawing.Size(81, 21)
@@ -697,7 +697,7 @@ Partial Class dlgTemperatureCalendar
         Me.btnLoadWeekly.Name = "btnLoadWeekly"
         Me.btnLoadWeekly.Size = New System.Drawing.Size(90, 35)
         Me.btnLoadWeekly.TabIndex = 7
-        Me.btnLoadWeekly.Text = "Carica settimanale"
+        Me.btnLoadWeekly.Text = "Load weekly programme"
         Me.btnLoadWeekly.UseVisualStyleBackColor = True
         '
         'btnSaveWeekly
@@ -706,7 +706,7 @@ Partial Class dlgTemperatureCalendar
         Me.btnSaveWeekly.Name = "btnSaveWeekly"
         Me.btnSaveWeekly.Size = New System.Drawing.Size(90, 35)
         Me.btnSaveWeekly.TabIndex = 7
-        Me.btnSaveWeekly.Text = "Salva settimanale"
+        Me.btnSaveWeekly.Text = "Save weekly programme"
         Me.btnSaveWeekly.UseVisualStyleBackColor = True
         '
         'btnEmptyWeek
@@ -715,7 +715,7 @@ Partial Class dlgTemperatureCalendar
         Me.btnEmptyWeek.Name = "btnEmptyWeek"
         Me.btnEmptyWeek.Size = New System.Drawing.Size(99, 35)
         Me.btnEmptyWeek.TabIndex = 7
-        Me.btnEmptyWeek.Text = "Crea settimanale vuoto"
+        Me.btnEmptyWeek.Text = "New weekly programme"
         Me.btnEmptyWeek.UseVisualStyleBackColor = True
         '
         'dlgTemperatureCalendar
@@ -753,7 +753,7 @@ Partial Class dlgTemperatureCalendar
         Me.Name = "dlgTemperatureCalendar"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Calendario"
+        Me.Text = "Calendar"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.gbDays.ResumeLayout(False)
         Me.gbDays.PerformLayout()

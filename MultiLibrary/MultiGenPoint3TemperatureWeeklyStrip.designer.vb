@@ -22,7 +22,7 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
     'Non modificarla mediante l'editor del codice.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.lblClockHH = New System.Windows.Forms.Label()
+        Me.lblClock = New System.Windows.Forms.Label()
         Me.lblTemperature = New System.Windows.Forms.Label()
         Me.lblDay = New System.Windows.Forms.Label()
         Me.lblDate = New System.Windows.Forms.Label()
@@ -31,30 +31,30 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
         Me.pbManual = New System.Windows.Forms.PictureBox()
         Me.pbHeat = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.lblClockMM = New System.Windows.Forms.Label()
-        Me.lblClockDP = New System.Windows.Forms.Label()
+        Me.lblWSPtemperature = New System.Windows.Forms.Label()
         CType(Me.pbCool, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbEco, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbManual, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbHeat, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'lblClockHH
+        'lblClock
         '
-        Me.lblClockHH.Font = New System.Drawing.Font("Digital-7 Mono", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblClockHH.Location = New System.Drawing.Point(137, 35)
-        Me.lblClockHH.Name = "lblClockHH"
-        Me.lblClockHH.Size = New System.Drawing.Size(66, 47)
-        Me.lblClockHH.TabIndex = 0
-        Me.lblClockHH.Text = "88"
-        Me.lblClockHH.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblClock.Font = New System.Drawing.Font("Digital-7 Mono", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblClock.Location = New System.Drawing.Point(137, 28)
+        Me.lblClock.Name = "lblClock"
+        Me.lblClock.Size = New System.Drawing.Size(136, 47)
+        Me.lblClock.TabIndex = 0
+        Me.lblClock.Text = "22:22"
+        Me.lblClock.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lblTemperature
         '
         Me.lblTemperature.Font = New System.Drawing.Font("Digital-7", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTemperature.Location = New System.Drawing.Point(35, 23)
+        Me.lblTemperature.Location = New System.Drawing.Point(34, 23)
+        Me.lblTemperature.Margin = New System.Windows.Forms.Padding(0)
         Me.lblTemperature.Name = "lblTemperature"
-        Me.lblTemperature.Size = New System.Drawing.Size(81, 34)
+        Me.lblTemperature.Size = New System.Drawing.Size(99, 34)
         Me.lblTemperature.TabIndex = 0
         Me.lblTemperature.Text = "12.3°c"
         Me.lblTemperature.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -71,16 +71,16 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
         'lblDate
         '
         Me.lblDate.Font = New System.Drawing.Font("Digital-7", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDate.Location = New System.Drawing.Point(31, 54)
+        Me.lblDate.Location = New System.Drawing.Point(176, 76)
         Me.lblDate.Name = "lblDate"
-        Me.lblDate.Size = New System.Drawing.Size(81, 30)
+        Me.lblDate.Size = New System.Drawing.Size(81, 20)
         Me.lblDate.TabIndex = 0
         Me.lblDate.Text = "88/88/88"
         Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'pbCool
         '
-        Me.pbCool.Image = My.Resources.Resources.if_snowflake_alt2_372618
+        Me.pbCool.Image = Global.MultiLibrary.My.Resources.Resources.if_snowflake_alt2_372618
         Me.pbCool.Location = New System.Drawing.Point(234, 3)
         Me.pbCool.Name = "pbCool"
         Me.pbCool.Size = New System.Drawing.Size(16, 16)
@@ -89,7 +89,7 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
         '
         'pbEco
         '
-        Me.pbEco.Image = My.Resources.Resources.if_coda_eco_ecology_environment_flower_green_leaf_nature_paper_plant_392515_1_
+        Me.pbEco.Image = Global.MultiLibrary.My.Resources.Resources.if_coda_eco_ecology_environment_flower_green_leaf_nature_paper_plant_392515_1_
         Me.pbEco.Location = New System.Drawing.Point(163, 3)
         Me.pbEco.Name = "pbEco"
         Me.pbEco.Size = New System.Drawing.Size(16, 16)
@@ -98,7 +98,7 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
         '
         'pbManual
         '
-        Me.pbManual.Image = My.Resources.Resources.if_icon_3_high_five_329409
+        Me.pbManual.Image = Global.MultiLibrary.My.Resources.Resources.if_icon_3_high_five_329409
         Me.pbManual.Location = New System.Drawing.Point(180, 3)
         Me.pbManual.Name = "pbManual"
         Me.pbManual.Size = New System.Drawing.Size(16, 16)
@@ -107,7 +107,7 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
         '
         'pbHeat
         '
-        Me.pbHeat.Image = My.Resources.Resources.if_sun_226556
+        Me.pbHeat.Image = Global.MultiLibrary.My.Resources.Resources.if_sun_226556
         Me.pbHeat.Location = New System.Drawing.Point(216, 3)
         Me.pbHeat.Name = "pbHeat"
         Me.pbHeat.Size = New System.Drawing.Size(16, 16)
@@ -123,28 +123,16 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Day"
         '
-        'lblClockMM
+        'lblWSPtemperature
         '
-        Me.lblClockMM.Font = New System.Drawing.Font("Digital-7 Mono", 36.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblClockMM.Location = New System.Drawing.Point(204, 32)
-        Me.lblClockMM.Margin = New System.Windows.Forms.Padding(0)
-        Me.lblClockMM.Name = "lblClockMM"
-        Me.lblClockMM.Size = New System.Drawing.Size(66, 52)
-        Me.lblClockMM.TabIndex = 0
-        Me.lblClockMM.Text = "88"
-        Me.lblClockMM.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'lblClockDP
-        '
-        Me.lblClockDP.BackColor = System.Drawing.Color.Transparent
-        Me.lblClockDP.Font = New System.Drawing.Font("Digital-7", 27.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblClockDP.Location = New System.Drawing.Point(194, 38)
-        Me.lblClockDP.Margin = New System.Windows.Forms.Padding(0)
-        Me.lblClockDP.Name = "lblClockDP"
-        Me.lblClockDP.Size = New System.Drawing.Size(18, 42)
-        Me.lblClockDP.TabIndex = 0
-        Me.lblClockDP.Text = ":"
-        Me.lblClockDP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblWSPtemperature.Font = New System.Drawing.Font("Digital-7", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblWSPtemperature.Location = New System.Drawing.Point(30, 57)
+        Me.lblWSPtemperature.Margin = New System.Windows.Forms.Padding(0)
+        Me.lblWSPtemperature.Name = "lblWSPtemperature"
+        Me.lblWSPtemperature.Size = New System.Drawing.Size(103, 34)
+        Me.lblWSPtemperature.TabIndex = 0
+        Me.lblWSPtemperature.Text = "Setp:  88.8°c"
+        Me.lblWSPtemperature.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'MultiGenPoint3TemperatureWeeklyStrip
         '
@@ -157,10 +145,9 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
         Me.Controls.Add(Me.pbManual)
         Me.Controls.Add(Me.pbHeat)
         Me.Controls.Add(Me.lblDate)
+        Me.Controls.Add(Me.lblWSPtemperature)
         Me.Controls.Add(Me.lblTemperature)
-        Me.Controls.Add(Me.lblClockDP)
-        Me.Controls.Add(Me.lblClockMM)
-        Me.Controls.Add(Me.lblClockHH)
+        Me.Controls.Add(Me.lblClock)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4, 2, 4, 2)
@@ -175,7 +162,7 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
 
     End Sub
 
-    Friend WithEvents lblClockHH As Label
+    Friend WithEvents lblClock As Label
     Friend WithEvents lblTemperature As Label
     Friend WithEvents pbHeat As PictureBox
     Friend WithEvents pbCool As PictureBox
@@ -184,6 +171,5 @@ Partial Class MultiGenPoint3TemperatureWeeklyStrip
     Friend WithEvents pbManual As PictureBox
     Friend WithEvents pbEco As PictureBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents lblClockMM As Label
-    Friend WithEvents lblClockDP As Label
+    Friend WithEvents lblWSPtemperature As Label
 End Class

@@ -1,18 +1,21 @@
-﻿<Serializable()>
+﻿
+<Serializable()>
 Public Class weeklyScheduler
-    Public Property setpointHeatT1 As Double
-    Public Property setpointHeatT2 As Double
-    Public Property setpointHeatT3 As Double
-    Public Property setpointCoolT1 As Double
-    Public Property setpointCoolT2 As Double
-    Public Property setpointCoolT3 As Double
+    Public Property setpointHeatT1 As Decimal
+    Public Property setpointHeatT2 As Decimal
+    Public Property setpointHeatT3 As Decimal
+    Public Property setpointCoolT1 As Decimal
+    Public Property setpointCoolT2 As Decimal
+    Public Property setpointCoolT3 As Decimal
 
-    Public Property heatPB As Double
-    Public Property coolPB As Double
-    Public Property freezeProtSetpoint As Double
-    Public Property ecoHeatReduction As Double
-    Public Property ecoCoolIncrease As Double
-    Public Property workingSetpoint As Double
+    Public Property heatPB As Decimal
+    Public Property coolPB As Decimal
+    Public Property freezeProtSetpoint As Decimal
+    Public Property ecoHeatReduction As Decimal
+    Public Property ecoCoolIncrease As Decimal
+    Public Property workingSetpoint As Decimal
+    Public Property manualSetpoint As Decimal()
+    Public Property manualSelectedIndex As Integer
     Public activeHeatTemp(,) As Integer
     Public activeCoolTemp(,) As Integer
     Public Sub New()
@@ -25,9 +28,9 @@ Public Class weeklyScheduler
             Next
         Next
 
-        setpointHeatT1 = 21.0
+        setpointHeatT1 = 15.0
         setpointHeatT2 = 19.0
-        setpointHeatT3 = 15.0
+        setpointHeatT3 = 21.0
         setpointCoolT1 = 24.0
         setpointCoolT2 = 26.0
         setpointCoolT3 = 30.0
@@ -38,7 +41,9 @@ Public Class weeklyScheduler
         ecoHeatReduction = -4.0
         ecoCoolIncrease = 4.0
         workingSetpoint = 0.0
+        manualSetpoint = {freezeProtSetpoint, freezeProtSetpoint}
 
+        manualSelectedIndex = 3
 
     End Sub
 

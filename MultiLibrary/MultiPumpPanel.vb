@@ -1,7 +1,5 @@
 ﻿Public Class MultiPumpPanel
     Const Pi As Double = Math.PI
-    Dim x1, y1, x2, y2, x3, y3 As Integer
-    Dim xp1, yp1, xp2, yp2 As Int32
     Private m_lbltext As String = "Text"
     Private m_lblPumptext As String = "Text"
     Private m_semaphortext As String = "Text"
@@ -14,10 +12,7 @@
     Private m_SemaphorVisible As Boolean
     Private m_SemaphorBlinking As Boolean
 
-    Dim centreX As Double = 32
-    Dim centreY As Double = 44
     Dim apen As New Pen(Color.LightGray, 1)
-    Dim lpen As New Pen(Color.Black, 2)
     Dim angleSwitchOnOff As Double = -3 / 4 * Pi
     Dim angleSwitchPump As Double = -1 / 2 * Pi
     Dim blinkingSemaphorTimer As New Timer
@@ -38,12 +33,13 @@
     Private m_Pump2StartedDateTime As DateTime
     Private hourUpdate As Boolean = True
 
-    Public Event SwitchedON()
-    Public Event SwitchedOFF()
-    Public Event richiestaPartenzaPompa1()
-    Public Event richiestoSpegnimentoPompa1()
-    Public Event richiestaPartenzaPompa2()
-    Public Event richiestoSpegnimentoPompa2()
+    Private Event SwitchedON()
+    Private Event SwitchedOFF()
+    Private Event richiestaPartenzaPompa1()
+    Private Event richiestoSpegnimentoPompa1()
+    Private Event richiestaPartenzaPompa2()
+    Private Event richiestoSpegnimentoPompa2()
+    Private Event allarmePompe()
 
 
 
@@ -84,6 +80,7 @@
 
         AddHandler Me.SwitchedON, AddressOf pbSwitchOnOff_SwitchedON
         AddHandler Me.SwitchedOFF, AddressOf pbSwitchOnOff_SwitchedOFF
+        AddHandler Me.allarmePompe, AddressOf gestioneSemaphor
     End Sub
     Private Sub MultiPumpPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         pbPump1LED.Image = My.Resources.led_off_black
@@ -91,20 +88,34 @@
         lbltext = "Switch"
         lblPumpText = "Mode"
         semaphortext = "Signals"
-        SemaphorVisible = True
         semaphorColor = Color.Black
+        SemaphorVisible = True
+        SemaphorBlinking = False
 
-        For Each ctl In Me.Controls
-            If ctl.name <> pbSwitchOnOff.Name Then
-                ctl.enabled = False
-            End If
-        Next
 
         If My.Settings.m_Pump1StartedDateTime.Year <> 1 Then
             m_Pump1StartedDateTime = My.Settings.m_Pump1StartedDateTime
         End If
         If My.Settings.m_Pump2StartedDateTime.Year <> 1 Then
             m_Pump2StartedDateTime = My.Settings.m_Pump2StartedDateTime
+        End If
+
+        m_selectedPositionPumpSwitch = My.Settings.selectedPositionPumpSwitch
+        If m_selectedPositionPumpSwitch = 0 Then
+            angleSwitchPump = -3 / 4 * Pi
+        ElseIf m_selectedPositionPumpSwitch = 1 Then
+            angleSwitchPump = -1 / 2 * Pi
+        Else
+            angleSwitchPump = -1 / 4 * Pi
+        End If
+
+        m_selectedPositionOnOffSwitch = My.Settings.selectedPositionOnOffSwitch
+        If m_selectedPositionOnOffSwitch = 0 Then
+            angleSwitchOnOff = -3 / 4 * Pi
+            RaiseEvent SwitchedOFF()
+        Else
+            angleSwitchOnOff = -1 / 4 * Pi
+            RaiseEvent SwitchedON()
         End If
 
         hourCounterPump1 = My.Settings.hourCounterPump1
@@ -124,24 +135,23 @@
                 End If
             Next
             angleSwitchOnOff = -3 / 4 * Pi
-            Me.Refresh()
             RaiseEvent SwitchedOFF()
+            Me.Refresh()
+            My.Settings.selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
+            My.Settings.Save()
             Exit Sub
         End If
         If m_positionsOnOffSwitch = 2 Then
             For Each ctl In Me.Controls
-                If ctl.name <> pbSwitchOnOff.Name Then
-                    ctl.enabled = True
-                End If
+                ctl.enabled = True
             Next
             angleSwitchOnOff += Pi / 2
-            Me.Refresh()
             RaiseEvent SwitchedON()
+            Me.Refresh()
+            My.Settings.selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
+            My.Settings.Save()
         End If
 
-
-
-        Me.Refresh()
     End Sub
     Private Sub pbSwitchPump_click(sender As Object, e As EventArgs) Handles pbSwitchPump.Click
 
@@ -151,6 +161,8 @@
             angleSwitchPump = -3 / 4 * Pi
             RaiseEvent SwitchedON()
             Me.Refresh()
+            My.Settings.selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
+            My.Settings.Save()
             Exit Sub
         End If
         If m_positionsPumpSwitch = 2 Then
@@ -159,10 +171,11 @@
         Else
             angleSwitchPump += Pi / 4
             RaiseEvent SwitchedON()
+            Me.Refresh()
+            My.Settings.selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
+            My.Settings.Save()
+
         End If
-
-
-        Me.Refresh()
     End Sub
     Public Property SemaphorVisible As Boolean
         Get
@@ -248,14 +261,18 @@
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
             Application.DoEvents()
         End While
-        pbPump1LED.Image = My.Resources.led_green_black
+        If m_pump1Alarm Then
+            pbPump1LED.Image = My.Resources.led_red_black
+        Else
+            pbPump1LED.Image = My.Resources.led_green_black
+        End If
     End Sub
     Private Sub ritardoP1Stop()
         Dim start As DateTime = DateTime.Now
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
             Application.DoEvents()
         End While
-        If pump1Alarm Then
+        If m_pump1Alarm Then
             pbPump1LED.Image = My.Resources.led_red_black
         Else
             pbPump1LED.Image = My.Resources.led_off_black
@@ -266,14 +283,18 @@
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
             Application.DoEvents()
         End While
-        pbPump2LED.Image = My.Resources.led_green_black
+        If m_pump2Alarm Then
+            pbPump2LED.Image = My.Resources.led_red_black
+        Else
+            pbPump2LED.Image = My.Resources.led_green_black
+        End If
     End Sub
     Private Sub ritardoP2Stop()
         Dim start As DateTime = DateTime.Now
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
             Application.DoEvents()
         End While
-        If pump2Alarm Then
+        If m_pump2Alarm Then
             pbPump2LED.Image = My.Resources.led_red_black
         Else
             pbPump2LED.Image = My.Resources.led_off_black
@@ -347,10 +368,13 @@
             If m_pump1Alarm Then
                 m_pump1Running = False
                 pbPump1LED.Image = My.Resources.led_red_black
+                RaiseEvent allarmePompe()
             ElseIf Not m_pump1Alarm And m_pump1Running Then
                 pbPump1LED.Image = My.Resources.led_green_black
+                RaiseEvent allarmePompe()
             ElseIf Not m_pump1Alarm And Not m_pump1Running Then
                 pbPump1LED.Image = My.Resources.led_off_black
+                RaiseEvent allarmePompe()
             End If
             hourUpdate = False
             pumpRotation()
@@ -365,10 +389,13 @@
             If m_pump2Alarm Then
                 m_pump2Running = False
                 pbPump2LED.Image = My.Resources.led_red_black
+                RaiseEvent allarmePompe()
             ElseIf Not m_pump2Alarm And m_pump2Running Then
                 pbPump2LED.Image = My.Resources.led_green_black
+                RaiseEvent allarmePompe()
             ElseIf Not m_pump2Alarm And Not m_pump2Running Then
                 pbPump2LED.Image = My.Resources.led_off_black
+                RaiseEvent allarmePompe()
             End If
             hourUpdate = False
             pumpRotation()
@@ -410,13 +437,33 @@
             Me.Refresh()
         End Set
     End Property
-
+    Private Sub gestioneSemaphor()
+        If m_pump1Alarm Xor m_pump2Alarm Then
+            semaphorColor = Color.Yellow
+            SemaphorBlinking = True
+        End If
+        If m_pump1Alarm And m_pump2Alarm Then
+            semaphorColor = Color.Red
+            SemaphorBlinking = True
+        End If
+        If Not m_pump1Alarm And Not m_pump2Alarm Then
+            semaphorColor = Color.Green
+            SemaphorBlinking = False
+        End If
+    End Sub
     Private Sub chkTestRotation_CheckedChanged(sender As Object, e As EventArgs) Handles chkTestRotation.CheckedChanged
+
+        pumpRotationTimer.Enabled = False
+        pumpRotationTimer.Stop()
+
         If chkTestRotation.Checked Then
             pumpRotationTimer.Interval = 1000
         Else
             pumpRotationTimer.Interval = 86400000
         End If
+
+        pumpRotationTimer.enabled = True
+        pumpRotationTimer.Start()
 
         My.Settings.chkTestRotation = chkTestRotation.Checked
         My.Settings.Save()
@@ -498,7 +545,7 @@
 
         e.Graphics.DrawRectangle(apen, 1 + offset, 78, 62, 21)
 
-        lblPumpTag.Text = lblPumptext
+        lblPumpTag.Text = lblPumpText
 
 
 #End Region
@@ -525,7 +572,7 @@
         End If
 
     End Sub
-    Public Sub drawswitch(e, angle)
+    Private Sub drawswitch(e, angle)
 
         If e = 2 Then
             If angle = -3 / 4 * Pi Then
@@ -624,7 +671,7 @@
             End If
         End If
 
-
+        gestioneSemaphor()
 
     End Sub
     Private Sub pbSwitchOnOff_SwitchedOFF() Handles Me.SwitchedOFF
@@ -632,6 +679,8 @@
         pump2Running = False
         hourCounterPump1 += DateTime.Now.Hour - m_Pump1StartedDateTime.Hour
         hourCounterPump2 += DateTime.Now.Hour - m_Pump2StartedDateTime.Hour
+        semaphorColor = Color.Black
+        SemaphorBlinking = False
 
     End Sub
     Private Sub pumpRotation()
@@ -713,6 +762,8 @@
         My.Settings.nupLeadLagtime = nupLeadLagTime.Value
         My.Settings.nupRitardi = nupRitardi.Value
         My.Settings.chkTestRotation = chkTestRotation.Checked
+        My.Settings.selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
+        My.Settings.selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
 
         My.Settings.Save()
 

@@ -23,6 +23,19 @@ Public Class dlgTemperatureCalendar
         dlgWeeklyScheduler.ecoCoolIncrease = nupCoolEco.Value
         dlgWeeklyScheduler.ecoHeatReduction = nupHeatEco.Value
 
+        dlgWeeklyScheduler.manualSelectedIndex = cbManual.FindStringExact(cbManual.Text)
+
+
+        If cbManual.Text = "T3" Then
+            dlgWeeklyScheduler.manualSetpoint = {nupHeatT3.Value, nupCoolT3.Value}
+        ElseIf cbManual.Text = "T2" Then
+            dlgWeeklyScheduler.manualSetpoint = {nupHeatT2.Value, nupCoolT2.Value}
+        ElseIf cbManual.Text = "T1" Then
+            dlgWeeklyScheduler.manualSetpoint = {nupHeatT1.Value, nupCoolT1.Value}
+        ElseIf cbManual.Text = "Frost Prot." Then
+            dlgWeeklyScheduler.manualSetpoint = {nupFrostProt.Value, nupFrostProt.Value}
+        End If
+
 
         MultiGenPoint3TemperatureWeeklyStrip.UpdateRequest = True
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -90,12 +103,13 @@ Public Class dlgTemperatureCalendar
         nupFrostProt.Value = dlgWeeklyScheduler.freezeProtSetpoint
         nupCoolEco.Value = dlgWeeklyScheduler.ecoCoolIncrease
         nupHeatEco.Value = dlgWeeklyScheduler.ecoHeatReduction
+        cbManual.SelectedIndex = dlgWeeklyScheduler.manualSelectedIndex
 
         For i = 1 To 23
             Dim lbl As New Label
             With lbl
                 .Text = i.ToString.PadLeft(2, "0")
-                .Location = New Point(30 + 30 * i, 215)
+                .Location = New Point(28 + 30 * i, 215)
                 .Name = "lblTime" & i.ToString
                 .Visible = True
                 .ForeColor = Color.Black
@@ -106,7 +120,7 @@ Public Class dlgTemperatureCalendar
             Dim lcl As New Label
             With lcl
                 .Text = i.ToString.PadLeft(2, "0")
-                .Location = New Point(30 + 30 * i, 295)
+                .Location = New Point(28 + 30 * i, 295)
                 .Name = "lclTime" & i.ToString
                 .Visible = True
                 .ForeColor = Color.Black
@@ -389,6 +403,7 @@ Public Class dlgTemperatureCalendar
             temp.ecoCoolIncrease = nupCoolEco.Value
             temp.ecoHeatReduction = nupHeatEco.Value
 
+            temp.manualSelectedIndex = cbManual.FindStringExact(cbManual.Text)
 
             Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 
@@ -488,6 +503,9 @@ Public Class dlgTemperatureCalendar
         nupFrostProt.Value = dlgWeeklyScheduler.freezeProtSetpoint
         nupCoolEco.Value = dlgWeeklyScheduler.ecoCoolIncrease
         nupHeatEco.Value = dlgWeeklyScheduler.ecoHeatReduction
+
+        cbManual.SelectedIndex = dlgWeeklyScheduler.manualSelectedIndex
+
 
         MultiGenPoint3TemperatureWeeklyStrip.UpdateRequest = True
 

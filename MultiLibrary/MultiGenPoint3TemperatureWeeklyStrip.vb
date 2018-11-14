@@ -1,6 +1,8 @@
 ﻿Imports System.Globalization
-Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
+Imports System.Diagnostics
+Public Class MultiGenPoint3TemperatureWeeklyStrip
     Dim WithEvents clock As New Timers.Timer
+    Dim WithEvents determinaWSP As New Timers.Timer
     Private m_temperature As Double
     Private m_isHeating As Boolean
     Private m_isCooling As Boolean
@@ -9,17 +11,28 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
     Private m_isEco As Boolean
     Protected _disposed As Boolean = False
     Public Shared UpdateRequest As Boolean = True
+    Private m_WorkingSetpoint As Decimal
     Private myWeeklySchedule As New weeklyScheduler
+    Private myWeeklyScheduleManualSave As New weeklyScheduler
+    Private Event eventoManualeAttivato()
+    Private Event eventoManualeDisattivato()
+    Public ReadOnly Property workingSetpoint As Decimal
+        Get
+            Return m_WorkingSetpoint
+        End Get
+    End Property
     Public Property isHeating As Boolean
         Get
             isHeating = m_isHeating
         End Get
         Set(isHeating As Boolean)
-            pbHeat.Visible = isHeating
-            m_isHeating = isHeating
-            pbCool.Visible = Not isHeating
-            m_isCooling = Not isHeating
-            UpdateRequest = True
+            If Not m_isOff Then
+                pbHeat.Visible = isHeating
+                m_isHeating = isHeating
+                pbCool.Visible = Not isHeating
+                m_isCooling = Not isHeating
+                UpdateRequest = True
+            End If
         End Set
     End Property
     Public Property isCooling As Boolean
@@ -27,11 +40,13 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
             isCooling = m_isCooling
         End Get
         Set(isCooling As Boolean)
-            pbCool.Visible = isCooling
-            m_isCooling = isCooling
-            pbHeat.Visible = Not isCooling
-            m_isHeating = Not isCooling
-            UpdateRequest = True
+            If Not m_isOff Then
+                pbCool.Visible = isCooling
+                m_isCooling = isCooling
+                pbHeat.Visible = Not isCooling
+                m_isHeating = Not isCooling
+                UpdateRequest = True
+            End If
         End Set
     End Property
     Public Property isManual As Boolean
@@ -39,17 +54,42 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
             isManual = m_isManual
         End Get
         Set(isManual As Boolean)
-            pbManual.Visible = isManual
-            m_isManual = isManual
+            If Not m_isOff Then
+                pbManual.Visible = isManual
+                m_isManual = isManual
+            End If
+            If m_isManual Then
+                myWeeklyScheduleManualSave = DeepClone(myWeeklySchedule)
+                RaiseEvent eventoManualeAttivato()
+            Else
+                myWeeklySchedule = DeepClone(myWeeklyScheduleManualSave)
+                RaiseEvent eventoManualeDisattivato()
+            End If
         End Set
     End Property
+    Function DeepClone(Of T)(ByRef orig As T) As T
+
+        ' Don't serialize a null object, simply return the default for that object
+        If (Object.ReferenceEquals(orig, Nothing)) Then Return Nothing
+
+        Dim formatter As New Runtime.Serialization.Formatters.Binary.BinaryFormatter()
+        Dim stream As New IO.MemoryStream()
+
+        formatter.Serialize(stream, orig)
+        stream.Seek(0, IO.SeekOrigin.Begin)
+
+        Return CType(formatter.Deserialize(stream), T)
+
+    End Function
     Public Property isEco As Boolean
         Get
             isEco = m_isEco
         End Get
         Set(isEco As Boolean)
-            pbEco.Visible = isEco
-            m_isEco = isEco
+            If Not m_isOff And Not m_isManual And Not ((m_WorkingSetpoint + myWeeklySchedule.ecoHeatReduction) <= myWeeklySchedule.freezeProtSetpoint) Then
+                pbEco.Visible = isEco
+                m_isEco = isEco
+            End If
         End Set
     End Property
     Public Property isOff As Boolean
@@ -64,7 +104,7 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
                     If ctl.name <> "lblClock" Then
                         ctl.visible = False
                     Else
-                        lblClockHH.Text = " OFF"
+                        lblClock.Text = " OFF"
                     End If
                 Next
             Else
@@ -96,14 +136,14 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
             temperature = m_temperature
         End Get
         Set(temperature As Double)
-            lblTemperature.Text = Format(temperature, "##0.0").ToString & "°c"
+            lblTemperature.Text = (Format(temperature, "##0.0").ToString & "°c").Replace(",", ".")
             m_temperature = temperature
 
         End Set
     End Property
     Public Sub New()
         InitializeComponent()
-        modificaClockText("", "", "")
+        modificaClockText("")
 
 #Region "Labels"
         Dim lbl04 As New Label
@@ -187,9 +227,9 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
     End Sub
     Private Sub clock_tick() Handles clock.Elapsed
         If DateTime.Now.Second Mod 2 = 0 Then
-            modificaClockText(DateTime.Now.Hour.ToString.PadLeft(2, "0"), ":", DateTime.Now.Minute.ToString.PadLeft(2, "0"))
+            modificaClockText(DateTime.Now.Hour.ToString.PadLeft(2, "0") & ":" & DateTime.Now.Minute.ToString.PadLeft(2, "0"))
         Else
-            modificaClockText(DateTime.Now.Hour.ToString.PadLeft(2, "0"), "", DateTime.Now.Minute.ToString.PadLeft(2, "0"))
+            modificaClockText(DateTime.Now.Hour.ToString.PadLeft(2, "0") & " " & DateTime.Now.Minute.ToString.PadLeft(2, "0"))
         End If
 
         modificalblDays()
@@ -264,21 +304,21 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
                         End If
                     ElseIf isCooling Then
                         If myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 0 Then
+                            pbTickT3.BackColor = Color.LightGray
+                            pbTickT2.BackColor = Color.LightGray
                             pbTickT1.BackColor = Color.LightGray
-                            pbTickT2.BackColor = Color.LightGray
-                            pbTickT3.BackColor = Color.LightGray
                         ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 1 Then
-                            pbTickT1.BackColor = Color.Black
-                            pbTickT2.BackColor = Color.LightGray
-                            pbTickT3.BackColor = Color.LightGray
-                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 2 Then
-                            pbTickT1.BackColor = Color.Black
-                            pbTickT2.BackColor = Color.Black
-                            pbTickT3.BackColor = Color.LightGray
-                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 3 Then
-                            pbTickT1.BackColor = Color.Black
-                            pbTickT2.BackColor = Color.Black
                             pbTickT3.BackColor = Color.Black
+                            pbTickT2.BackColor = Color.LightGray
+                            pbTickT1.BackColor = Color.LightGray
+                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 2 Then
+                            pbTickT3.BackColor = Color.Black
+                            pbTickT2.BackColor = Color.Black
+                            pbTickT1.BackColor = Color.LightGray
+                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 3 Then
+                            pbTickT3.BackColor = Color.Black
+                            pbTickT2.BackColor = Color.Black
+                            pbTickT1.BackColor = Color.Black
                         End If
                     End If
                     counter += 1
@@ -306,21 +346,21 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
                         End If
                     ElseIf isCooling Then
                         If myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 0 Then
+                            DirectCast(Me.Controls.Find("pbTickT3" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
+                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
                             DirectCast(Me.Controls.Find("pbTickT1" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
-                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
-                            DirectCast(Me.Controls.Find("pbTickT3" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
                         ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 1 Then
-                            DirectCast(Me.Controls.Find("pbTickT1" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
-                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
-                            DirectCast(Me.Controls.Find("pbTickT3" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
-                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 2 Then
-                            DirectCast(Me.Controls.Find("pbTickT1" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
-                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
-                            DirectCast(Me.Controls.Find("pbTickT3" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
-                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 3 Then
-                            DirectCast(Me.Controls.Find("pbTickT1" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
-                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
                             DirectCast(Me.Controls.Find("pbTickT3" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
+                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
+                            DirectCast(Me.Controls.Find("pbTickT1" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
+                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 2 Then
+                            DirectCast(Me.Controls.Find("pbTickT3" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
+                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
+                            DirectCast(Me.Controls.Find("pbTickT1" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.LightGray
+                        ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, counter) = 3 Then
+                            DirectCast(Me.Controls.Find("pbTickT3" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
+                            DirectCast(Me.Controls.Find("pbTickT2" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
+                            DirectCast(Me.Controls.Find("pbTickT1" & counter.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.Black
                         End If
                     End If
                     counter += 1
@@ -331,12 +371,17 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
         clock.Enabled = True
 
         UpdateRequest = False
+        If m_isManual Then
+            RaiseEvent eventoManualeAttivato()
+        Else
+            RaiseEvent eventoManualeDisattivato()
+        End If
         blinkingDot()
 
 
     End Sub
     Private Delegate Sub blinkingDotDelegate()
-    Private Sub blinkingDot()
+    Private Sub blinkingDot() 'Determina anche WSP
 
 
 
@@ -354,35 +399,72 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
                 Else
                     defaultColor = Color.LightGray
                 End If
+
+                'Determinazione working setpoint
+                If m_isManual Then
+                    m_WorkingSetpoint = myWeeklySchedule.manualSetpoint(0)
+                ElseIf myWeeklySchedule.activeHeatTemp(DateTime.Now.DayOfWeek, position) = 0 Then
+                    m_WorkingSetpoint = myWeeklySchedule.freezeProtSetpoint
+                ElseIf myWeeklySchedule.activeHeatTemp(DateTime.Now.DayOfWeek, position) = 1 Then
+                    m_WorkingSetpoint = myWeeklySchedule.setpointHeatT1
+                ElseIf myWeeklySchedule.activeHeatTemp(DateTime.Now.DayOfWeek, position) = 2 Then
+                    m_WorkingSetpoint = myWeeklySchedule.setpointHeatT2
+                ElseIf myWeeklySchedule.activeHeatTemp(DateTime.Now.DayOfWeek, position) = 3 Then
+                    m_WorkingSetpoint = myWeeklySchedule.setpointHeatT3
+                End If
+                If m_isEco And Not m_isManual Then
+                    m_WorkingSetpoint += myWeeklySchedule.ecoHeatReduction
+                End If
+
             ElseIf isCooling Then
-                If myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, position) <> 0 Then
+                If myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, position) = 3 Then
                     defaultColor = Color.Black
                 Else
                     defaultColor = Color.LightGray
                 End If
 
+                'Determinazione working setpoint
+                If m_isManual Then
+                    m_WorkingSetpoint = myWeeklySchedule.manualSetpoint(1)
+                ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, position) = 0 Then
+                    m_WorkingSetpoint = myWeeklySchedule.freezeProtSetpoint
+                ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, position) = 1 Then
+                    m_WorkingSetpoint = myWeeklySchedule.setpointCoolT3
+                ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, position) = 2 Then
+                    m_WorkingSetpoint = myWeeklySchedule.setpointCoolT2
+                ElseIf myWeeklySchedule.activeCoolTemp(DateTime.Now.DayOfWeek, position) = 3 Then
+                    m_WorkingSetpoint = myWeeklySchedule.setpointCoolT1
+                End If
+                If m_isEco And Not m_isManual Then
+                    m_WorkingSetpoint += myWeeklySchedule.ecoCoolIncrease
+                End If
+
             End If
 
-            If DirectCast(Me.Controls.Find("pbTickT1" & position.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = defaultColor Then
-                DirectCast(Me.Controls.Find("pbTickT1" & position.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.DarkGray
-            Else
-                DirectCast(Me.Controls.Find("pbTickT1" & position.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = defaultColor
+            If DateTime.Now.Second Mod 2 Then
+                If DirectCast(Me.Controls.Find("pbTickT1" & position.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = defaultColor Then
+                    DirectCast(Me.Controls.Find("pbTickT1" & position.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = Color.DarkGray
+                Else
+                    DirectCast(Me.Controls.Find("pbTickT1" & position.ToString.PadLeft(2, "0"), True)(0), PictureBox).BackColor = defaultColor
+                End If
             End If
         End If
+
+        Me.BeginInvoke(Sub()
+                           lblWSPtemperature.Text = ("SETP: " & Format(m_WorkingSetpoint, "##0.0").ToString & "°c").Replace(",", ".")
+                       End Sub)
 
 
 
     End Sub
-    Private Delegate Sub modificaClockTextDelegate(ByVal a As String, ByVal b As String, ByVal c As String)
-    Private Sub modificaClockText(ByVal a As String, ByVal b As String, ByVal c As String)
+    Private Delegate Sub modificaClockTextDelegate(ByVal a As String)
+    Private Sub modificaClockText(ByVal a As String)
 
         If Me.InvokeRequired Then
             Dim d As New modificaClockTextDelegate(AddressOf Me.modificaClockText)
-            Me.BeginInvoke(d, New Object() {a, b, c})
+            Me.BeginInvoke(d, New Object() {a})
         Else
-            lblClockHH.Text = a
-            lblClockMM.Text = c
-            lblClockDP.Text = b
+            lblClock.Text = a
         End If
 
     End Sub
@@ -413,8 +495,9 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
 
         newDlg.dlgWeeklyScheduler = myWeeklySchedule
         newDlg.ShowDialog()
+        isManual = False
         If newDlg.DialogResult = DialogResult.OK Then
-            myWeeklySchedule = newDlg.dlgWeeklyScheduler
+            myWeeklySchedule = DeepClone(newDlg.dlgWeeklyScheduler)
         End If
     End Sub
     Public Sub UpdatemyWeeklySchedule(ByVal a As weeklyScheduler)
@@ -431,9 +514,85 @@ Public Class MultiGenPoint3TemperatureWeeklyStrip : Implements IDisposable
         myGraphics.DrawRectangle(myPen, myRectangle)
 
     End Sub
+    Private Sub visualizzazioneManuale()
+
+
+
+        If m_isHeating Then
+            If myWeeklySchedule.manualSetpoint(0) = myWeeklySchedule.freezeProtSetpoint Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeHeatTemp(day, hh) = 0
+                    Next
+                Next
+            ElseIf myWeeklySchedule.manualSetpoint(0) = myWeeklySchedule.setpointHeatT1 Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeHeatTemp(day, hh) = 1
+                    Next
+                Next
+            ElseIf myWeeklySchedule.manualSetpoint(0) = myWeeklySchedule.setpointHeatT2 Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeHeatTemp(day, hh) = 2
+                    Next
+                Next
+            ElseIf myWeeklySchedule.manualSetpoint(0) = myWeeklySchedule.setpointHeatT3 Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeHeatTemp(day, hh) = 3
+                    Next
+                Next
+            End If
+        ElseIf m_isCooling Then
+            If myWeeklySchedule.manualSetpoint(1) = myWeeklySchedule.freezeProtSetpoint Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeCoolTemp(day, hh) = 0
+                    Next
+                Next
+            ElseIf myWeeklySchedule.manualSetpoint(1) = myWeeklySchedule.setpointCoolT1 Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeCoolTemp(day, hh) = 1
+                    Next
+                Next
+            ElseIf myWeeklySchedule.manualSetpoint(1) = myWeeklySchedule.setpointCoolT2 Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeCoolTemp(day, hh) = 2
+                    Next
+                Next
+            ElseIf myWeeklySchedule.manualSetpoint(1) = myWeeklySchedule.setpointCoolT3 Then
+                For day = 0 To 6
+                    For hh = 0 To 47
+                        myWeeklySchedule.activeCoolTemp(day, hh) = 3
+                    Next
+                Next
+            End If
+
+        End If
+
+        UpdateRequest = True
+        'Me.BeginInvoke(Sub()
+        '                   Me.Refresh()
+        '               End Sub)
+
+    End Sub
+    Private Sub devisualizzazioneManuale()
+
+        UpdateRequest = True
+        'Me.BeginInvoke(Sub()
+        '                   Me.Refresh()
+        '               End Sub)
+
+
+    End Sub
 
     Private Sub MultiGenPoint3TemperatureWeeklyStrip_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         UpdateRequest = True
         Me.Refresh()
+        AddHandler eventoManualeAttivato, AddressOf Me.visualizzazioneManuale
+        AddHandler eventoManualeDisattivato, AddressOf Me.devisualizzazioneManuale
     End Sub
 End Class
