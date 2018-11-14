@@ -6,16 +6,16 @@
     Dim cpen As New Pen(Color.Black, 1)
     Dim lpen As New Pen(Color.Black, 10)
     Dim tpen As New Pen(Color.Transparent, 2)
-    Dim radius As Integer = 60
+    Dim radius As Integer = 44
     Dim x1, y1, x2, y2 As Integer
-    Dim centreX As Double = 64
-    Dim centreY As Double = 64
+    Dim centreX As Double = 48
+    Dim centreY As Double = 48
     Private m_settings As Integer()
 
     Private Sub MePaint(sender As Object, e As PaintEventArgs) Handles Me.Paint
 
-        e.Graphics.DrawEllipse(cpen, 2, 2, 124, 124)
-        e.Graphics.DrawEllipse(cpen, 12, 12, 104, 104)
+        e.Graphics.DrawEllipse(cpen, 2, 2, 92, 92)
+        e.Graphics.DrawEllipse(cpen, 12, 12, 72, 72)
         Dim i As Double = 6
         For num = 0 To 2 * pi Step pi / 24
             x1 = Convert.ToInt32(radius * Math.Cos(num) + centreX)
@@ -26,10 +26,11 @@
             e.Graphics.DrawLine(apen, x1, y1, x2, y2)
 
             If i Mod 2 = 0 Then
+                If i = 24 Then i = 0
                 Dim lbl As New Label
                 With lbl
                     .Text = i.ToString.PadLeft(2, "0")
-                    .Location = New Point(Convert.ToInt32(28 / 40 * radius * Math.Cos(num) + centreX - 5), Convert.ToInt32(28 / 40 * radius * Math.Sin(num) + centreY - 5))
+                    .Location = New Point(Convert.ToInt32(26 / 40 * radius * Math.Cos(num) + centreX - 5), Convert.ToInt32(26 / 40 * radius * Math.Sin(num) + centreY - 5))
                     .Visible = True
                     .Size = New Size(10, 10)
                     .Font = New Font("Segoe UI", 5, FontStyle.Regular)
@@ -38,7 +39,6 @@
                 End With
                 Me.Controls.Add(lbl)
             End If
-            If i = 24 Then i = 0
             i += 0.5
         Next
 

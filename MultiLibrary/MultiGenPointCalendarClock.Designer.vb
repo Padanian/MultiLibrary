@@ -29,7 +29,7 @@ Partial Class MultiGenPointCalendarClock
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Name = "MultiGenPointCalendarClock"
-        Me.Size = New System.Drawing.Size(128, 128)
+        Me.Size = New System.Drawing.Size(96, 96)
         Me.ResumeLayout(False)
 
     End Sub
