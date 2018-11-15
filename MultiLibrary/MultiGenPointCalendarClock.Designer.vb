@@ -22,16 +22,31 @@ Partial Class MultiGenPointCalendarClock
     'Non modificarla mediante l'editor del codice.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.pbCalendarClockSettings = New System.Windows.Forms.PictureBox()
+        CType(Me.pbCalendarClockSettings, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'pbCalendarClockSettings
+        '
+        Me.pbCalendarClockSettings.Image = Global.MultiLibrary.My.Resources.Resources.SettingsGroup_64x
+        Me.pbCalendarClockSettings.Location = New System.Drawing.Point(32, 32)
+        Me.pbCalendarClockSettings.Name = "pbCalendarClockSettings"
+        Me.pbCalendarClockSettings.Size = New System.Drawing.Size(32, 32)
+        Me.pbCalendarClockSettings.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pbCalendarClockSettings.TabIndex = 0
+        Me.pbCalendarClockSettings.TabStop = False
         '
         'MultiGenPointCalendarClock
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.pbCalendarClockSettings)
         Me.Name = "MultiGenPointCalendarClock"
         Me.Size = New System.Drawing.Size(96, 96)
+        CType(Me.pbCalendarClockSettings, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
+    Friend WithEvents pbCalendarClockSettings As PictureBox
 End Class

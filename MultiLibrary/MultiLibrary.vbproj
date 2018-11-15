@@ -50,8 +50,12 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -173,6 +177,12 @@
     <Compile Include="MultiGenPointCalendarClock.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Resources\frmCalendarClockSettings.Designer.vb">
+      <DependentUpon>frmCalendarClockSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\frmCalendarClockSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="weeklyScheduler.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MultiGenPointCalendarClock.resx">
       <DependentUpon>MultiGenPointCalendarClock.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\frmCalendarClockSettings.resx">
+      <DependentUpon>frmCalendarClockSettings.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +327,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\black-dot-transparent-back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings_64x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SettingsGroup_64x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

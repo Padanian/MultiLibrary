@@ -2,7 +2,7 @@
     Dim pbBoxes As PictureBox() = New PictureBox(287) {}
     Dim pi As Double = Math.PI
     Dim apen As New Pen(Color.LightGray, 1)
-    Dim bpen As New Pen(Color.Gray, 1)
+    Dim bpen As New Pen(Color.Black, 2)
     Dim cpen As New Pen(Color.Black, 1)
     Dim lpen As New Pen(Color.Black, 10)
     Dim tpen As New Pen(Color.Transparent, 2)
@@ -11,6 +11,15 @@
     Dim centreX As Double = 48
     Dim centreY As Double = 48
     Private m_settings As Integer()
+
+    Private Sub pbCalendarClockSettings_Click(sender As Object, e As EventArgs) Handles pbCalendarClockSettings.Click
+        Dim myform As New frmCalendarClockSettings
+        myform.ShowDialog()
+        If myform.DialogResult = DialogResult.OK Then
+            Settings = myform.Settings
+            Me.Refresh()
+        End If
+    End Sub
 
     Private Sub MePaint(sender As Object, e As PaintEventArgs) Handles Me.Paint
 
@@ -42,43 +51,50 @@
             i += 0.5
         Next
 
-        'For i = 2 To 23 Step 2
-        '        Dim lbl As New Label
-        '        With lbl
-        '            .Text = i.ToString.PadLeft(2, "0")
-        '            .Location = New Point(12 * (i - 1) + 7, 2)
-        '            .Visible = True
-        '            .Size = New Size(18, 10)
-        '            .Font = New Font("Segoe UI", 5, FontStyle.Regular)
-        '            .Name = "lbl" & i.ToString.PadLeft(2, "0")
-        '        End With
-        '        Me.Controls.Add(lbl)
-        '    Next
-        '    e.Graphics.DrawLine(lpen, Settings(0), 25, Settings(1), 25)
-        '    e.Graphics.DrawLine(lpen, Settings(2), 25, Settings(3), 25)
-        '    e.Graphics.DrawLine(lpen, Settings(4), 25, Settings(5), 25)
+        For i = Stepping(Settings(0)) To Stepping(Settings(1)) Step pi / 288
+            x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
+            y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
+            x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
+            y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
 
+            e.Graphics.DrawLine(cpen, x1, y1, x2, y2)
+        Next
+        For i = Stepping(Settings(2)) To Stepping(Settings(3)) Step pi / 288
+            x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
+            y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
+            x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
+            y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
 
+            e.Graphics.DrawLine(cpen, x1, y1, x2, y2)
+        Next
+        For i = Stepping(Settings(4)) To Stepping(Settings(5)) Step pi / 288
+            x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
+            y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
+            x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
+            y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
+
+            e.Graphics.DrawLine(cpen, x1, y1, x2, y2)
+        Next
 
     End Sub
-        Public Sub New()
+    Private Function Stepping(ByVal setting As Integer) As Double
+        Return setting * pi / 144 - pi / 2
+    End Function
+    Public Sub New()
             InitializeComponent()
             Settings = {0, 0, 0, 0, 0, 0}
         End Sub
-        Public Property Settings As Integer()
-            Get
-                Settings = m_settings
-            End Get
-            Set(Settings As Integer())
-                If Settings.Count = 6 Then
-                    Array.Sort(Settings)
-                    m_settings = Settings
-                    Me.Refresh()
-                End If
-            End Set
-        End Property
+    Public Property Settings As Integer()
+        Get
+            Settings = m_settings
+        End Get
+        Set(Settings As Integer())
+            If Settings.Count = 6 Then
+                Array.Sort(Settings)
+                m_settings = Settings
+                Me.Refresh()
+            End If
+        End Set
+    End Property
 
-
-
-
-    End Class
+End Class
