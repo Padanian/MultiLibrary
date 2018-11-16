@@ -13,6 +13,17 @@ Public Class MultiGenPointCalendarClock
     Dim centreY As Double = 48
     Private m_settings As Integer()
     Public Property isOn As Boolean
+    Public AppSettings As System.Configuration.SettingsBase
+
+    'Private user_settings As System.Configuration.ApplicationSettingsBase
+    'Public Property AppSettings() As System.Configuration.ApplicationSettingsBase
+    '    Get
+    '        Return user_settings
+    '    End Get
+    '    Set(ByVal value As System.Configuration.ApplicationSettingsBase)
+    '        user_settings = value
+    '    End Set
+    'End Property
     Private Sub pbCalendarClockSettings_Click(sender As Object, e As EventArgs) Handles pbCalendarClockSettings.Click
         Dim myform As New frmCalendarClockSettings
         myform.StartPosition = FormStartPosition.Manual
@@ -26,13 +37,13 @@ Public Class MultiGenPointCalendarClock
         If myform.DialogResult = DialogResult.OK Then
             Settings = myform.Settings
 
-            My.Settings.MGPCCSettings0 = Settings(0)
-            My.Settings.MGPCCSettings1 = Settings(1)
-            My.Settings.MGPCCSettings2 = Settings(2)
-            My.Settings.MGPCCSettings3 = Settings(3)
-            My.Settings.MGPCCSettings4 = Settings(4)
-            My.Settings.MGPCCSettings5 = Settings(5)
-            My.Settings.Save()
+            AppSettings("MGPCCSettings0") = Settings(0)
+            AppSettings("MGPCCSettings1") = Settings(1)
+            AppSettings("MGPCCSettings2") = Settings(2)
+            AppSettings("MGPCCSettings3") = Settings(3)
+            AppSettings("MGPCCSettings4") = Settings(4)
+            AppSettings("MGPCCSettings5") = Settings(5)
+            AppSettings.Save()
 
 
             Me.Refresh()
@@ -127,12 +138,15 @@ Public Class MultiGenPointCalendarClock
     Public Sub New()
         InitializeComponent()
 
-        Settings = {My.Settings.MGPCCSettings0,
-            My.Settings.MGPCCSettings1,
-            My.Settings.MGPCCSettings2,
-            My.Settings.MGPCCSettings3,
-            My.Settings.MGPCCSettings4,
-            My.Settings.MGPCCSettings5}
+        AppSettings = My.Settings
+
+        Settings = {AppSettings("MGPCCSettings0"),
+            AppSettings("MGPCCSettings1"),
+            AppSettings("MGPCCSettings2"),
+            AppSettings("MGPCCSettings3"),
+            AppSettings("MGPCCSettings4"),
+            AppSettings("MGPCCSettings5")}
+
 
 
     End Sub
@@ -200,3 +214,5 @@ Public Class MultiGenPointCalendarClock
         End If
     End Sub
 End Class
+
+
