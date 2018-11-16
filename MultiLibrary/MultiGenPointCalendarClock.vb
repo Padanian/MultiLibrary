@@ -1,22 +1,38 @@
 ﻿Public Class MultiGenPointCalendarClock
-    Dim pbBoxes As PictureBox() = New PictureBox(287) {}
+    Dim WithEvents clock As New Timers.Timer
     Dim pi As Double = Math.PI
     Dim apen As New Pen(Color.LightGray, 1)
-    Dim bpen As New Pen(Color.Black, 2)
+    Dim b1pen As New Pen(Color.Red, 4)
+    Dim b2pen As New Pen(Color.LightGray, 1)
+    Dim b3pen As New Pen(Color.Blue, 4)
     Dim cpen As New Pen(Color.Black, 1)
-    Dim lpen As New Pen(Color.Black, 10)
-    Dim tpen As New Pen(Color.Transparent, 2)
     Dim radius As Integer = 44
-    Dim x1, y1, x2, y2 As Integer
+    Dim x1, y1, x2, y2, x, y As Integer
     Dim centreX As Double = 48
     Dim centreY As Double = 48
     Private m_settings As Integer()
-
+    Public Property isOn As Boolean
     Private Sub pbCalendarClockSettings_Click(sender As Object, e As EventArgs) Handles pbCalendarClockSettings.Click
         Dim myform As New frmCalendarClockSettings
+        myform.StartPosition = FormStartPosition.Manual
+        myform.Location = New Point(Me.Location.X + Me.Size.Width, Me.Location.Y)
+        myform.Settings = Settings
+
+
         myform.ShowDialog()
+
+
         If myform.DialogResult = DialogResult.OK Then
             Settings = myform.Settings
+
+            My.Settings.MGPCCSettings0 = Settings(0)
+            My.Settings.MGPCCSettings1 = Settings(1)
+            My.Settings.MGPCCSettings2 = Settings(2)
+            My.Settings.MGPCCSettings3 = Settings(3)
+            My.Settings.MGPCCSettings4 = Settings(4)
+            My.Settings.MGPCCSettings5 = Settings(5)
+            My.Settings.Save()
+
             Me.Refresh()
         End If
     End Sub
@@ -25,7 +41,7 @@
 
         e.Graphics.DrawEllipse(cpen, 2, 2, 92, 92)
         e.Graphics.DrawEllipse(cpen, 12, 12, 72, 72)
-        Dim i As Double = 6
+            Dim i As Double = 6
         For num = 0 To 2 * pi Step pi / 24
             x1 = Convert.ToInt32(radius * Math.Cos(num) + centreX)
             y1 = Convert.ToInt32(radius * Math.Sin(num) + centreY)
@@ -51,30 +67,56 @@
             i += 0.5
         Next
 
-        For i = Stepping(Settings(0)) To Stepping(Settings(1)) Step pi / 288
-            x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
-            y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
-            x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
-            y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
+        If Settings(0) <> Settings(1) Then
+            For i = Stepping(Settings(0)) To Stepping(Settings(1)) Step pi / 288
+                x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
+                y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
+                x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
+                y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
 
-            e.Graphics.DrawLine(cpen, x1, y1, x2, y2)
-        Next
-        For i = Stepping(Settings(2)) To Stepping(Settings(3)) Step pi / 288
-            x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
-            y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
-            x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
-            y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
+                If i = Stepping(Settings(0)) Then
+                    e.Graphics.DrawLine(b1pen, x1, y1, x2, y2)
+                    i += pi / 72
+                Else e.Graphics.DrawLine(b2pen, x1, y1, x2, y2)
+                End If
+            Next
+            e.Graphics.DrawLine(b3pen, x1, y1, x2, y2)
 
-            e.Graphics.DrawLine(cpen, x1, y1, x2, y2)
-        Next
-        For i = Stepping(Settings(4)) To Stepping(Settings(5)) Step pi / 288
-            x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
-            y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
-            x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
-            y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
+        End If
 
-            e.Graphics.DrawLine(cpen, x1, y1, x2, y2)
-        Next
+        If Settings(2) <> Settings(3) Then
+            For i = Stepping(Settings(2)) To Stepping(Settings(3)) Step pi / 288
+                x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
+                y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
+                x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
+                y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
+
+                If i = Stepping(Settings(2)) Then
+                    e.Graphics.DrawLine(b1pen, x1, y1, x2, y2)
+                    i += pi / 72
+                Else e.Graphics.DrawLine(b2pen, x1, y1, x2, y2)
+                End If
+            Next
+            e.Graphics.DrawLine(b3pen, x1, y1, x2, y2)
+
+        End If
+
+        If Settings(4) <> Settings(5) Then
+            For i = Stepping(Settings(4)) To Stepping(Settings(5)) Step pi / 288
+                x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
+                y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
+                x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
+                y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
+
+                If i = Stepping(Settings(4)) Then
+                    e.Graphics.DrawLine(b1pen, x1, y1, x2, y2)
+                    i += pi / 72
+                Else e.Graphics.DrawLine(b2pen, x1, y1, x2, y2)
+                End If
+            Next
+            e.Graphics.DrawLine(b3pen, x1, y1, x2, y2)
+
+        End If
 
     End Sub
     Private Function Stepping(ByVal setting As Integer) As Double
@@ -82,8 +124,13 @@
     End Function
     Public Sub New()
             InitializeComponent()
-            Settings = {0, 0, 0, 0, 0, 0}
-        End Sub
+        Settings = {My.Settings.MGPCCSettings0,
+            My.Settings.MGPCCSettings1,
+            My.Settings.MGPCCSettings2,
+            My.Settings.MGPCCSettings3,
+            My.Settings.MGPCCSettings4,
+            My.Settings.MGPCCSettings5}
+    End Sub
     Public Property Settings As Integer()
         Get
             Settings = m_settings
@@ -97,4 +144,54 @@
         End Set
     End Property
 
+    Private Sub MultiGenPointCalendarClock_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        With clock
+            .Enabled = True
+            .Interval = 666
+            .AutoReset = True
+            .Start()
+        End With
+    End Sub
+
+    Private Sub clock_tick() Handles clock.Elapsed
+        blinkingDot()
+    End Sub
+    Private Delegate Sub blinkingDotDelegate()
+    Private Sub blinkingDot()
+
+        If Me.InvokeRequired Then
+            Dim d As New blinkingDotDelegate(AddressOf Me.blinkingDot)
+            Me.BeginInvoke(d)
+        Else
+            Dim f = (DateTime.Now.Hour * 12 + DateTime.Now.Minute \ 5)
+            Dim i = f * 2 * pi / 288 - pi / 2
+            x = Convert.ToInt32(1 / 2 * radius * Math.Cos(i) + centreX)
+            y = Convert.ToInt32(1 / 2 * radius * Math.Sin(i) + centreY)
+            If (f >= Settings(0) And f <= Settings(1)) Or
+                (f >= Settings(2) And f <= Settings(3)) Or
+                (f >= Settings(4) And f <= Settings(5)) Then
+                pbLed.Image = My.Resources.ledgreen
+                isOn = True
+            Else
+                pbLed.Image = My.Resources.ledoff
+                isOn = False
+            End If
+            If Me.Controls.Find("pbDot", True).Length = 0 Then
+                Dim pbDot As New PictureBox
+                With pbDot
+                    .Location = New Point(x, y)
+                    .Size = New Size(2, 2)
+                    .BackColor = Color.Black
+                    .Name = "pbDot"
+                End With
+                Me.Controls.Add(pbDot)
+            Else
+                If Me.Controls.Find("pbDot", True)(0).BackColor = Color.Black Then
+                    Me.Controls.Find("pbDot", True)(0).BackColor = Me.BackColor
+                Else
+                    Me.Controls.Find("pbDot", True)(0).BackColor = Color.Black
+                End If
+            End If
+        End If
+    End Sub
 End Class

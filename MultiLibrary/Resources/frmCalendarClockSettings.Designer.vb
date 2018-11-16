@@ -36,6 +36,8 @@ Partial Class frmCalendarClockSettings
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.chkF2 = New System.Windows.Forms.CheckBox()
+        Me.chkF3 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -98,6 +100,7 @@ Partial Class frmCalendarClockSettings
         'dtpF2Start
         '
         Me.dtpF2Start.CustomFormat = "HH:mm"
+        Me.dtpF2Start.Enabled = False
         Me.dtpF2Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtpF2Start.Location = New System.Drawing.Point(42, 58)
         Me.dtpF2Start.Name = "dtpF2Start"
@@ -109,6 +112,7 @@ Partial Class frmCalendarClockSettings
         'dtpF2Stop
         '
         Me.dtpF2Stop.CustomFormat = "HH:mm"
+        Me.dtpF2Stop.Enabled = False
         Me.dtpF2Stop.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtpF2Stop.Location = New System.Drawing.Point(115, 58)
         Me.dtpF2Stop.Name = "dtpF2Stop"
@@ -120,6 +124,7 @@ Partial Class frmCalendarClockSettings
         'dtpF3Start
         '
         Me.dtpF3Start.CustomFormat = "HH:mm"
+        Me.dtpF3Start.Enabled = False
         Me.dtpF3Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtpF3Start.Location = New System.Drawing.Point(42, 86)
         Me.dtpF3Start.Name = "dtpF3Start"
@@ -131,6 +136,7 @@ Partial Class frmCalendarClockSettings
         'dtpF3Stop
         '
         Me.dtpF3Stop.CustomFormat = "HH:mm"
+        Me.dtpF3Stop.Enabled = False
         Me.dtpF3Stop.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtpF3Stop.Location = New System.Drawing.Point(115, 86)
         Me.dtpF3Stop.Name = "dtpF3Stop"
@@ -151,6 +157,7 @@ Partial Class frmCalendarClockSettings
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.Enabled = False
         Me.Label2.Location = New System.Drawing.Point(12, 65)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(19, 13)
@@ -160,6 +167,7 @@ Partial Class frmCalendarClockSettings
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.Enabled = False
         Me.Label3.Location = New System.Drawing.Point(12, 93)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(19, 13)
@@ -184,6 +192,24 @@ Partial Class frmCalendarClockSettings
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "Stop"
         '
+        'chkF2
+        '
+        Me.chkF2.AutoSize = True
+        Me.chkF2.Location = New System.Drawing.Point(178, 62)
+        Me.chkF2.Name = "chkF2"
+        Me.chkF2.Size = New System.Drawing.Size(15, 14)
+        Me.chkF2.TabIndex = 3
+        Me.chkF2.UseVisualStyleBackColor = True
+        '
+        'chkF3
+        '
+        Me.chkF3.AutoSize = True
+        Me.chkF3.Location = New System.Drawing.Point(178, 90)
+        Me.chkF3.Name = "chkF3"
+        Me.chkF3.Size = New System.Drawing.Size(15, 14)
+        Me.chkF3.TabIndex = 3
+        Me.chkF3.UseVisualStyleBackColor = True
+        '
         'frmCalendarClockSettings
         '
         Me.AcceptButton = Me.OK_Button
@@ -192,6 +218,8 @@ Partial Class frmCalendarClockSettings
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(211, 175)
         Me.ControlBox = False
+        Me.Controls.Add(Me.chkF3)
+        Me.Controls.Add(Me.chkF2)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label5)
@@ -232,4 +260,6 @@ Partial Class frmCalendarClockSettings
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents Label5 As Label
+    Friend WithEvents chkF2 As CheckBox
+    Friend WithEvents chkF3 As CheckBox
 End Class

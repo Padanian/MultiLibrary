@@ -11,6 +11,15 @@ Public Class frmCalendarClockSettings
         Dim F2Stop As Integer = dtpF2Stop.Value.Hour * 12 + dtpF2Stop.Value.Minute \ 5
         Dim F3Stop As Integer = dtpF3Stop.Value.Hour * 12 + dtpF3Stop.Value.Minute \ 5
 
+        If chkF2.Checked = False Then
+            F2Start = 0
+            F2Stop = 0
+        End If
+        If chkF3.Checked = False Then
+            F3Start = 0
+            F3Stop = 0
+        End If
+
         If (F1Start < F1Stop Or (F1Start = 0 And F1Stop = 0)) And
             (F1Stop < F2Start Or F2Start = 0) And
             (F2Start < F2Stop Or (F2Start = 0 And F2Stop = 0)) And
@@ -49,5 +58,70 @@ Public Class frmCalendarClockSettings
 
     Private Sub dtpF3Start_ValueChanged(sender As Object, e As EventArgs) Handles dtpF3Start.ValueChanged
         dtpF3Stop.MinDate = dtpF3Start.Value
+    End Sub
+
+    Private Sub chkF2_CheckedChanged(sender As Object, e As EventArgs) Handles chkF2.CheckedChanged
+        If chkF2.Checked = False Then
+            dtpF2Start.Enabled = False
+            dtpF2Stop.Enabled = False
+            Label2.Enabled = False
+        Else
+            dtpF2Start.Enabled = True
+            dtpF2Stop.Enabled = True
+            Label2.Enabled = True
+        End If
+    End Sub
+
+    Private Sub chkF3_CheckedChanged(sender As Object, e As EventArgs) Handles chkF3.CheckedChanged
+        If chkF3.Checked = False Then
+            dtpF3Start.Enabled = False
+            dtpF3Stop.Enabled = False
+            Label3.Enabled = False
+        Else
+            dtpF3Start.Enabled = True
+            dtpF3Stop.Enabled = True
+            Label3.Enabled = True
+        End If
+
+    End Sub
+
+    Private Sub frmCalendarClockSettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        If Not Settings.SequenceEqual({0, 0, 0, 0, 0, 0}) Then
+            Dim midnight = New DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
+            If Settings(0) = 0 And Settings(1) = 0 And Settings(2) = 0 And Settings(3) = 0 Then
+                dtpF1Start.Value = midnight.AddHours(Settings(4) \ 12)
+                dtpF1Start.Value = dtpF1Start.Value.AddMinutes((Settings(4) Mod 12) * 5)
+                dtpF1Stop.Value = midnight.AddHours(Settings(5) \ 12)
+                dtpF1Stop.Value = dtpF1Stop.Value.AddMinutes((Settings(5) Mod 12) * 5)
+            ElseIf Settings(0) = 0 And Settings(1) = 0 Then
+                chkF2.Checked = True
+                dtpF1Start.Value = midnight.AddHours(Settings(2) \ 12)
+                dtpF1Start.Value = dtpF1Start.Value.AddMinutes((Settings(2) Mod 12) * 5)
+                dtpF1Stop.Value = midnight.AddHours(Settings(3) \ 12)
+                dtpF1Stop.Value = dtpF1Stop.Value.AddMinutes((Settings(3) Mod 12) * 5)
+                dtpF2Start.Value = midnight.AddHours(Settings(4) \ 12)
+                dtpF2Start.Value = dtpF2Start.Value.AddMinutes((Settings(4) Mod 12) * 5)
+                dtpF2Stop.Value = midnight.AddHours(Settings(5) \ 12)
+                dtpF2Stop.Value = dtpF2Stop.Value.AddMinutes((Settings(5) Mod 12) * 5)
+            Else
+                chkF2.Checked = True
+                chkF3.Checked = True
+                dtpF1Start.Value = midnight.AddHours(Settings(0) \ 12)
+                dtpF1Start.Value = dtpF1Start.Value.AddMinutes((Settings(0) Mod 12) * 5)
+                dtpF1Stop.Value = midnight.AddHours(Settings(1) \ 12)
+                dtpF1Stop.Value = dtpF1Stop.Value.AddMinutes((Settings(1) Mod 12) * 5)
+                dtpF2Start.Value = midnight.AddHours(Settings(2) \ 12)
+                dtpF2Start.Value = dtpF2Start.Value.AddMinutes((Settings(2) Mod 12) * 5)
+                dtpF2Stop.Value = midnight.AddHours(Settings(3) \ 12)
+                dtpF2Stop.Value = dtpF2Stop.Value.AddMinutes((Settings(3) Mod 12) * 5)
+                dtpF3Start.Value = midnight.AddHours(Settings(4) \ 12)
+                dtpF3Start.Value = dtpF3Start.Value.AddMinutes((Settings(4) Mod 12) * 5)
+                dtpF3Stop.Value = midnight.AddHours(Settings(5) \ 12)
+                dtpF3Stop.Value = dtpF3Stop.Value.AddMinutes((Settings(5) Mod 12) * 5)
+            End If
+        End If
+
+
     End Sub
 End Class

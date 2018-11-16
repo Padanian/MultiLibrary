@@ -23,30 +23,45 @@ Partial Class MultiGenPointCalendarClock
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.pbCalendarClockSettings = New System.Windows.Forms.PictureBox()
+        Me.pbLed = New System.Windows.Forms.PictureBox()
         CType(Me.pbCalendarClockSettings, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbLed, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pbCalendarClockSettings
         '
         Me.pbCalendarClockSettings.Image = Global.MultiLibrary.My.Resources.Resources.SettingsGroup_64x
-        Me.pbCalendarClockSettings.Location = New System.Drawing.Point(32, 32)
+        Me.pbCalendarClockSettings.Location = New System.Drawing.Point(81, 0)
         Me.pbCalendarClockSettings.Name = "pbCalendarClockSettings"
-        Me.pbCalendarClockSettings.Size = New System.Drawing.Size(32, 32)
+        Me.pbCalendarClockSettings.Size = New System.Drawing.Size(15, 15)
         Me.pbCalendarClockSettings.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbCalendarClockSettings.TabIndex = 0
         Me.pbCalendarClockSettings.TabStop = False
+        '
+        'pbLed
+        '
+        Me.pbLed.Image = Global.MultiLibrary.My.Resources.Resources.ledoff
+        Me.pbLed.Location = New System.Drawing.Point(32, 32)
+        Me.pbLed.Name = "pbLed"
+        Me.pbLed.Size = New System.Drawing.Size(32, 32)
+        Me.pbLed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pbLed.TabIndex = 1
+        Me.pbLed.TabStop = False
         '
         'MultiGenPointCalendarClock
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.pbLed)
         Me.Controls.Add(Me.pbCalendarClockSettings)
         Me.Name = "MultiGenPointCalendarClock"
         Me.Size = New System.Drawing.Size(96, 96)
         CType(Me.pbCalendarClockSettings, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbLed, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents pbCalendarClockSettings As PictureBox
+    Friend WithEvents pbLed As PictureBox
 End Class

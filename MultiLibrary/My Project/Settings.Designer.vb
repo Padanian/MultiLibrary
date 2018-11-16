@@ -15,7 +15,7 @@ Option Explicit On
 Namespace My
     
     <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.8.0.0"),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0"),  _
      Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -159,6 +159,78 @@ Namespace My
             End Get
             Set
                 Me("selectedPositionPumpSwitch") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property MGPCCSettings0() As Integer
+            Get
+                Return CType(Me("MGPCCSettings0"),Integer)
+            End Get
+            Set
+                Me("MGPCCSettings0") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property MGPCCSettings1() As Integer
+            Get
+                Return CType(Me("MGPCCSettings1"),Integer)
+            End Get
+            Set
+                Me("MGPCCSettings1") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property MGPCCSettings2() As Integer
+            Get
+                Return CType(Me("MGPCCSettings2"),Integer)
+            End Get
+            Set
+                Me("MGPCCSettings2") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property MGPCCSettings3() As Integer
+            Get
+                Return CType(Me("MGPCCSettings3"),Integer)
+            End Get
+            Set
+                Me("MGPCCSettings3") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property MGPCCSettings4() As Integer
+            Get
+                Return CType(Me("MGPCCSettings4"),Integer)
+            End Get
+            Set
+                Me("MGPCCSettings4") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property MGPCCSettings5() As Integer
+            Get
+                Return CType(Me("MGPCCSettings5"),Integer)
+            End Get
+            Set
+                Me("MGPCCSettings5") = value
             End Set
         End Property
     End Class
