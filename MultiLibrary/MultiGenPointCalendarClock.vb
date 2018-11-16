@@ -1,4 +1,6 @@
-﻿Imports System.Configuration
+﻿Imports System.IO
+
+<Serializable>
 Public Class MultiGenPointCalendarClock
     Dim WithEvents clock As New Timers.Timer
     Dim pi As Double = Math.PI
@@ -12,18 +14,14 @@ Public Class MultiGenPointCalendarClock
     Dim centreX As Double = 48
     Dim centreY As Double = 48
     Private m_settings As Integer()
-    Public Property isOn As Boolean
-    Public AppSettings As System.Configuration.SettingsBase
+    Public ReadOnly Property isOn As Boolean
+        Get
+            Return m_isOn
+        End Get
+    End Property
+    Private Property m_isOn As Boolean
 
-    'Private user_settings As System.Configuration.ApplicationSettingsBase
-    'Public Property AppSettings() As System.Configuration.ApplicationSettingsBase
-    '    Get
-    '        Return user_settings
-    '    End Get
-    '    Set(ByVal value As System.Configuration.ApplicationSettingsBase)
-    '        user_settings = value
-    '    End Set
-    'End Property
+
     Private Sub pbCalendarClockSettings_Click(sender As Object, e As EventArgs) Handles pbCalendarClockSettings.Click
         Dim myform As New frmCalendarClockSettings
         myform.StartPosition = FormStartPosition.Manual
@@ -37,13 +35,13 @@ Public Class MultiGenPointCalendarClock
         If myform.DialogResult = DialogResult.OK Then
             Settings = myform.Settings
 
-            AppSettings("MGPCCSettings0") = Settings(0)
-            AppSettings("MGPCCSettings1") = Settings(1)
-            AppSettings("MGPCCSettings2") = Settings(2)
-            AppSettings("MGPCCSettings3") = Settings(3)
-            AppSettings("MGPCCSettings4") = Settings(4)
-            AppSettings("MGPCCSettings5") = Settings(5)
-            AppSettings.Save()
+            Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+
+            Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mgpcc"
+            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            bf.Serialize(fStream, Settings) ' write to file
+            fStream.Close()
+
 
 
             Me.Refresh()
@@ -138,16 +136,21 @@ Public Class MultiGenPointCalendarClock
     Public Sub New()
         InitializeComponent()
 
-        AppSettings = My.Settings
+        Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+        Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mgpcc"
 
-        Settings = {AppSettings("MGPCCSettings0"),
-            AppSettings("MGPCCSettings1"),
-            AppSettings("MGPCCSettings2"),
-            AppSettings("MGPCCSettings3"),
-            AppSettings("MGPCCSettings4"),
-            AppSettings("MGPCCSettings5")}
+        If File.Exists(filename) Then
 
+            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            Settings = bf.Deserialize(fStream)
+            fStream.Close()
+        Else
+            Settings = {0, 0, 0, 0, 0, 0}
 
+            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            bf.Serialize(fStream, Settings) ' write to file
+            fStream.Close()
+        End If
 
     End Sub
     Public Property Settings As Integer()
@@ -190,10 +193,10 @@ Public Class MultiGenPointCalendarClock
                 (f >= Settings(2) And f <= Settings(3)) Or
                 (f >= Settings(4) And f <= Settings(5)) Then
                 pbLed.Image = My.Resources.ledgreen
-                isOn = True
+                m_isOn = True
             Else
                 pbLed.Image = My.Resources.ledoff
-                isOn = False
+                m_isOn = False
             End If
             If Me.Controls.Find("pbDot", True).Length = 0 Then
                 Dim pbDot As New PictureBox

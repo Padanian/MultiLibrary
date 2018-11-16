@@ -1,4 +1,6 @@
-﻿Imports MultiLibrary
+﻿Imports System.Configuration
+Imports System.IO
+Imports MultiLibrary
 
 Public Class Form1
     Dim pp0 As New MultiLibrary.MultiGenPointCalendarClock
@@ -8,47 +10,58 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         With pp0
             .Location = New Point(50, 50)
+            .Name = "pp0"
         End With
         Me.Controls.Add(pp0)
         With pp1
             .Location = New Point(150, 50)
+            .Name = "pp1"
         End With
         Me.Controls.Add(pp1)
         With pp2
             .Location = New Point(250, 50)
+            .Name = "pp2"
         End With
         Me.Controls.Add(pp2)
 
-        pp0.AppSettings = My.Settings
-        pp1.AppSettings = My.Settings
-        pp2.AppSettings = My.Settings
+        For Each pp In Me.Controls
+            If TypeOf (pp) Is MultiGenPointCalendarClock Then
 
+                Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                Dim filename As String = Application.LocalUserAppDataPath & "\" & pp.Name & ".mgpcc"
 
-        'pp0.AppSettings.Item("MGPCCSettings0") = pp0.Settings(0)
-        'pp1.AppSettings.Item("MGPCCSettings0") = pp1.Settings(0)
-        'pp2.AppSettings.Item("MGPCCSettings0") = pp2.Settings(0)
-        'pp0.AppSettings.Item("MGPCCSettings1") = pp0.Settings(1)
-        'pp1.AppSettings.Item("MGPCCSettings1") = pp1.Settings(1)
-        'pp2.AppSettings.Item("MGPCCSettings1") = pp2.Settings(1)
-        'pp0.AppSettings.Item("MGPCCSettings2") = pp0.Settings(2)
-        'pp1.AppSettings.Item("MGPCCSettings2") = pp1.Settings(2)
-        'pp2.AppSettings.Item("MGPCCSettings2") = pp2.Settings(2)
-        'pp0.AppSettings.Item("MGPCCSettings3") = pp0.Settings(3)
-        'pp1.AppSettings.Item("MGPCCSettings3") = pp1.Settings(3)
-        'pp2.AppSettings.Item("MGPCCSettings3") = pp2.Settings(3)
-        'pp0.AppSettings.Item("MGPCCSettings4") = pp0.Settings(4)
-        'pp1.AppSettings.Item("MGPCCSettings4") = pp1.Settings(4)
-        'pp2.AppSettings.Item("MGPCCSettings4") = pp2.Settings(4)
-        'pp0.AppSettings.Item("MGPCCSettings5") = pp0.Settings(5)
-        'pp1.AppSettings.Item("MGPCCSettings5") = pp1.Settings(5)
-        'pp2.AppSettings.Item("MGPCCSettings5") = pp2.Settings(5)
+                If File.Exists(filename) Then
+
+                    Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+                    pp.Settings = bf.Deserialize(fStream)
+                    fStream.Close()
+                Else
+                    pp0.Settings = {0, 0, 0, 0, 0, 0}
+
+                    Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+                    bf.Serialize(fStream, pp.Settings) ' write to file
+                    fStream.Close()
+                End If
+            End If
+        Next
+
 
     End Sub
 
     Private Sub Form1_closing(sender As Object, e As EventArgs) Handles Me.Closing
-        pp0.AppSettings.Save()
-        pp1.AppSettings.Save()
-        pp2.AppSettings.Save()
+
+        For Each pp In Me.Controls
+            If TypeOf (pp) Is MultiGenPointCalendarClock Then
+
+                Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                Dim filename As String = Application.LocalUserAppDataPath & "\" & pp.Name & ".mgpcc"
+
+                Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+                bf.Serialize(fStream, pp.Settings) ' write to file
+                fStream.Close()
+
+            End If
+        Next
 
     End Sub
 
