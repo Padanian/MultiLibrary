@@ -1,4 +1,5 @@
-﻿Public Class MultiGenPointCalendarClock
+﻿Imports System.Configuration
+Public Class MultiGenPointCalendarClock
     Dim WithEvents clock As New Timers.Timer
     Dim pi As Double = Math.PI
     Dim apen As New Pen(Color.LightGray, 1)
@@ -33,6 +34,7 @@
             My.Settings.MGPCCSettings5 = Settings(5)
             My.Settings.Save()
 
+
             Me.Refresh()
         End If
     End Sub
@@ -41,7 +43,7 @@
 
         e.Graphics.DrawEllipse(cpen, 2, 2, 92, 92)
         e.Graphics.DrawEllipse(cpen, 12, 12, 72, 72)
-            Dim i As Double = 6
+        Dim i As Double = 6
         For num = 0 To 2 * pi Step pi / 24
             x1 = Convert.ToInt32(radius * Math.Cos(num) + centreX)
             y1 = Convert.ToInt32(radius * Math.Sin(num) + centreY)
@@ -57,8 +59,8 @@
                     .Text = i.ToString.PadLeft(2, "0")
                     .Location = New Point(Convert.ToInt32(26 / 40 * radius * Math.Cos(num) + centreX - 5), Convert.ToInt32(26 / 40 * radius * Math.Sin(num) + centreY - 5))
                     .Visible = True
-                    .Size = New Size(10, 10)
-                    .Font = New Font("Segoe UI", 5, FontStyle.Regular)
+                    .Size = New Size(11, 10)
+                    .Font = New Font("Segoe UI", 4, FontStyle.Regular)
                     .Name = "lbl" & i.ToString.PadLeft(2, "0")
                     .TextAlign = ContentAlignment.MiddleCenter
                 End With
@@ -123,13 +125,16 @@
         Return setting * pi / 144 - pi / 2
     End Function
     Public Sub New()
-            InitializeComponent()
+        InitializeComponent()
+
         Settings = {My.Settings.MGPCCSettings0,
             My.Settings.MGPCCSettings1,
             My.Settings.MGPCCSettings2,
             My.Settings.MGPCCSettings3,
             My.Settings.MGPCCSettings4,
             My.Settings.MGPCCSettings5}
+
+
     End Sub
     Public Property Settings As Integer()
         Get
