@@ -68,7 +68,7 @@ Public Class MultiGenPointCalendarClock
                     .Text = i.ToString.PadLeft(2, "0")
                     .Location = New Point(Convert.ToInt32(26 / 40 * radius * Math.Cos(num) + centreX - 5), Convert.ToInt32(26 / 40 * radius * Math.Sin(num) + centreY - 5))
                     .Visible = True
-                    .Size = New Size(11, 10)
+                    .Size = New Size(12, 10)
                     .Font = New Font("Segoe UI", 4, FontStyle.Regular)
                     .Name = "lbl" & i.ToString.PadLeft(2, "0")
                     .TextAlign = ContentAlignment.MiddleCenter

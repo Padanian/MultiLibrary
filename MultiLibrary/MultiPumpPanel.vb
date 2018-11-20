@@ -1,4 +1,6 @@
-﻿Public Class MultiPumpPanel
+﻿Imports System.IO
+
+Public Class MultiPumpPanel
     Const Pi As Double = Math.PI
     Private m_lbltext As String = "Text"
     Private m_lblPumptext As String = "Text"
@@ -11,6 +13,8 @@
     Private m_semaphorColor As Color = Color.Yellow
     Private m_SemaphorVisible As Boolean
     Private m_SemaphorBlinking As Boolean
+
+    Private mySettings As New Settings
 
     Dim apen As New Pen(Color.LightGray, 1)
     Dim angleSwitchOnOff As Double = -3 / 4 * Pi
@@ -26,11 +30,14 @@
     Private m_hourCounterPump2 As Integer
     Private m_pump1Running As Boolean
     Private m_pump2Running As Boolean
-
+    Private m_nupLeadLagtime As Integer = 168
     Private m_pump1Alarm As Boolean
     Private m_pump2Alarm As Boolean
     Private m_Pump1StartedDateTime As DateTime
     Private m_Pump2StartedDateTime As DateTime
+    Private m_nupRitardi As Integer
+    Private m_chkTestRotation As Boolean
+
     Private hourUpdate As Boolean = True
 
     Private Event SwitchedON()
@@ -43,11 +50,61 @@
 
 
 
+
+
+
     Sub New()
+
 
         ' La chiamata è richiesta dalla finestra di progettazione.
         InitializeComponent()
 
+        Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+        Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mpp"
+
+        If File.Exists(filename) Then
+
+            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            mySettings = bf.Deserialize(fStream)
+            fStream.Close()
+
+            m_Pump1StartedDateTime = mySettings.m_Pump1StartedDateTime
+            m_Pump2StartedDateTime = mySettings.m_Pump2StartedDateTime
+            m_nupLeadLagtime = mySettings.m_nupLeadLagtime
+            m_hourCounterPump1 = mySettings.m_hourCounterPump1
+            m_hourCounterPump2 = mySettings.m_hourCounterPump2
+            m_nupRitardi = mySettings.m_nupRitardi
+            m_chkTestRotation = mySettings.m_chkTestRotation
+            m_selectedPositionOnOffSwitch = mySettings.m_selectedPositionOnOffSwitch
+            m_selectedPositionPumpSwitch = mySettings.m_selectedPositionPumpSwitch
+
+
+        Else
+            m_Pump1StartedDateTime = #01/01/0001 00:01#
+            m_Pump2StartedDateTime = #01/01/0001 00:01#
+            m_nupLeadLagtime = 168
+            m_hourCounterPump1 = 0
+            m_hourCounterPump2 = 0
+            m_nupRitardi = 0
+            m_chkTestRotation = False
+            m_selectedPositionOnOffSwitch = 0
+            m_selectedPositionPumpSwitch = 1
+
+            mySettings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+            mySettings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+            mySettings.m_nupLeadLagtime = m_nupLeadLagtime
+            mySettings.m_hourCounterPump1 = m_hourCounterPump1
+            mySettings.m_hourCounterPump2 = m_hourCounterPump2
+            mySettings.m_nupRitardi = m_nupRitardi
+            mySettings.m_chkTestRotation = m_chkTestRotation
+            mySettings.m_selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
+            mySettings.m_selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
+
+
+            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            bf.Serialize(fStream, mySettings) ' write to file
+            fStream.Close()
+        End If
 
 
         ' Aggiungere le eventuali istruzioni di inizializzazione dopo la chiamata a InitializeComponent().
@@ -93,14 +150,7 @@
         SemaphorBlinking = False
 
 
-        If My.Settings.m_Pump1StartedDateTime.Year <> 1 Then
-            m_Pump1StartedDateTime = My.Settings.m_Pump1StartedDateTime
-        End If
-        If My.Settings.m_Pump2StartedDateTime.Year <> 1 Then
-            m_Pump2StartedDateTime = My.Settings.m_Pump2StartedDateTime
-        End If
-
-        m_selectedPositionPumpSwitch = My.Settings.selectedPositionPumpSwitch
+        m_selectedPositionPumpSwitch = selectedPositionPumpSwitch
         If m_selectedPositionPumpSwitch = 0 Then
             angleSwitchPump = -3 / 4 * Pi
         ElseIf m_selectedPositionPumpSwitch = 1 Then
@@ -109,7 +159,7 @@
             angleSwitchPump = -1 / 4 * Pi
         End If
 
-        m_selectedPositionOnOffSwitch = My.Settings.selectedPositionOnOffSwitch
+        m_selectedPositionOnOffSwitch = selectedPositionOnOffSwitch
         If m_selectedPositionOnOffSwitch = 0 Then
             angleSwitchOnOff = -3 / 4 * Pi
             RaiseEvent SwitchedOFF()
@@ -118,11 +168,11 @@
             RaiseEvent SwitchedON()
         End If
 
-        hourCounterPump1 = My.Settings.hourCounterPump1
-        hourCounterPump2 = My.Settings.hourCounterPump2
-        nupLeadLagTime.Value = My.Settings.nupLeadLagtime
-        nupRitardi.Value = My.Settings.nupRitardi
-        chkTestRotation.Checked = My.Settings.chkTestRotation
+        hourCounterPump1 = m_hourCounterPump1
+        hourCounterPump2 = m_hourCounterPump2
+        nupLeadLagTime.Value = m_nupLeadLagtime
+        nupRitardi.Value = m_nupRitardi
+        chkTestRotation.Checked = m_chkTestRotation
 
     End Sub
     Private Sub pbSwitchOnOff_click(sender As Object, e As EventArgs) Handles pbSwitchOnOff.Click
@@ -137,8 +187,7 @@
             angleSwitchOnOff = -3 / 4 * Pi
             RaiseEvent SwitchedOFF()
             Me.Refresh()
-            My.Settings.selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
-            My.Settings.Save()
+            mySettingsSave()
             Exit Sub
         End If
         If m_positionsOnOffSwitch = 2 Then
@@ -148,8 +197,7 @@
             angleSwitchOnOff += Pi / 2
             RaiseEvent SwitchedON()
             Me.Refresh()
-            My.Settings.selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
-            My.Settings.Save()
+            mySettingsSave()
         End If
 
     End Sub
@@ -161,8 +209,7 @@
             angleSwitchPump = -3 / 4 * Pi
             RaiseEvent SwitchedON()
             Me.Refresh()
-            My.Settings.selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
-            My.Settings.Save()
+            mySettingsSave()
             Exit Sub
         End If
         If m_positionsPumpSwitch = 2 Then
@@ -172,8 +219,7 @@
             angleSwitchPump += Pi / 4
             RaiseEvent SwitchedON()
             Me.Refresh()
-            My.Settings.selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
-            My.Settings.Save()
+            mySettingsSave()
 
         End If
     End Sub
@@ -462,13 +508,21 @@
             pumpRotationTimer.Interval = 86400000
         End If
 
-        pumpRotationTimer.enabled = True
+        pumpRotationTimer.Enabled = True
         pumpRotationTimer.Start()
 
-        My.Settings.chkTestRotation = chkTestRotation.Checked
-        My.Settings.Save()
+        mySettingsSave()
 
     End Sub
+    Private Sub nupRitardi_ValueChanged(sender As Object, e As EventArgs) Handles nupRitardi.ValueChanged
+        m_nupRitardi = nupRitardi.Value
+        mySettingsSave()
+    End Sub
+    Private Sub nupLeadLagTime_ValueChanged(sender As Object, e As EventArgs) Handles nupLeadLagTime.ValueChanged
+        m_nupLeadLagtime = nupLeadLagTime.Value
+        mySettingsSave()
+    End Sub
+
     Public ReadOnly Property selectedPositionOnOffSwitch As Integer
         Get
             selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
@@ -600,8 +654,7 @@
                 'Pompa 1 in marcia, determina l'ora di partenza e salvala
                 pump1Running = True
                 m_Pump1StartedDateTime = DateTime.Now
-                My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
-                My.Settings.Save()
+                mySettingsSave()
 
                 'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump2Running = False
@@ -612,8 +665,7 @@
                 'Pompa 2 in marcia, determina l'ora di partenza e salvala
                 pump2Running = True
                 m_Pump2StartedDateTime = DateTime.Now
-                My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
-                My.Settings.Save()
+                mySettingsSave()
 
                 'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump1Running = False
@@ -628,8 +680,7 @@
                     'Pompa 2 in marcia, determina l'ora di partenza e salvala
                     pump2Running = True
                     m_Pump2StartedDateTime = DateTime.Now
-                    My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
-                    My.Settings.Save()
+                    mySettingsSave()
 
                     'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                     pump1Running = False
@@ -638,8 +689,7 @@
                     'Pompa 1 in marcia, determina l'ora di partenza e salvala
                     pump1Running = True
                     m_Pump1StartedDateTime = DateTime.Now
-                    My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
-                    My.Settings.Save()
+                    mySettingsSave()
 
                     'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                     pump2Running = False
@@ -649,8 +699,7 @@
                 'Pompa 2 in marcia, determina l'ora di partenza e salvala
                 pump2Running = True
                 m_Pump2StartedDateTime = DateTime.Now
-                My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
-                My.Settings.Save()
+                mySettingsSave()
 
                 'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump1Running = False
@@ -659,8 +708,7 @@
                 'Pompa 1 in marcia, determina l'ora di partenza e salvala
                 pump1Running = True
                 m_Pump1StartedDateTime = DateTime.Now
-                My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
-                My.Settings.Save()
+                mySettingsSave()
 
                 'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump2Running = False
@@ -699,8 +747,7 @@
             'Pompa 2 in marcia, determina l'ora di partenza e salvala
             pump2Running = True
             m_Pump2StartedDateTime = DateTime.Now
-            My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
-            My.Settings.Save()
+            mySettingsSave()
 
             pump1Running = False
             Exit Sub
@@ -710,8 +757,7 @@
             'Pompa 1 in marcia, determina l'ora di partenza e salvala
             pump1Running = True
             m_Pump1StartedDateTime = DateTime.Now
-            My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
-            My.Settings.Save()
+            mySettingsSave()
 
             pump2Running = False
             Exit Sub
@@ -736,8 +782,7 @@
                 'Pompa 2 in marcia, determina l'ora di partenza e salvala
                 pump2Running = True
                 m_Pump2StartedDateTime = DateTime.Now
-                My.Settings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
-                My.Settings.Save()
+                mySettingsSave()
 
                 'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump1Running = False
@@ -748,8 +793,7 @@
                 'Pompa 1 in marcia, determina l'ora di partenza e salvala
                 pump1Running = True
                 m_Pump1StartedDateTime = DateTime.Now
-                My.Settings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
-                My.Settings.Save()
+                mySettingsSave()
 
                 'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump2Running = False
@@ -757,17 +801,42 @@
             End If
         End If
 
-        My.Settings.hourCounterPump1 = hourCounterPump1
-        My.Settings.hourCounterPump2 = hourCounterPump2
-        My.Settings.nupLeadLagtime = nupLeadLagTime.Value
-        My.Settings.nupRitardi = nupRitardi.Value
-        My.Settings.chkTestRotation = chkTestRotation.Checked
-        My.Settings.selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
-        My.Settings.selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
+        mySettingsSave()
 
-        My.Settings.Save()
+    End Sub
+    Private Sub mySettingsSave()
+
+        mySettings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+        mySettings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+        mySettings.m_nupLeadLagtime = m_nupLeadLagtime
+        mySettings.m_hourCounterPump1 = m_hourCounterPump1
+        mySettings.m_hourCounterPump2 = m_hourCounterPump2
+        mySettings.m_nupRitardi = m_nupRitardi
+        mySettings.m_chkTestRotation = m_chkTestRotation
+        mySettings.m_selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
+        mySettings.m_selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
+
+
+        Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+
+        Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mpp"
+        Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+        bf.Serialize(fStream, mySettings) ' write to file
+        fStream.Close()
 
     End Sub
 
-End Class
 
+End Class
+<Serializable>
+Class Settings
+    Property m_Pump1StartedDateTime As DateTime
+    Property m_Pump2StartedDateTime As DateTime
+    Property m_nupLeadLagtime As Integer
+    Property m_hourCounterPump1 As Integer
+    Property m_hourCounterPump2 As Integer
+    Property m_nupRitardi As Integer
+    Property m_chkTestRotation As Boolean
+    Property m_selectedPositionOnOffSwitch As Integer
+    Property m_selectedPositionPumpSwitch As Integer
+End Class
