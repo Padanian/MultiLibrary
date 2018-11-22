@@ -18,6 +18,7 @@
     Dim blinkingSemaphorTimer As New Timer
     Dim pbSemaphor As New PictureBox
     Dim lblSemaphorText As New Label
+    Public Event PositionChanged()
 
 
 
@@ -27,6 +28,7 @@
             m_selectedPosition = 0
             angle = -3 / 4 * Pi
             Me.Refresh()
+            RaiseEvent PositionChanged()
             Exit Sub
         End If
         If m_positions = 2 Then
@@ -35,6 +37,7 @@
             angle += Pi / 4
         End If
         Me.Refresh()
+        RaiseEvent PositionChanged()
     End Sub
     Public Property isSemaphorVisible As Boolean
         Get

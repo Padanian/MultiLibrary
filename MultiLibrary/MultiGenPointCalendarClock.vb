@@ -25,7 +25,7 @@ Public Class MultiGenPointCalendarClock
     Private Sub pbCalendarClockSettings_Click(sender As Object, e As EventArgs) Handles pbCalendarClockSettings.Click
         Dim myform As New frmCalendarClockSettings
         myform.StartPosition = FormStartPosition.Manual
-        myform.Location = New Point(Me.Location.X + Me.Size.Width, Me.Location.Y)
+        myform.Location = New Point(Cursor.Position.X, Cursor.Position.Y)
         myform.Settings = Settings
 
 
@@ -66,7 +66,7 @@ Public Class MultiGenPointCalendarClock
                 Dim lbl As New Label
                 With lbl
                     .Text = i.ToString.PadLeft(2, "0")
-                    .Location = New Point(Convert.ToInt32(26 / 40 * radius * Math.Cos(num) + centreX - 5), Convert.ToInt32(26 / 40 * radius * Math.Sin(num) + centreY - 5))
+                    .Location = New Point(Convert.ToInt32(24 / 40 * radius * Math.Cos(num) + centreX - 5), Convert.ToInt32(26 / 40 * radius * Math.Sin(num) + centreY - 5))
                     .Visible = True
                     .Size = New Size(12, 10)
                     .Font = New Font("Segoe UI", 4, FontStyle.Regular)
@@ -161,8 +161,17 @@ Public Class MultiGenPointCalendarClock
             If Settings.Count = 6 Then
                 Array.Sort(Settings)
                 m_settings = Settings
+                Try
+                    Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+                    Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mgpcc"
+                    Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+                    bf.Serialize(fStream, Settings) ' write to file
+                    fStream.Close()
+                Catch
+                End Try
+
                 Me.Refresh()
-            End If
+                End If
         End Set
     End Property
 
@@ -180,41 +189,43 @@ Public Class MultiGenPointCalendarClock
     End Sub
     Private Delegate Sub blinkingDotDelegate()
     Private Sub blinkingDot()
-
-        If Me.InvokeRequired Then
-            Dim d As New blinkingDotDelegate(AddressOf Me.blinkingDot)
-            Me.BeginInvoke(d)
-        Else
-            Dim f = (DateTime.Now.Hour * 12 + DateTime.Now.Minute \ 5)
-            Dim i = f * 2 * pi / 288 - pi / 2
-            x = Convert.ToInt32(1 / 2 * radius * Math.Cos(i) + centreX)
-            y = Convert.ToInt32(1 / 2 * radius * Math.Sin(i) + centreY)
-            If (f >= Settings(0) And f <= Settings(1)) Or
-                (f >= Settings(2) And f <= Settings(3)) Or
-                (f >= Settings(4) And f <= Settings(5)) Then
-                pbLed.Image = My.Resources.ledgreen
-                m_isOn = True
+        Try
+            If Me.InvokeRequired Then
+                Dim d As New blinkingDotDelegate(AddressOf Me.blinkingDot)
+                Me.BeginInvoke(d)
             Else
-                pbLed.Image = My.Resources.ledoff
-                m_isOn = False
-            End If
-            If Me.Controls.Find("pbDot", True).Length = 0 Then
-                Dim pbDot As New PictureBox
-                With pbDot
-                    .Location = New Point(x, y)
-                    .Size = New Size(2, 2)
-                    .BackColor = Color.Black
-                    .Name = "pbDot"
-                End With
-                Me.Controls.Add(pbDot)
-            Else
-                If Me.Controls.Find("pbDot", True)(0).BackColor = Color.Black Then
-                    Me.Controls.Find("pbDot", True)(0).BackColor = Me.BackColor
+                Dim f = (DateTime.Now.Hour * 12 + DateTime.Now.Minute \ 5)
+                Dim i = f * 2 * pi / 288 - pi / 2
+                x = Convert.ToInt32(18 / 16 * radius * Math.Cos(i) + centreX)
+                y = Convert.ToInt32(18 / 16 * radius * Math.Sin(i) + centreY)
+                If (f >= Settings(0) And f <= Settings(1)) Or
+                    (f >= Settings(2) And f <= Settings(3)) Or
+                    (f >= Settings(4) And f <= Settings(5)) Then
+                    pbLed.Image = My.Resources.ledgreen
+                    m_isOn = True
                 Else
-                    Me.Controls.Find("pbDot", True)(0).BackColor = Color.Black
+                    pbLed.Image = My.Resources.ledoff
+                    m_isOn = False
+                End If
+                If Me.Controls.Find("pbDot", True).Length = 0 Then
+                    Dim pbDot As New PictureBox
+                    With pbDot
+                        .Location = New Point(x, y)
+                        .Size = New Size(2, 2)
+                        .BackColor = Color.Black
+                        .Name = "pbDot"
+                    End With
+                    Me.Controls.Add(pbDot)
+                Else
+                    If Me.Controls.Find("pbDot", True)(0).BackColor = Color.Black Then
+                        Me.Controls.Find("pbDot", True)(0).BackColor = Me.BackColor
+                    Else
+                        Me.Controls.Find("pbDot", True)(0).BackColor = Color.Black
+                    End If
                 End If
             End If
-        End If
+        Catch
+        End Try
     End Sub
 End Class
 

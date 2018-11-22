@@ -65,9 +65,39 @@ Public Class Form1
 
     End Sub
 
-    Private Sub MultiTrimmerKnob1_Load() Handles TrackBar1.ValueChanged
-        MultiVerticalMeter1.value = TrackBar1.Value
-        MultiGauge1.value = TrackBar1.Value
-        MultiGauge2.value = TrackBar1.Value / 2
+    Private Sub MultiTrimmerKnob1_Load() Handles MultiTrimmerKnob1.ValueChanged, MultiTrimmerKnob2.ValueChanged
+        MultiVerticalMeter1.value = MultiTrimmerKnob1.value
+        MultiGauge1.value = MultiTrimmerKnob1.value
+        MultiGauge2.value = MultiTrimmerKnob1.value / 2
+    End Sub
+
+
+    Private Sub MultiPanelSwitch1_Click() Handles MultiPanelSwitch1.PositionChanged
+        If MultiPanelSwitch1.selectedPosition = 0 Then
+            MultiPanelSemaphor1.semaphorColor = Color.Red
+        ElseIf MultiPanelSwitch1.selectedPosition = 1 Then
+            MultiPanelSemaphor1.semaphorColor = Color.Yellow
+        ElseIf MultiPanelSwitch1.selectedPosition = 2 Then
+            MultiPanelSemaphor1.semaphorColor = Color.Blue
+        End If
+    End Sub
+    Private Sub MultiPanelSwitch2_Click() Handles MultiPanelSwitch2.PositionChanged
+        If MultiPanelSwitch2.selectedPosition = 0 Then
+            MultiPanelSemaphor2.semaphorColor = Color.Green
+        ElseIf MultiPanelSwitch2.selectedPosition = 1 Then
+            MultiPanelSemaphor2.semaphorColor = Color.Black
+        ElseIf MultiPanelSwitch2.selectedPosition = 2 Then
+            MultiPanelSemaphor2.semaphorColor = Color.Blue
+        End If
+    End Sub
+
+
+    Private Sub MultiTrimmerKnob2_Load() Handles MultiTrimmerKnob2.ValueChanged
+        MultiAmmVoltmeter1.value = MultiTrimmerKnob2.value
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Form2.Show()
+        Me.Hide()
     End Sub
 End Class

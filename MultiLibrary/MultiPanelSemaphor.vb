@@ -113,6 +113,8 @@
                     pbSemaphor.Image = My.Resources.led_green_black
                 Case Color.Red
                     pbSemaphor.Image = My.Resources.led_red_black
+                Case Else
+                    pbSemaphor.Image = My.Resources.led_off_black
             End Select
 
         ElseIf isSemaphorBlinking Then

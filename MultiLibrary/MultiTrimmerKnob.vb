@@ -18,6 +18,16 @@
     Dim mouseDownLocation As New Point
     Dim eventString As String
     Public Event ValueChanged()
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        value -= maximum / 10
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        value += maximum / 10
+
+    End Sub
+
     Public Property value As Decimal
         Get
             value = m_value
@@ -166,7 +176,7 @@
         xp3 = Convert.ToInt32(8 * Math.Cos(Lend + 0.5) + centreX)
         yp3 = Convert.ToInt32(8 * Math.Sin(Lend + 0.5) + centreY)
 
-        Dim valorediPartenza As Double = 0 'value / maximum * Pi
+        Dim valorediPartenza As Double = value / maximum * Pi
 
         For m = valorediPartenza To 2 * Pi + valorediPartenza Step Pi / 8
             xp4 = Convert.ToInt32(14 * Math.Cos(m) + centreX - 1.5)

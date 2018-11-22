@@ -22,7 +22,7 @@ Partial Class Form1
     'Non modificarla mediante l'editor del codice.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.MultiGenPointCalendarClock1 = New MultiLibrary.MultiGenPointCalendarClock()
+        Me.MultiTrimmerKnob1 = New MultiLibrary.MultiTrimmerKnob()
         Me.MultiPanelSwitch2 = New MultiLibrary.MultiPanelSwitch()
         Me.MultiLinearMeter1 = New MultiLibrary.MultiLinearMeter()
         Me.MultiVerticalMeter1 = New MultiLibrary.MultiVerticalMeter()
@@ -33,27 +33,30 @@ Partial Class Form1
         Me.MultiGauge2 = New MultiLibrary.MultiGauge()
         Me.MultiGauge1 = New MultiLibrary.MultiGauge()
         Me.MultiAmmVoltmeter1 = New MultiLibrary.MultiAmmVoltmeter()
-        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.MultiGenPointCalendarClock1 = New MultiLibrary.MultiGenPointCalendarClock()
+        Me.MultiTrimmerKnob2 = New MultiLibrary.MultiTrimmerKnob()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
-        'MultiGenPointCalendarClock1
+        'MultiTrimmerKnob1
         '
-        Me.MultiGenPointCalendarClock1.Location = New System.Drawing.Point(362, 13)
-        Me.MultiGenPointCalendarClock1.Name = "MultiGenPointCalendarClock1"
-        Me.MultiGenPointCalendarClock1.Settings = New Integer() {0, 0, 0, 0, 0, 0}
-        Me.MultiGenPointCalendarClock1.Size = New System.Drawing.Size(96, 96)
-        Me.MultiGenPointCalendarClock1.TabIndex = 12
+        Me.MultiTrimmerKnob1.Location = New System.Drawing.Point(186, 99)
+        Me.MultiTrimmerKnob1.maximum = 100
+        Me.MultiTrimmerKnob1.minimum = 0
+        Me.MultiTrimmerKnob1.Name = "MultiTrimmerKnob1"
+        Me.MultiTrimmerKnob1.Size = New System.Drawing.Size(64, 64)
+        Me.MultiTrimmerKnob1.TabIndex = 13
+        Me.MultiTrimmerKnob1.value = New Decimal(New Integer() {0, 0, 0, 0})
         '
         'MultiPanelSwitch2
         '
         Me.MultiPanelSwitch2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MultiPanelSwitch2.isSemaphorBlinking = False
+        Me.MultiPanelSwitch2.isSemaphorBlinking = True
         Me.MultiPanelSwitch2.isSemaphorVisible = True
         Me.MultiPanelSwitch2.lbltext = "Text"
-        Me.MultiPanelSwitch2.Location = New System.Drawing.Point(394, 145)
+        Me.MultiPanelSwitch2.Location = New System.Drawing.Point(408, 145)
         Me.MultiPanelSwitch2.Name = "MultiPanelSwitch2"
-        Me.MultiPanelSwitch2.positions = 3
+        Me.MultiPanelSwitch2.positions = 2
         Me.MultiPanelSwitch2.semaphorColor = System.Drawing.Color.Yellow
         Me.MultiPanelSwitch2.semaphortext = "Text"
         Me.MultiPanelSwitch2.Size = New System.Drawing.Size(64, 200)
@@ -89,7 +92,7 @@ Partial Class Form1
         Me.MultiPanelSwitch1.isSemaphorBlinking = False
         Me.MultiPanelSwitch1.isSemaphorVisible = False
         Me.MultiPanelSwitch1.lbltext = "Text"
-        Me.MultiPanelSwitch1.Location = New System.Drawing.Point(324, 145)
+        Me.MultiPanelSwitch1.Location = New System.Drawing.Point(338, 145)
         Me.MultiPanelSwitch1.Name = "MultiPanelSwitch1"
         Me.MultiPanelSwitch1.positions = 3
         Me.MultiPanelSwitch1.semaphorColor = System.Drawing.Color.Yellow
@@ -164,22 +167,42 @@ Partial Class Form1
         Me.MultiAmmVoltmeter1.units = "V"
         Me.MultiAmmVoltmeter1.value = New Decimal(New Integer() {0, 0, 0, 0})
         '
-        'TrackBar1
+        'MultiGenPointCalendarClock1
         '
-        Me.TrackBar1.Location = New System.Drawing.Point(180, 108)
-        Me.TrackBar1.Maximum = 100
-        Me.TrackBar1.Name = "TrackBar1"
-        Me.TrackBar1.Size = New System.Drawing.Size(104, 45)
-        Me.TrackBar1.TabIndex = 13
-        Me.TrackBar1.TickFrequency = 10
+        Me.MultiGenPointCalendarClock1.Location = New System.Drawing.Point(362, 13)
+        Me.MultiGenPointCalendarClock1.Name = "MultiGenPointCalendarClock1"
+        Me.MultiGenPointCalendarClock1.Settings = New Integer() {0, 0, 0, 0, 0, 0}
+        Me.MultiGenPointCalendarClock1.Size = New System.Drawing.Size(96, 96)
+        Me.MultiGenPointCalendarClock1.TabIndex = 14
+        '
+        'MultiTrimmerKnob2
+        '
+        Me.MultiTrimmerKnob2.Location = New System.Drawing.Point(256, 99)
+        Me.MultiTrimmerKnob2.maximum = 400
+        Me.MultiTrimmerKnob2.minimum = 0
+        Me.MultiTrimmerKnob2.Name = "MultiTrimmerKnob2"
+        Me.MultiTrimmerKnob2.Size = New System.Drawing.Size(64, 64)
+        Me.MultiTrimmerKnob2.TabIndex = 13
+        Me.MultiTrimmerKnob2.value = New Decimal(New Integer() {0, 0, 0, 0})
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(301, 322)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 15
+        Me.Button1.Text = "Pompe"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(504, 362)
-        Me.Controls.Add(Me.TrackBar1)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.MultiGenPointCalendarClock1)
+        Me.Controls.Add(Me.MultiTrimmerKnob2)
+        Me.Controls.Add(Me.MultiTrimmerKnob1)
         Me.Controls.Add(Me.MultiPanelSwitch2)
         Me.Controls.Add(Me.MultiLinearMeter1)
         Me.Controls.Add(Me.MultiVerticalMeter1)
@@ -192,9 +215,7 @@ Partial Class Form1
         Me.Controls.Add(Me.MultiAmmVoltmeter1)
         Me.Name = "Form1"
         Me.Text = "Form1"
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
@@ -208,6 +229,8 @@ Partial Class Form1
     Friend WithEvents MultiVerticalMeter1 As MultiLibrary.MultiVerticalMeter
     Friend WithEvents MultiLinearMeter1 As MultiLibrary.MultiLinearMeter
     Friend WithEvents MultiPanelSwitch2 As MultiLibrary.MultiPanelSwitch
+    Friend WithEvents MultiTrimmerKnob1 As MultiLibrary.MultiTrimmerKnob
     Friend WithEvents MultiGenPointCalendarClock1 As MultiLibrary.MultiGenPointCalendarClock
-    Friend WithEvents TrackBar1 As TrackBar
+    Friend WithEvents MultiTrimmerKnob2 As MultiLibrary.MultiTrimmerKnob
+    Friend WithEvents Button1 As Button
 End Class

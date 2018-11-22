@@ -49,7 +49,7 @@ Partial Class frmCalendarClockSettings
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(53, 134)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(66, 170)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -78,22 +78,24 @@ Partial Class frmCalendarClockSettings
         'dtpF1Start
         '
         Me.dtpF1Start.CustomFormat = "HH:mm"
+        Me.dtpF1Start.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpF1Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpF1Start.Location = New System.Drawing.Point(42, 30)
+        Me.dtpF1Start.Location = New System.Drawing.Point(39, 34)
         Me.dtpF1Start.Name = "dtpF1Start"
         Me.dtpF1Start.ShowUpDown = True
-        Me.dtpF1Start.Size = New System.Drawing.Size(57, 22)
+        Me.dtpF1Start.Size = New System.Drawing.Size(65, 29)
         Me.dtpF1Start.TabIndex = 1
         Me.dtpF1Start.Value = New Date(2018, 11, 15, 0, 0, 0, 0)
         '
         'dtpF1Stop
         '
         Me.dtpF1Stop.CustomFormat = "HH:mm"
+        Me.dtpF1Stop.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpF1Stop.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpF1Stop.Location = New System.Drawing.Point(115, 30)
+        Me.dtpF1Stop.Location = New System.Drawing.Point(112, 34)
         Me.dtpF1Stop.Name = "dtpF1Stop"
         Me.dtpF1Stop.ShowUpDown = True
-        Me.dtpF1Stop.Size = New System.Drawing.Size(57, 22)
+        Me.dtpF1Stop.Size = New System.Drawing.Size(65, 29)
         Me.dtpF1Stop.TabIndex = 1
         Me.dtpF1Stop.Value = New Date(2018, 11, 15, 0, 0, 0, 0)
         '
@@ -101,11 +103,12 @@ Partial Class frmCalendarClockSettings
         '
         Me.dtpF2Start.CustomFormat = "HH:mm"
         Me.dtpF2Start.Enabled = False
+        Me.dtpF2Start.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpF2Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpF2Start.Location = New System.Drawing.Point(42, 58)
+        Me.dtpF2Start.Location = New System.Drawing.Point(39, 78)
         Me.dtpF2Start.Name = "dtpF2Start"
         Me.dtpF2Start.ShowUpDown = True
-        Me.dtpF2Start.Size = New System.Drawing.Size(57, 22)
+        Me.dtpF2Start.Size = New System.Drawing.Size(65, 29)
         Me.dtpF2Start.TabIndex = 1
         Me.dtpF2Start.Value = New Date(2018, 11, 15, 0, 0, 0, 0)
         '
@@ -113,11 +116,12 @@ Partial Class frmCalendarClockSettings
         '
         Me.dtpF2Stop.CustomFormat = "HH:mm"
         Me.dtpF2Stop.Enabled = False
+        Me.dtpF2Stop.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpF2Stop.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpF2Stop.Location = New System.Drawing.Point(115, 58)
+        Me.dtpF2Stop.Location = New System.Drawing.Point(112, 78)
         Me.dtpF2Stop.Name = "dtpF2Stop"
         Me.dtpF2Stop.ShowUpDown = True
-        Me.dtpF2Stop.Size = New System.Drawing.Size(57, 22)
+        Me.dtpF2Stop.Size = New System.Drawing.Size(65, 29)
         Me.dtpF2Stop.TabIndex = 1
         Me.dtpF2Stop.Value = New Date(2018, 11, 15, 0, 0, 0, 0)
         '
@@ -125,11 +129,12 @@ Partial Class frmCalendarClockSettings
         '
         Me.dtpF3Start.CustomFormat = "HH:mm"
         Me.dtpF3Start.Enabled = False
+        Me.dtpF3Start.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpF3Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpF3Start.Location = New System.Drawing.Point(42, 86)
+        Me.dtpF3Start.Location = New System.Drawing.Point(39, 122)
         Me.dtpF3Start.Name = "dtpF3Start"
         Me.dtpF3Start.ShowUpDown = True
-        Me.dtpF3Start.Size = New System.Drawing.Size(57, 22)
+        Me.dtpF3Start.Size = New System.Drawing.Size(65, 29)
         Me.dtpF3Start.TabIndex = 1
         Me.dtpF3Start.Value = New Date(2018, 11, 15, 0, 0, 0, 0)
         '
@@ -137,18 +142,19 @@ Partial Class frmCalendarClockSettings
         '
         Me.dtpF3Stop.CustomFormat = "HH:mm"
         Me.dtpF3Stop.Enabled = False
+        Me.dtpF3Stop.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpF3Stop.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpF3Stop.Location = New System.Drawing.Point(115, 86)
+        Me.dtpF3Stop.Location = New System.Drawing.Point(112, 122)
         Me.dtpF3Stop.Name = "dtpF3Stop"
         Me.dtpF3Stop.ShowUpDown = True
-        Me.dtpF3Stop.Size = New System.Drawing.Size(57, 22)
+        Me.dtpF3Stop.Size = New System.Drawing.Size(65, 29)
         Me.dtpF3Stop.TabIndex = 1
         Me.dtpF3Stop.Value = New Date(2018, 11, 15, 0, 0, 0, 0)
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 37)
+        Me.Label1.Location = New System.Drawing.Point(14, 43)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(19, 13)
         Me.Label1.TabIndex = 2
@@ -158,7 +164,7 @@ Partial Class frmCalendarClockSettings
         '
         Me.Label2.AutoSize = True
         Me.Label2.Enabled = False
-        Me.Label2.Location = New System.Drawing.Point(12, 65)
+        Me.Label2.Location = New System.Drawing.Point(14, 87)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(19, 13)
         Me.Label2.TabIndex = 2
@@ -168,7 +174,7 @@ Partial Class frmCalendarClockSettings
         '
         Me.Label3.AutoSize = True
         Me.Label3.Enabled = False
-        Me.Label3.Location = New System.Drawing.Point(12, 93)
+        Me.Label3.Location = New System.Drawing.Point(14, 131)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(19, 13)
         Me.Label3.TabIndex = 2
@@ -195,7 +201,7 @@ Partial Class frmCalendarClockSettings
         'chkF2
         '
         Me.chkF2.AutoSize = True
-        Me.chkF2.Location = New System.Drawing.Point(178, 62)
+        Me.chkF2.Location = New System.Drawing.Point(185, 86)
         Me.chkF2.Name = "chkF2"
         Me.chkF2.Size = New System.Drawing.Size(15, 14)
         Me.chkF2.TabIndex = 3
@@ -204,7 +210,7 @@ Partial Class frmCalendarClockSettings
         'chkF3
         '
         Me.chkF3.AutoSize = True
-        Me.chkF3.Location = New System.Drawing.Point(178, 90)
+        Me.chkF3.Location = New System.Drawing.Point(185, 130)
         Me.chkF3.Name = "chkF3"
         Me.chkF3.Size = New System.Drawing.Size(15, 14)
         Me.chkF3.TabIndex = 3
@@ -216,7 +222,7 @@ Partial Class frmCalendarClockSettings
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(211, 175)
+        Me.ClientSize = New System.Drawing.Size(224, 211)
         Me.ControlBox = False
         Me.Controls.Add(Me.chkF3)
         Me.Controls.Add(Me.chkF2)
