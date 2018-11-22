@@ -1,7 +1,7 @@
 ﻿Public Class MultiTrimmerKnob
 
     Const Pi As Double = Math.PI
-        Dim x1, y1, x2, y2 As Integer
+    Dim x1, y1, x2, y2 As Integer
     Dim xp1, yp1, xp2, yp2, xp3, yp3, xp4, yp4 As Int32
     Private m_value As Decimal
     Private m_minimum As Integer
@@ -17,6 +17,7 @@
     Dim blinkingLedTimer As New Timer
     Dim mouseDownLocation As New Point
     Dim eventString As String
+    Public Event ValueChanged()
     Public Property value As Decimal
         Get
             value = m_value
@@ -24,6 +25,7 @@
         Set(value As Decimal)
             If value >= minimum And value <= maximum Then
                 m_value = value
+                RaiseEvent ValueChanged()
                 Me.Refresh()
             Else
                 Exit Property
@@ -65,39 +67,39 @@
         End Set
     End Property
     Public Property maximum As Integer
-            Get
-                maximum = m_maximum
-            End Get
-            Set(maximum As Integer)
-                If maximum < minimum Then
-                    MsgBox("Max can't be smaller than Min")
-                    Exit Property
-                End If
-                m_maximum = maximum
-                If value > maximum Then
-                    value = maximum
-                End If
-                For Each lbl In Me.Controls
-                    Select Case lbl.tag
-                        Case "lbl0"
-                            lbl.text = minimum
-                        Case "lbl2"
-                            lbl.text = (maximum - minimum) / 10 * (2.ToString.PadLeft(2, "0")) + minimum
-                        Case "lbl4"
-                            lbl.text = (maximum - minimum) / 10 * (4.ToString.PadLeft(2, "0")) + minimum
-                        Case "lbl6"
-                            lbl.text = (maximum - minimum) / 10 * (6.ToString.PadLeft(2, "0")) + minimum
-                        Case "lbl8"
-                            lbl.text = (maximum - minimum) / 10 * (8.ToString.PadLeft(2, "0")) + minimum
-                        Case "lbl10"
-                            lbl.text = (maximum - minimum) / 10 * (10.ToString.PadLeft(2, "0")) + minimum
-                    End Select
-                Next
-                Dim c = value
-                value = c
-                Me.Refresh()
-            End Set
-        End Property
+        Get
+            maximum = m_maximum
+        End Get
+        Set(maximum As Integer)
+            If maximum < minimum Then
+                MsgBox("Max can't be smaller than Min")
+                Exit Property
+            End If
+            m_maximum = maximum
+            If value > maximum Then
+                value = maximum
+            End If
+            For Each lbl In Me.Controls
+                Select Case lbl.tag
+                    Case "lbl0"
+                        lbl.text = minimum
+                    Case "lbl2"
+                        lbl.text = (maximum - minimum) / 10 * (2.ToString.PadLeft(2, "0")) + minimum
+                    Case "lbl4"
+                        lbl.text = (maximum - minimum) / 10 * (4.ToString.PadLeft(2, "0")) + minimum
+                    Case "lbl6"
+                        lbl.text = (maximum - minimum) / 10 * (6.ToString.PadLeft(2, "0")) + minimum
+                    Case "lbl8"
+                        lbl.text = (maximum - minimum) / 10 * (8.ToString.PadLeft(2, "0")) + minimum
+                    Case "lbl10"
+                        lbl.text = (maximum - minimum) / 10 * (10.ToString.PadLeft(2, "0")) + minimum
+                End Select
+            Next
+            Dim c = value
+            value = c
+            Me.Refresh()
+        End Set
+    End Property
     Private Sub GaugePaint(sender As Object, e As PaintEventArgs) Handles Me.Paint
 
         For num As Double = -5 / 4 * Pi To 1 / 4 * Pi Step 0.075
@@ -121,26 +123,26 @@
 
     End Sub
     Private Sub addlabel(ByVal i As Integer)
-            Dim lblScale As New Label
-            With lblScale
-                .Location = New Point(x2 - 5, y2 - 3)
-                .Size = New Size(18, 10)
-                .Text = (maximum - minimum) / 10 * (i.ToString.PadLeft(2, "0"))
-                .Font = New Font("Segoe UI", 5, FontStyle.Regular)
-                .ForeColor = Color.Black
-                .BackColor = Color.Transparent
-                .TextAlign = ContentAlignment.TopLeft
-                .Tag = "lbl" & i.ToString
-            End With
-            For Each lbl In Me.Controls
-                If TypeOf (lbl) Is Label And lbl.tag = "lbl" & i.ToString Then
-                    Exit Sub
-                End If
-            Next
-            If i Mod 2 = 0 Then
-                Me.Controls.Add(lblScale)
+        Dim lblScale As New Label
+        With lblScale
+            .Location = New Point(x2 - 5, y2 - 3)
+            .Size = New Size(18, 10)
+            .Text = (maximum - minimum) / 10 * (i.ToString.PadLeft(2, "0"))
+            .Font = New Font("Segoe UI", 5, FontStyle.Regular)
+            .ForeColor = Color.Black
+            .BackColor = Color.Transparent
+            .TextAlign = ContentAlignment.TopLeft
+            .Tag = "lbl" & i.ToString
+        End With
+        For Each lbl In Me.Controls
+            If TypeOf (lbl) Is Label And lbl.tag = "lbl" & i.ToString Then
+                Exit Sub
             End If
-        End Sub
+        Next
+        If i Mod 2 = 0 Then
+            Me.Controls.Add(lblScale)
+        End If
+    End Sub
     Sub New()
 
         ' La chiamata è richiesta dalla finestra di progettazione.
@@ -153,8 +155,8 @@
 
     End Sub
     Public Sub redrawLine(e As PaintEventArgs)
-            Dim Lend As Double = 1 / 4 * Pi - 6 / 4 * Pi * ((maximum - value) / (maximum - minimum))
-            Dim Lstart = Lend - Pi
+        Dim Lend As Double = 1 / 4 * Pi - 6 / 4 * Pi * ((maximum - value) / (maximum - minimum))
+        Dim Lstart = Lend - Pi
 
 
         xp1 = Convert.ToInt32(14 * Math.Cos(Lend) + centreX)
@@ -164,7 +166,7 @@
         xp3 = Convert.ToInt32(8 * Math.Cos(Lend + 0.5) + centreX)
         yp3 = Convert.ToInt32(8 * Math.Sin(Lend + 0.5) + centreY)
 
-        Dim valorediPartenza As Double = value / maximum * Pi
+        Dim valorediPartenza As Double = 0 'value / maximum * Pi
 
         For m = valorediPartenza To 2 * Pi + valorediPartenza Step Pi / 8
             xp4 = Convert.ToInt32(14 * Math.Cos(m) + centreX - 1.5)
@@ -180,7 +182,7 @@
         e.Graphics.FillPolygon(Brushes.Black, points)
 
     End Sub
-    Private Sub Me_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown
+    Private Sub Me_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
         eventString = ""
         Select Case e.Button
@@ -194,12 +196,12 @@
         End Select
 
     End Sub
-    Private Sub Me_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseUp
+    Private Sub Me_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp
 
         eventString = ""
 
     End Sub
-    Private Sub Me_MouseMove(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseMove
+    Private Sub Me_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
 
         If eventString = "L" Then
             Dim mouseX As Integer = e.X
@@ -209,18 +211,18 @@
             If mouseX > mouseDownLocation.X And mouseY < centreY Then
                 value += variation
                 mouseDownLocation = New Point(e.X, e.Y)
-                ElseIf mouseX < mouseDownLocation.X And mouseY > centreY Then
+            ElseIf mouseX < mouseDownLocation.X And mouseY > centreY Then
                 value += variation
                 mouseDownLocation = New Point(e.X, e.Y)
-                ElseIf mouseX > mouseDownLocation.X And mouseY > centreY Then
+            ElseIf mouseX > mouseDownLocation.X And mouseY > centreY Then
                 value -= variation
                 mouseDownLocation = New Point(e.X, e.Y)
-                ElseIf mouseX < mouseDownLocation.X And mouseY < centreY Then
+            ElseIf mouseX < mouseDownLocation.X And mouseY < centreY Then
                 value -= variation
                 mouseDownLocation = New Point(e.X, e.Y)
-                End If
-            Else
-                Exit Sub
+            End If
+        Else
+            Exit Sub
         End If
         Me.Refresh()
     End Sub

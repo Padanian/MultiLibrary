@@ -22,10 +22,10 @@ Partial Class Form1
     'Non modificarla mediante l'editor del codice.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.MultiGenPointCalendarClock1 = New MultiLibrary.MultiGenPointCalendarClock()
         Me.MultiPanelSwitch2 = New MultiLibrary.MultiPanelSwitch()
         Me.MultiLinearMeter1 = New MultiLibrary.MultiLinearMeter()
         Me.MultiVerticalMeter1 = New MultiLibrary.MultiVerticalMeter()
-        Me.MultiTrimmerKnob1 = New MultiLibrary.MultiTrimmerKnob()
         Me.MultiPanelSwitch1 = New MultiLibrary.MultiPanelSwitch()
         Me.MultiPanelSemaphor3 = New MultiLibrary.MultiPanelSemaphor()
         Me.MultiPanelSemaphor2 = New MultiLibrary.MultiPanelSemaphor()
@@ -33,8 +33,17 @@ Partial Class Form1
         Me.MultiGauge2 = New MultiLibrary.MultiGauge()
         Me.MultiGauge1 = New MultiLibrary.MultiGauge()
         Me.MultiAmmVoltmeter1 = New MultiLibrary.MultiAmmVoltmeter()
-        Me.MultiGenPointCalendarClock1 = New MultiLibrary.MultiGenPointCalendarClock()
+        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'MultiGenPointCalendarClock1
+        '
+        Me.MultiGenPointCalendarClock1.Location = New System.Drawing.Point(362, 13)
+        Me.MultiGenPointCalendarClock1.Name = "MultiGenPointCalendarClock1"
+        Me.MultiGenPointCalendarClock1.Settings = New Integer() {0, 0, 0, 0, 0, 0}
+        Me.MultiGenPointCalendarClock1.Size = New System.Drawing.Size(96, 96)
+        Me.MultiGenPointCalendarClock1.TabIndex = 12
         '
         'MultiPanelSwitch2
         '
@@ -73,16 +82,6 @@ Partial Class Form1
         Me.MultiVerticalMeter1.TabIndex = 9
         Me.MultiVerticalMeter1.value = New Decimal(New Integer() {0, 0, 0, 0})
         Me.MultiVerticalMeter1.WarningThreshold = 80
-        '
-        'MultiTrimmerKnob1
-        '
-        Me.MultiTrimmerKnob1.Location = New System.Drawing.Point(168, 99)
-        Me.MultiTrimmerKnob1.maximum = 100
-        Me.MultiTrimmerKnob1.minimum = 0
-        Me.MultiTrimmerKnob1.Name = "MultiTrimmerKnob1"
-        Me.MultiTrimmerKnob1.Size = New System.Drawing.Size(64, 64)
-        Me.MultiTrimmerKnob1.TabIndex = 8
-        Me.MultiTrimmerKnob1.value = New Decimal(New Integer() {0, 0, 0, 0})
         '
         'MultiPanelSwitch1
         '
@@ -165,24 +164,25 @@ Partial Class Form1
         Me.MultiAmmVoltmeter1.units = "V"
         Me.MultiAmmVoltmeter1.value = New Decimal(New Integer() {0, 0, 0, 0})
         '
-        'MultiGenPointCalendarClock1
+        'TrackBar1
         '
-        Me.MultiGenPointCalendarClock1.Location = New System.Drawing.Point(362, 13)
-        Me.MultiGenPointCalendarClock1.Name = "MultiGenPointCalendarClock1"
-        Me.MultiGenPointCalendarClock1.Settings = New Integer() {0, 0, 0, 0, 0, 0}
-        Me.MultiGenPointCalendarClock1.Size = New System.Drawing.Size(96, 96)
-        Me.MultiGenPointCalendarClock1.TabIndex = 12
+        Me.TrackBar1.Location = New System.Drawing.Point(180, 108)
+        Me.TrackBar1.Maximum = 100
+        Me.TrackBar1.Name = "TrackBar1"
+        Me.TrackBar1.Size = New System.Drawing.Size(104, 45)
+        Me.TrackBar1.TabIndex = 13
+        Me.TrackBar1.TickFrequency = 10
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(504, 362)
+        Me.Controls.Add(Me.TrackBar1)
         Me.Controls.Add(Me.MultiGenPointCalendarClock1)
         Me.Controls.Add(Me.MultiPanelSwitch2)
         Me.Controls.Add(Me.MultiLinearMeter1)
         Me.Controls.Add(Me.MultiVerticalMeter1)
-        Me.Controls.Add(Me.MultiTrimmerKnob1)
         Me.Controls.Add(Me.MultiPanelSwitch1)
         Me.Controls.Add(Me.MultiPanelSemaphor3)
         Me.Controls.Add(Me.MultiPanelSemaphor2)
@@ -192,7 +192,9 @@ Partial Class Form1
         Me.Controls.Add(Me.MultiAmmVoltmeter1)
         Me.Name = "Form1"
         Me.Text = "Form1"
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -203,9 +205,9 @@ Partial Class Form1
     Friend WithEvents MultiPanelSemaphor2 As MultiLibrary.MultiPanelSemaphor
     Friend WithEvents MultiPanelSemaphor3 As MultiLibrary.MultiPanelSemaphor
     Friend WithEvents MultiPanelSwitch1 As MultiLibrary.MultiPanelSwitch
-    Friend WithEvents MultiTrimmerKnob1 As MultiLibrary.MultiTrimmerKnob
     Friend WithEvents MultiVerticalMeter1 As MultiLibrary.MultiVerticalMeter
     Friend WithEvents MultiLinearMeter1 As MultiLibrary.MultiLinearMeter
     Friend WithEvents MultiPanelSwitch2 As MultiLibrary.MultiPanelSwitch
     Friend WithEvents MultiGenPointCalendarClock1 As MultiLibrary.MultiGenPointCalendarClock
+    Friend WithEvents TrackBar1 As TrackBar
 End Class
