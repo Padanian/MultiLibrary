@@ -45,6 +45,13 @@
         Set(value As Decimal)
             If value >= minimum And value <= maximum Then
                 m_value = value
+                Dim uu As String
+                If units = "H" Then
+                    uu = "Hz"
+                Else
+                    uu = units
+                End If
+                lblValue.Text = Format(value, "###.#0") & " " & uu
                 Me.Refresh()
             Else
                 Exit Property
@@ -165,8 +172,8 @@
     Private Sub addlabel(ByVal i As Integer)
         Dim lblScale As New Label
         With lblScale
-            .Location = New Point(x2 - 4, y2 - 4)
-            .Size = New Size(18, 10)
+            .Location = New Point(x2 - 4, y2 - 2)
+            .Size = New Size(24, 10)
             .Text = (maximum - minimum) / 16 * (i.ToString.PadLeft(2, "0"))
             .Font = New Font("Segoe UI", 5, FontStyle.Regular)
             .ForeColor = Color.Black
@@ -181,6 +188,7 @@
         Next
         If i Mod 2 = 0 Then
             Me.Controls.Add(lblScale)
+            lblScale.BringToFront()
         End If
     End Sub
     Sub New()

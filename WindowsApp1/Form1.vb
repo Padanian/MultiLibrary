@@ -1,103 +1,78 @@
 ﻿Imports System.Configuration
 Imports System.IO
 Imports MultiLibrary
+Imports EasyModbus
+Imports System.IO.Ports
 
 Public Class Form1
-    'Dim pp0 As New MultiLibrary.MultiGenPointCalendarClock
-    'Dim pp1 As New MultiLibrary.MultiGenPointCalendarClock
-    'Dim pp2 As New MultiLibrary.MultiGenPointCalendarClock
+
+    Dim sbMst As New ModbusClient()  'dichiarazione canale modbus master
+    Const timeoutModbus = 250 'timeout modbus
+    Dim MultiAmmVoltmeter1 As New MultiAmmVoltmeter
+    Dim MultiAmmVoltmeter2 As New MultiAmmVoltmeter
+
+
+
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'With pp0
-        '    .Location = New Point(50, 50)
-        '    .Name = "pp0"
-        'End With
-        'Me.Controls.Add(pp0)
-        'With pp1
-        '    .Location = New Point(150, 50)
-        '    .Name = "pp1"
-        'End With
-        'Me.Controls.Add(pp1)
-        'With pp2
-        '    .Location = New Point(250, 50)
-        '    .Name = "pp2"
-        'End With
-        'Me.Controls.Add(pp2)
 
-        For Each pp In Me.Controls
-            If TypeOf (pp) Is MultiGenPointCalendarClock Then
+        Try
 
-                Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-                Dim filename As String = Application.LocalUserAppDataPath & "\" & pp.Name & ".mgpcc"
-
-                If File.Exists(filename) Then
-
-                    Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
-                    pp.Settings = bf.Deserialize(fStream)
-                    fStream.Close()
-                Else
-                    'pp0.Settings = {0, 0, 0, 0, 0, 0}
-
-                    Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
-                    bf.Serialize(fStream, pp.Settings) ' write to file
-                    fStream.Close()
-                End If
+            If sbMst.Connected Then
+                sbMst.Disconnect()
             End If
-        Next
 
+            Dim port As Integer = 10
+            sbMst.Baudrate = 38400
 
-    End Sub
+            sbMst.NumberOfRetries = 2
+            sbMst.UnitIdentifier = 1
+            sbMst.SerialPort = "COM10"
 
-    Private Sub Form1_closing(sender As Object, e As EventArgs) Handles Me.Closing
+            sbMst.Parity = Parity.None
+            sbMst.StopBits = 1
+            sbMst.ConnectionTimeout = 200
 
-        For Each pp In Me.Controls
-            If TypeOf (pp) Is MultiGenPointCalendarClock Then
+            sbMst.Connect()
+            Timer1.Enabled = True
 
-                Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-                Dim filename As String = Application.LocalUserAppDataPath & "\" & pp.Name & ".mgpcc"
+        Catch ex As Exception
 
-                Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
-                bf.Serialize(fStream, pp.Settings) ' write to file
-                fStream.Close()
-
+            If sbMst.Connected() Then
+                sbMst.Disconnect()
+                Timer1.Enabled = False
             End If
-        Next
+
+        End Try
+
+        Me.Controls.Add(MultiAmmVoltmeter1)
+        MultiAmmVoltmeter1.Location = New Point(12, 23)
+
+        Me.Controls.Add(MultiAmmVoltmeter2)
+        MultiAmmVoltmeter2.Location = New Point(168, 23)
+        MultiAmmVoltmeter2.units = "H"
 
     End Sub
 
-    Private Sub MultiTrimmerKnob1_Load() Handles MultiTrimmerKnob1.ValueChanged, MultiTrimmerKnob2.ValueChanged
-        MultiVerticalMeter1.value = MultiTrimmerKnob1.value
-        MultiGauge1.value = MultiTrimmerKnob1.value
-        MultiGauge2.value = MultiTrimmerKnob1.value / 2
-    End Sub
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Try
+            MultiAmmVoltmeter1.minimum = 216
+            MultiAmmVoltmeter1.maximum = 232
+            MultiAmmVoltmeter2.minimum = 49
+            MultiAmmVoltmeter2.maximum = 51
 
 
-    Private Sub MultiPanelSwitch1_Click() Handles MultiPanelSwitch1.PositionChanged
-        If MultiPanelSwitch1.selectedPosition = 0 Then
-            MultiPanelSemaphor1.semaphorColor = Color.Red
-        ElseIf MultiPanelSwitch1.selectedPosition = 1 Then
-            MultiPanelSemaphor1.semaphorColor = Color.Yellow
-        ElseIf MultiPanelSwitch1.selectedPosition = 2 Then
-            MultiPanelSemaphor1.semaphorColor = Color.Blue
-        End If
-    End Sub
-    Private Sub MultiPanelSwitch2_Click() Handles MultiPanelSwitch2.PositionChanged
-        If MultiPanelSwitch2.selectedPosition = 0 Then
-            MultiPanelSemaphor2.semaphorColor = Color.Green
-        ElseIf MultiPanelSwitch2.selectedPosition = 1 Then
-            MultiPanelSemaphor2.semaphorColor = Color.Black
-        ElseIf MultiPanelSwitch2.selectedPosition = 2 Then
-            MultiPanelSemaphor2.semaphorColor = Color.Blue
-        End If
-    End Sub
+            Dim reading As Integer() = sbMst.ReadInputRegisters(270, 2)
+            Dim temp As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
+            MultiAmmVoltmeter1.value = temp
+            reading = sbMst.ReadInputRegisters(218, 2)
+            temp = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
+            MultiAmmVoltmeter2.value = temp
+            MultiAmmVoltmeter1.Refresh()
+        Catch ex As Exception
 
 
-    Private Sub MultiTrimmerKnob2_Load() Handles MultiTrimmerKnob2.ValueChanged
-        MultiAmmVoltmeter1.value = MultiTrimmerKnob2.value
-    End Sub
+        End Try
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Form2.Show()
-        Me.Hide()
     End Sub
 End Class

@@ -23,6 +23,7 @@ Partial Class MultiAmmVoltmeter
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.lblUnits = New System.Windows.Forms.Label()
+        Me.lblValue = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'lblUnits
@@ -34,10 +35,20 @@ Partial Class MultiAmmVoltmeter
         Me.lblUnits.TabIndex = 0
         Me.lblUnits.Text = "Volts"
         '
+        'lblValue
+        '
+        Me.lblValue.AutoSize = True
+        Me.lblValue.Location = New System.Drawing.Point(87, 130)
+        Me.lblValue.Name = "lblValue"
+        Me.lblValue.Size = New System.Drawing.Size(43, 17)
+        Me.lblValue.TabIndex = 1
+        Me.lblValue.Text = "Label1"
+        '
         'MultiAmmVoltmeter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 17.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.Controls.Add(Me.lblValue)
         Me.Controls.Add(Me.lblUnits)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI Semilight", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -49,4 +60,5 @@ Partial Class MultiAmmVoltmeter
     End Sub
 
     Friend WithEvents lblUnits As Label
+    Friend WithEvents lblValue As Label
 End Class
