@@ -1,20 +1,26 @@
-﻿Imports System.Configuration
-Imports System.IO
-Imports MultiLibrary
+﻿Imports MultiLibrary
 Imports EasyModbus
 Imports System.IO.Ports
 
 Public Class Form1
 
     Dim sbMst As New ModbusClient()  'dichiarazione canale modbus master
-    Const timeoutModbus = 250 'timeout modbus
     Dim MultiAmmVoltmeter1 As New MultiAmmVoltmeter
     Dim MultiAmmVoltmeter2 As New MultiAmmVoltmeter
+    Dim MultiAmmVoltmeter3 As New MultiAmmVoltmeter
 
 
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        MultiAmmVoltmeter1.minimum = 224
+        MultiAmmVoltmeter1.maximum = 236
+        MultiAmmVoltmeter2.minimum = 49.95
+        MultiAmmVoltmeter2.maximum = 50.05
+        MultiAmmVoltmeter3.minimum = 0
+        MultiAmmVoltmeter3.maximum = 10
+
 
         Try
 
@@ -31,7 +37,7 @@ Public Class Form1
 
             sbMst.Parity = Parity.None
             sbMst.StopBits = 1
-            sbMst.ConnectionTimeout = 200
+            sbMst.ConnectionTimeout = 150
 
             sbMst.Connect()
             Timer1.Enabled = True
@@ -52,23 +58,39 @@ Public Class Form1
         MultiAmmVoltmeter2.Location = New Point(168, 23)
         MultiAmmVoltmeter2.units = "H"
 
+        Me.Controls.Add(MultiAmmVoltmeter3)
+        MultiAmmVoltmeter3.Location = New Point(324, 23)
+        MultiAmmVoltmeter3.units = "A"
+
+
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Try
-            MultiAmmVoltmeter1.minimum = 216
-            MultiAmmVoltmeter1.maximum = 232
-            MultiAmmVoltmeter2.minimum = 49
-            MultiAmmVoltmeter2.maximum = 51
 
 
+            sbMst.UnitIdentifier = 1
             Dim reading As Integer() = sbMst.ReadInputRegisters(270, 2)
             Dim temp As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
             MultiAmmVoltmeter1.value = temp
             reading = sbMst.ReadInputRegisters(218, 2)
             temp = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
             MultiAmmVoltmeter2.value = temp
-            MultiAmmVoltmeter1.Refresh()
+            reading = sbMst.ReadInputRegisters(232, 2)
+            temp = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
+            MultiAmmVoltmeter3.value = temp
+
+            sbMst.UnitIdentifier = 2
+            If MultiPumpPanel1.isPump1Running And Not MultiPumpPanel1.isPump2Running Then
+                sbMst.WriteMultipleRegisters(1, {1})
+            ElseIf MultiPumpPanel1.isPump2Running And Not MultiPumpPanel1.isPump1Running Then
+                sbMst.WriteSingleRegister(1, 2)
+            ElseIf MultiPumpPanel1.isPump2Running And MultiPumpPanel1.isPump1Running Then
+                sbMst.WriteSingleRegister(1, 3)
+            Else
+                sbMst.WriteSingleRegister(1, 0)
+            End If
+
         Catch ex As Exception
 
 

@@ -1,5 +1,4 @@
-﻿Imports System.IO
-
+﻿
 Public Class MultiPumpPanel
     Const Pi As Double = Math.PI
     Private m_lbltext As String = "Text"
@@ -98,9 +97,9 @@ Public Class MultiPumpPanel
         Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
         Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mpp"
 
-        If File.Exists(filename) Then
+        If IO.File.Exists(filename) Then
 
-            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            Dim fStream As New IO.FileStream(filename, IO.FileMode.OpenOrCreate)
             mySettings = bf.Deserialize(fStream)
             fStream.Close()
 
@@ -152,14 +151,16 @@ Public Class MultiPumpPanel
             mySettings.m_selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
 
 
-            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            Dim fStream As New IO.FileStream(filename, IO.FileMode.OpenOrCreate)
             bf.Serialize(fStream, mySettings) ' write to file
             fStream.Close()
         End If
 
 
         pbPump1LED.Image = My.Resources.led_off_black
+        pbPump1LED.Tag = "off"
         pbPump2LED.Image = My.Resources.led_off_black
+        pbPump2LED.Tag = "off"
         lbltext = "Switch"
         lblPumpText = "Mode"
         semaphortext = "Signals"
@@ -323,55 +324,71 @@ Public Class MultiPumpPanel
     Private Sub ritardoP1Start()
         Dim start As DateTime = DateTime.Now
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
-            Application.DoEvents()
+            Threading.Thread.Sleep(1000)
         End While
         If m_pump1Alarm Then
             pbPump1LED.Image = My.Resources.led_red_black
+            pbPump1LED.Tag = "red"
         Else
             pbPump1LED.Image = My.Resources.led_green_black
+            pbPump1LED.Tag = "green"
         End If
     End Sub
     Private Sub ritardoP1Stop()
         Dim start As DateTime = DateTime.Now
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
-            Application.DoEvents()
+            Threading.Thread.Sleep(1000)
         End While
         If m_pump1Alarm Then
             pbPump1LED.Image = My.Resources.led_red_black
+            pbPump1LED.Tag = "red"
         Else
             pbPump1LED.Image = My.Resources.led_off_black
+            pbPump1LED.Tag = "off"
         End If
     End Sub
     Private Sub ritardoP2Start()
         Dim start As DateTime = DateTime.Now
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
-            Application.DoEvents()
+            Threading.Thread.Sleep(1000)
         End While
         If m_pump2Alarm Then
             pbPump2LED.Image = My.Resources.led_red_black
+            pbPump2LED.Tag = "red"
         Else
             pbPump2LED.Image = My.Resources.led_green_black
+            pbPump2LED.Tag = "green"
         End If
     End Sub
     Private Sub ritardoP2Stop()
         Dim start As DateTime = DateTime.Now
         While DateDiff(DateInterval.Second, start, DateTime.Now) < nupRitardi.Value
-            Application.DoEvents()
+            Threading.Thread.Sleep(1000)
         End While
         If m_pump2Alarm Then
             pbPump2LED.Image = My.Resources.led_red_black
+            pbPump2LED.Tag = "red"
         Else
             pbPump2LED.Image = My.Resources.led_off_black
+            pbPump2LED.Tag = "off"
         End If
     End Sub
     Public ReadOnly Property isPump1Running As Boolean
         Get
-            Return m_pump1Running
+            If pbPump1LED.Tag = "green" Or pbPump1LED.Tag = "blue" Then
+                Return True
+            Else
+                Return False
+            End If
         End Get
     End Property
     Public ReadOnly Property isPump2Running As Boolean
         Get
-            Return m_pump2Running
+            If pbPump2LED.Tag = "green" Or pbPump2LED.Tag = "blue" Then
+                Return True
+            Else
+                Return False
+            End If
         End Get
     End Property
     Private Property pump1Running As Boolean
@@ -387,9 +404,11 @@ Public Class MultiPumpPanel
 
                 If m_pump1Running = False And pump1Running = True Then
                     pbPump1LED.Image = My.Resources.led_blue_black
+                    pbPump1LED.Tag = "blue"
                     trdDatiStart.Start()
                 ElseIf m_pump1Running = True And pump1Running = False Then
                     pbPump1LED.Image = My.Resources.led_blue_black
+                    pbPump1LED.Tag = "blue"
                     trdDatiStop.Start()
                 End If
 
@@ -412,9 +431,11 @@ Public Class MultiPumpPanel
 
                 If m_pump2Running = False And pump2Running = True Then
                     pbPump2LED.Image = My.Resources.led_blue_black
+                    pbPump2LED.Tag = "blue"
                     trdDatiStart.Start()
                 ElseIf m_pump2Running = True And pump2Running = False Then
                     pbPump2LED.Image = My.Resources.led_blue_black
+                    pbPump2LED.Tag = "blue"
                     trdDatiStop.Start()
                 End If
 
@@ -432,12 +453,15 @@ Public Class MultiPumpPanel
             If m_pump1Alarm Then
                 m_pump1Running = False
                 pbPump1LED.Image = My.Resources.led_red_black
+                pbPump1LED.Tag = "red"
                 RaiseEvent allarmePompe()
             ElseIf Not m_pump1Alarm And m_pump1Running Then
                 pbPump1LED.Image = My.Resources.led_green_black
+                pbPump1LED.Tag = "green"
                 RaiseEvent allarmePompe()
             ElseIf Not m_pump1Alarm And Not m_pump1Running Then
                 pbPump1LED.Image = My.Resources.led_off_black
+                pbPump1LED.Tag = "off"
                 RaiseEvent allarmePompe()
             End If
             hourUpdate = False
@@ -453,12 +477,15 @@ Public Class MultiPumpPanel
             If m_pump2Alarm Then
                 m_pump2Running = False
                 pbPump2LED.Image = My.Resources.led_red_black
+                pbPump2LED.Tag = "red"
                 RaiseEvent allarmePompe()
             ElseIf Not m_pump2Alarm And m_pump2Running Then
                 pbPump2LED.Image = My.Resources.led_green_black
+                pbPump2LED.Tag = "green"
                 RaiseEvent allarmePompe()
             ElseIf Not m_pump2Alarm And Not m_pump2Running Then
                 pbPump2LED.Image = My.Resources.led_off_black
+                pbPump2LED.Tag = "off"
                 RaiseEvent allarmePompe()
             End If
             hourUpdate = False
@@ -672,7 +699,7 @@ Public Class MultiPumpPanel
                 'Pompa 1 in marcia, determina l'ora di partenza e salvala
                 pump1Running = True
                 m_Pump1StartedDateTime = DateTime.Now
-                mySettingsSave()
+                'mySettingsSave()
 
                 'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump2Running = False
@@ -683,7 +710,7 @@ Public Class MultiPumpPanel
                 'Pompa 2 in marcia, determina l'ora di partenza e salvala
                 pump2Running = True
                 m_Pump2StartedDateTime = DateTime.Now
-                mySettingsSave()
+                'mySettingsSave()
 
                 'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump1Running = False
@@ -698,7 +725,7 @@ Public Class MultiPumpPanel
                     'Pompa 2 in marcia, determina l'ora di partenza e salvala
                     pump2Running = True
                     m_Pump2StartedDateTime = DateTime.Now
-                    mySettingsSave()
+                    'mySettingsSave()
 
                     'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                     pump1Running = False
@@ -707,7 +734,7 @@ Public Class MultiPumpPanel
                     'Pompa 1 in marcia, determina l'ora di partenza e salvala
                     pump1Running = True
                     m_Pump1StartedDateTime = DateTime.Now
-                    mySettingsSave()
+                    'mySettingsSave()
 
                     'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                     pump2Running = False
@@ -717,7 +744,7 @@ Public Class MultiPumpPanel
                 'Pompa 2 in marcia, determina l'ora di partenza e salvala
                 pump2Running = True
                 m_Pump2StartedDateTime = DateTime.Now
-                mySettingsSave()
+                'mySettingsSave()
 
                 'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump1Running = False
@@ -726,7 +753,7 @@ Public Class MultiPumpPanel
                 'Pompa 1 in marcia, determina l'ora di partenza e salvala
                 pump1Running = True
                 m_Pump1StartedDateTime = DateTime.Now
-                mySettingsSave()
+                'mySettingsSave()
 
                 'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump2Running = False
@@ -737,6 +764,7 @@ Public Class MultiPumpPanel
             End If
         End If
 
+        mySettingsSave()
         gestioneSemaphor()
 
     End Sub
@@ -765,7 +793,7 @@ Public Class MultiPumpPanel
             'Pompa 2 in marcia, determina l'ora di partenza e salvala
             pump2Running = True
             m_Pump2StartedDateTime = DateTime.Now
-            mySettingsSave()
+            'mySettingsSave()
 
             pump1Running = False
             Exit Sub
@@ -775,7 +803,7 @@ Public Class MultiPumpPanel
             'Pompa 1 in marcia, determina l'ora di partenza e salvala
             pump1Running = True
             m_Pump1StartedDateTime = DateTime.Now
-            mySettingsSave()
+            'mySettingsSave()
 
             pump2Running = False
             Exit Sub
@@ -800,7 +828,7 @@ Public Class MultiPumpPanel
                 'Pompa 2 in marcia, determina l'ora di partenza e salvala
                 pump2Running = True
                 m_Pump2StartedDateTime = DateTime.Now
-                mySettingsSave()
+                'mySettingsSave()
 
                 'Pompa 1 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump1Running = False
@@ -811,7 +839,7 @@ Public Class MultiPumpPanel
                 'Pompa 1 in marcia, determina l'ora di partenza e salvala
                 pump1Running = True
                 m_Pump1StartedDateTime = DateTime.Now
-                mySettingsSave()
+                'mySettingsSave()
 
                 'Pompa 2 a riposo, calcola quanto ha marciato e aggiorna il contatore
                 pump2Running = False
@@ -839,7 +867,7 @@ Public Class MultiPumpPanel
             Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 
             Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mpp"
-            Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
+            Dim fStream As New IO.FileStream(filename, IO.FileMode.OpenOrCreate)
             bf.Serialize(fStream, mySettings) ' write to file
             fStream.Close()
         End If
