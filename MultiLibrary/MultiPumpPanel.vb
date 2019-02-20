@@ -789,7 +789,8 @@ Public Class MultiPumpPanel
 
         hourUpdate = True
 
-        If pump1Alarm And Not pump2Alarm And (m_selectedPositionPumpSwitch = 2 Or m_selectedPositionPumpSwitch = 1) Then
+        If pump1Alarm And Not pump2Alarm And (m_selectedPositionPumpSwitch = 2 Or m_selectedPositionPumpSwitch = 1) And
+            Not m_selectedPositionOnOffSwitch = 0 Then
             'Pompa 2 in marcia, determina l'ora di partenza e salvala
             pump2Running = True
             m_Pump2StartedDateTime = DateTime.Now
@@ -799,7 +800,8 @@ Public Class MultiPumpPanel
             Exit Sub
         End If
 
-        If pump2Alarm And Not pump1Alarm And (m_selectedPositionPumpSwitch = 0 Or m_selectedPositionPumpSwitch = 1) Then
+        If pump2Alarm And Not pump1Alarm And (m_selectedPositionPumpSwitch = 0 Or m_selectedPositionPumpSwitch = 1) And
+            Not m_selectedPositionOnOffSwitch = 0 Then
             'Pompa 1 in marcia, determina l'ora di partenza e salvala
             pump1Running = True
             m_Pump1StartedDateTime = DateTime.Now

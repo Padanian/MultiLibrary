@@ -38,7 +38,7 @@ Partial Class MultiPanelSwitch
         '
         'pbSwitch
         '
-        Me.pbSwitch.Image = My.Resources.Resources.PanelSwitchOff
+        Me.pbSwitch.Image = Global.MultiLibrary.My.Resources.Resources.PanelSwitchOff
         Me.pbSwitch.Location = New System.Drawing.Point(0, 0)
         Me.pbSwitch.Name = "pbSwitch"
         Me.pbSwitch.Size = New System.Drawing.Size(64, 64)

@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Libreria di controlli custom per quadri elettrici")>
 <Assembly: AssemblyCompany("Alessandro Mandelli")>
 <Assembly: AssemblyProduct("MultiLibrary")>
-<Assembly: AssemblyCopyright("Copyright Alessandro Mandelli ©  2018")>
+<Assembly: AssemblyCopyright("Copyright Alessandro Mandelli ©  2019")>
 <Assembly: AssemblyTrademark("Alessandro Mandelli")>
 
 <Assembly: ComVisible(True)>
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' È possibile specificare tutti i valori oppure impostare valori predefiniti per i numeri relativi alla revisione e alla build
 ' usando l'asterisco '*' come illustrato di seguito:
 
-<Assembly: AssemblyVersion("0.1.0.0")>
+<Assembly: AssemblyVersion("0.2.0.0")>
 <Assembly: AssemblyFileVersion("1.0.0.0")>

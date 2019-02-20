@@ -194,10 +194,12 @@
 
 
         If isSemaphorVisible And Not isSemaphorBlinking Then
-            With blinkingSemaphorTimer
-                .Enabled = False
-                .Stop()
-            End With
+            If blinkingSemaphorTimer.Enabled = True Then
+                With blinkingSemaphorTimer
+                    .Enabled = False
+                    .Stop()
+                End With
+            End If
             pbSemaphor.Visible = True
             e.Graphics.DrawRectangle(apen, 1, 115, 62, 21)
             lblSemaphorText.Visible = True
@@ -223,10 +225,12 @@
             e.Graphics.DrawRectangle(apen, 1, 115, 62, 21)
             lblSemaphorText.Visible = True
         ElseIf Not isSemaphorVisible Then
-            With blinkingSemaphorTimer
-                .Enabled = False
-                .Stop()
-            End With
+            If blinkingSemaphorTimer.Enabled = True Then
+                With blinkingSemaphorTimer
+                    .Enabled = False
+                    .Stop()
+                End With
+            End If
             pbSemaphor.Visible = False
             lblSemaphorText.Visible = False
         End If
@@ -256,16 +260,21 @@
 
     Public Sub drawswitch(e, angle)
 
-        If angle = -3 / 4 * Pi And m_positions = 3 Then
+        If angle = -3 / 4 * Pi And m_positions = 3 And Not pbSwitch.Tag = "off3pos" Then
             pbSwitch.Image = My.Resources.PanelSwitchOff
-        ElseIf angle = -3 / 4 * Pi And m_positions = 2 Then
+            pbSwitch.Tag = "off3pos"
+        ElseIf angle = -3 / 4 * Pi And m_positions = 2 And Not pbSwitch.Tag = "off2pos" Then
             pbSwitch.Image = My.Resources.PanelSwitchOff_2pos
-        ElseIf angle = -1 / 2 * Pi Then
+            pbSwitch.Tag = "off2pos"
+        ElseIf angle = -1 / 2 * Pi And Not pbSwitch.Tag = "auto" Then
             pbSwitch.Image = My.Resources.PanelSwitchAuto
-        ElseIf angle = -1 / 4 * Pi And m_positions = 3 Then
+            pbSwitch.Tag = "auto"
+        ElseIf angle = -1 / 4 * Pi And m_positions = 3 And Not pbSwitch.Tag = "on3pos" Then
             pbSwitch.Image = My.Resources.PanelSwitchOn
-        ElseIf angle = -1 / 4 * Pi And m_positions = 2 Then
+            pbSwitch.Tag = "on3pos"
+        ElseIf angle = -1 / 4 * Pi And m_positions = 2 And Not pbSwitch.Tag = "on2pos" Then
             pbSwitch.Image = My.Resources.PanelSwitchOn_2pos
+            pbSwitch.Tag = "on2pos"
         End If
 
     End Sub

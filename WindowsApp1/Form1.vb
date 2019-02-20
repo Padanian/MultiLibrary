@@ -81,16 +81,56 @@ Public Class Form1
             MultiAmmVoltmeter3.value = temp
 
             sbMst.UnitIdentifier = 2
+            Dim lettura = sbMst.ReadInputRegisters(1, 2)
+            Dim temp2 = lettura(0)
+            Dim refreshStatus As Integer = temp2
             If MultiPumpPanel1.isPump1Running And Not MultiPumpPanel1.isPump2Running Then
-                sbMst.WriteMultipleRegisters(1, {1})
+                refreshStatus = temp2 And &B11111100 Or &B1
             ElseIf MultiPumpPanel1.isPump2Running And Not MultiPumpPanel1.isPump1Running Then
-                sbMst.WriteSingleRegister(1, 2)
+                refreshStatus = temp2 And &B11111100 Or &B10
             ElseIf MultiPumpPanel1.isPump2Running And MultiPumpPanel1.isPump1Running Then
-                sbMst.WriteSingleRegister(1, 3)
+                refreshStatus = temp2 And &B11111100 Or &B11
             Else
-                sbMst.WriteSingleRegister(1, 0)
+                refreshStatus = temp2 And &B11111100
+            End If
+            If MultiPanelSwitch1.selectedPosition = 0 Then
+                refreshStatus = refreshStatus And &B11111011
+            Else
+                refreshStatus = refreshStatus Or &B100
+            End If
+            If MultiPanelSwitch2.selectedPosition = 0 Then
+                refreshStatus = refreshStatus And &B11110111
+            Else
+                refreshStatus = refreshStatus Or &B1000
             End If
 
+            sbMst.WriteSingleRegister(1, refreshStatus)
+
+            Dim temp3 As Integer = lettura(1)
+            If temp3 And &B1 Then
+                MultiPumpPanel1.pump1Alarm = True
+            Else
+                MultiPumpPanel1.pump1Alarm = False
+            End If
+            If temp3 And &B10 Then
+                MultiPumpPanel1.pump2Alarm = True
+            Else
+                MultiPumpPanel1.pump2Alarm = False
+            End If
+            If temp3 And &B100 Then
+                MultiPanelSwitch1.semaphorColor = Color.Yellow
+                MultiPanelSwitch1.isSemaphorBlinking = True
+            Else
+                MultiPanelSwitch1.semaphorColor = Color.Black
+                MultiPanelSwitch1.isSemaphorBlinking = False
+            End If
+            If temp3 And &B1000 Then
+                MultiPanelSwitch2.semaphorColor = Color.Yellow
+                MultiPanelSwitch2.isSemaphorBlinking = True
+            Else
+                MultiPanelSwitch2.semaphorColor = Color.Black
+                MultiPanelSwitch2.isSemaphorBlinking = False
+            End If
         Catch ex As Exception
 
 
