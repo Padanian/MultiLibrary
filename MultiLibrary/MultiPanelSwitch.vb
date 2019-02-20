@@ -251,7 +251,7 @@
                     Case Color.Red
                         pbSemaphor.Image = My.Resources.led_red_black
                 End Select
-            Else
+            ElseIf DateTime.Now.Second Mod 2 = 1 Then
                 pbSemaphor.Image = My.Resources.led_off_black
             End If
         End If
