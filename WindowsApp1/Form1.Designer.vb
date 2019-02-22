@@ -22,16 +22,10 @@ Partial Class Form1
     'Non modificarla mediante l'editor del codice.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.MultiPumpPanel1 = New MultiLibrary.MultiPumpPanel()
         Me.MultiPanelSwitch1 = New MultiLibrary.MultiPanelSwitch()
         Me.MultiPanelSwitch2 = New MultiLibrary.MultiPanelSwitch()
         Me.SuspendLayout()
-        '
-        'Timer1
-        '
-        Me.Timer1.Interval = 500
         '
         'MultiPumpPanel1
         '
@@ -92,7 +86,6 @@ Partial Class Form1
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Timer1 As Timer
     Friend WithEvents MultiPumpPanel1 As MultiLibrary.MultiPumpPanel
     Friend WithEvents MultiPanelSwitch1 As MultiLibrary.MultiPanelSwitch
     Friend WithEvents MultiPanelSwitch2 As MultiLibrary.MultiPanelSwitch

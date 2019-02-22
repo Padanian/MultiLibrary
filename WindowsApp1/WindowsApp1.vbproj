@@ -64,7 +64,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EasyModbus">
-      <HintPath>..\..\EasyModbusTCP.NET\EasyModbus\obj\Release\EasyModbus.dll</HintPath>
+      <HintPath>..\..\..\EasyModbusTCP.NET\EasyModbus\bin\Release\EasyModbus.dll</HintPath>
     </Reference>
     <Reference Include="MultiLibrary">
       <HintPath>..\MultiLibrary\bin\Debug\MultiLibrary.dll</HintPath>
