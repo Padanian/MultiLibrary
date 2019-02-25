@@ -22,16 +22,18 @@ Partial Class Form1
     'Non modificarla mediante l'editor del codice.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.MultiPumpPanel1 = New MultiLibrary.MultiPumpPanel()
         Me.MultiPanelSwitch1 = New MultiLibrary.MultiPanelSwitch()
         Me.MultiPanelSwitch2 = New MultiLibrary.MultiPanelSwitch()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'MultiPumpPanel1
         '
         Me.MultiPumpPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.MultiPumpPanel1.hourCounterPump1 = 292
-        Me.MultiPumpPanel1.hourCounterPump2 = 292
+        Me.MultiPumpPanel1.hourCounterPump1 = 324
+        Me.MultiPumpPanel1.hourCounterPump2 = 324
         Me.MultiPumpPanel1.lblPumpText = "Mode"
         Me.MultiPumpPanel1.lbltext = "Switch"
         Me.MultiPumpPanel1.Location = New System.Drawing.Point(12, 243)
@@ -73,6 +75,11 @@ Partial Class Form1
         Me.MultiPanelSwitch2.Size = New System.Drawing.Size(64, 200)
         Me.MultiPanelSwitch2.TabIndex = 1
         '
+        'Timer1
+        '
+        Me.Timer1.Enabled = True
+        Me.Timer1.Interval = 10
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -81,6 +88,7 @@ Partial Class Form1
         Me.Controls.Add(Me.MultiPanelSwitch2)
         Me.Controls.Add(Me.MultiPanelSwitch1)
         Me.Controls.Add(Me.MultiPumpPanel1)
+        Me.DoubleBuffered = True
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
@@ -89,4 +97,5 @@ Partial Class Form1
     Friend WithEvents MultiPumpPanel1 As MultiLibrary.MultiPumpPanel
     Friend WithEvents MultiPanelSwitch1 As MultiLibrary.MultiPanelSwitch
     Friend WithEvents MultiPanelSwitch2 As MultiLibrary.MultiPanelSwitch
+    Friend WithEvents Timer1 As Timer
 End Class

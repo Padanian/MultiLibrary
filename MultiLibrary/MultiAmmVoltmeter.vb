@@ -3,9 +3,9 @@
     Const Pi As Double = Math.PI
     Dim x1, y1, x2, y2 As Integer
     Dim xp1, yp1, xp2, yp2 As Int32
-    Private m_value As Decimal = 0
-    Private m_minimum As Decimal = 0
-    Private m_maximum As Decimal = 400
+    Private m_value As Double = 0
+    Private m_minimum As Double = 0
+    Private m_maximum As Double = 400
     Private m_Units As String = "V"
     Dim centreX As Integer = 125
     Dim centreY As Integer = 125
@@ -15,8 +15,9 @@
     Dim lpen As New Pen(Color.Black, 2)
     Dim rpen As New Pen(Color.Black, 4)
     Dim tpen As New Pen(Color.Transparent, 2)
-    Dim radius As Double = 120
+    Dim radius As Integer = 120
     Dim changed As Boolean = True
+    Dim Lend As Double
     Public Property units As String
         Get
             units = m_Units
@@ -39,11 +40,11 @@
         End Set
     End Property
 
-    Public Property value As Decimal
+    Public Property value As Double
         Get
             value = m_value
         End Get
-        Set(value As Decimal)
+        Set(value As Double)
 
             Dim uu As String
             If units = "H" Then
@@ -69,11 +70,11 @@
             Me.Refresh()
         End Set
     End Property
-    Public Property minimum As Decimal
+    Public Property minimum As Double
         Get
             minimum = m_minimum
         End Get
-        Set(minimum As Decimal)
+        Set(minimum As Double)
             If minimum > maximum Then
                 MsgBox("Min can't be greater than Max")
                 Exit Property
@@ -106,11 +107,11 @@
             Me.Refresh()
         End Set
     End Property
-    Public Property maximum As Decimal
+    Public Property maximum As Double
         Get
             maximum = m_maximum
         End Get
-        Set(maximum As Decimal)
+        Set(maximum As Double)
             If maximum < minimum Then
                 MsgBox("Max can't be smaller than Min")
                 Exit Property
@@ -147,16 +148,20 @@
 
 
         Dim i As Integer = 0
-            For num As Double = -Pi To -Pi / 2 + 0.001 Step Pi / 32
-                x1 = Convert.ToInt32(radius * Math.Cos(num) + centreX)
-                y1 = Convert.ToInt32(radius * Math.Sin(num) + centreY)
-                If i Mod 2 = 0 Then
-                    x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(num) + centreX)
-                    y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(num) + centreY)
-                Else
-                    x2 = Convert.ToInt32(15 / 16 * radius * Math.Cos(num) + centreX)
-                    y2 = Convert.ToInt32(15 / 16 * radius * Math.Sin(num) + centreY)
-                End If
+        For num As Double = -Pi To -Pi / 2 + 0.001 Step Pi / 32
+
+            Dim cosnum = Math.Cos(num)
+            Dim cossin = Math.Sin(num)
+
+            x1 = Math.Truncate(radius * cosnum + centreX)
+            y1 = Math.Truncate(radius * cossin + centreY)
+            If i Mod 2 = 0 Then
+                x2 = Math.Truncate(7 / 8 * radius * cosnum + centreX)
+                y2 = Math.Truncate(7 / 8 * radius * cossin + centreY)
+            Else
+                x2 = Math.Truncate(15 / 16 * radius * cosnum + centreX)
+                y2 = Math.Truncate(15 / 16 * radius * cossin + centreY)
+            End If
 
             e.Graphics.DrawLine(apen, x1, y1, x2, y2)
             If changed Then
@@ -164,13 +169,13 @@
             End If
 
             i += 1
-            Next
+        Next
 
-            e.Graphics.DrawArc(bpen, centreX - 15, centreY - 15, 30, 30, 180, 90)
-            e.Graphics.DrawLine(bpen, centreX, centreY + 1, centreX - 15, centreY + 1)
-            e.Graphics.DrawLine(bpen, centreX + 1, centreY, centreX + 1, centreY - 15)
+        e.Graphics.DrawArc(bpen, centreX - 15, centreY - 15, 30, 30, 180, 90)
+        e.Graphics.DrawLine(bpen, centreX, centreY + 1, centreX - 15, centreY + 1)
+        e.Graphics.DrawLine(bpen, centreX + 1, centreY, centreX + 1, centreY - 15)
 
-            changed = False
+        changed = False
 
         e.Graphics.DrawRectangle(lpen, 1, 1, 148, 148)
         redrawLine(e)
@@ -211,16 +216,20 @@
 
     End Sub
     Public Sub redrawLine(e As PaintEventArgs)
-        Dim Lend As Double = -Pi / 2 * ((maximum - value) / (maximum - minimum)) - Pi / 2
+        Dim newLend As Double = -Pi / 2 * ((maximum - value) / (maximum - minimum)) - Pi / 2
+        If newLend <> Lend Then
+            Lend = newLend
 
+            Dim coslend As Double = Math.Cos(Lend)
+            Dim sinlend As Double = Math.Sin(Lend)
 
-        xp1 = Convert.ToInt32(90 * Math.Cos(Lend) + centreX)
-        yp1 = Convert.ToInt32(90 * Math.Sin(Lend) + centreY)
-        xp2 = Convert.ToInt32(15 * Math.Cos(Lend) + centreX)
-        yp2 = Convert.ToInt32(15 * Math.Sin(Lend) + centreY)
+            xp1 = Math.Truncate(85 * coslend + centreX)
+            yp1 = Math.Truncate(85 * sinlend + centreY)
+            xp2 = Math.Truncate(15 * coslend + centreX)
+            yp2 = Math.Truncate(15 * sinlend + centreY)
 
-        e.Graphics.DrawLine(rpen, xp1, yp1, xp2, yp2)
-
+            e.Graphics.DrawLine(rpen, xp1, yp1, xp2, yp2)
+        End If
     End Sub
 
 

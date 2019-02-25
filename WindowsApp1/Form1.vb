@@ -65,91 +65,110 @@ Public Class Form1
         MultiAmmVoltmeter3.Location = New Point(324, 23)
         MultiAmmVoltmeter3.units = "A"
 
-        backgroundworker1.RunWorkerAsync()
 
     End Sub
 
     Private Sub backgroundworker1_RunWorkerAsync(sender As Object, e As DoWorkEventArgs) Handles backgroundworker1.DoWork
 
-        While sbMst.Connected
-
-            Try
-
-                Me.BeginInvoke(Sub()
-                                   Application.DoEvents()
-                                   Threading.Thread.Sleep(500)
-
-                                   sbMst.UnitIdentifier = 1
-                                       Dim reading As Integer() = sbMst.ReadInputRegisters(270, 2)
-                                       Dim temp As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
-                                       MultiAmmVoltmeter1.value = temp
-                                       reading = sbMst.ReadInputRegisters(218, 2)
-                                       temp = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
-                                       MultiAmmVoltmeter2.value = temp
-                                       reading = sbMst.ReadInputRegisters(232, 2)
-                                       temp = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
-                                       MultiAmmVoltmeter3.value = temp
-
-                                       sbMst.UnitIdentifier = 2
-                                       Dim lettura = sbMst.ReadInputRegisters(1, 2)
-                                       Dim temp2 = lettura(0)
-                                       Dim refreshStatus As Integer = temp2
-                                       If MultiPumpPanel1.isPump1Running And Not MultiPumpPanel1.isPump2Running Then
-                                           refreshStatus = temp2 And &B11111100 Or &B1
-                                       ElseIf MultiPumpPanel1.isPump2Running And Not MultiPumpPanel1.isPump1Running Then
-                                           refreshStatus = temp2 And &B11111100 Or &B10
-                                       ElseIf MultiPumpPanel1.isPump2Running And MultiPumpPanel1.isPump1Running Then
-                                           refreshStatus = temp2 And &B11111100 Or &B11
-                                       Else
-                                           refreshStatus = temp2 And &B11111100
-                                       End If
-                                       If MultiPanelSwitch1.selectedPosition = 0 Then
-                                           refreshStatus = refreshStatus And &B11111011
-                                       Else
-                                           refreshStatus = refreshStatus Or &B100
-                                       End If
-                                       If MultiPanelSwitch2.selectedPosition = 0 Then
-                                           refreshStatus = refreshStatus And &B11110111
-                                       Else
-                                           refreshStatus = refreshStatus Or &B1000
-                                       End If
-
-                                       sbMst.WriteSingleRegister(1, refreshStatus)
-
-                                       Dim temp3 As Integer = lettura(1)
-                                       If temp3 And &B1 Then
-                                           MultiPumpPanel1.pump1Alarm = True
-                                       Else
-                                           MultiPumpPanel1.pump1Alarm = False
-                                       End If
-                                       If temp3 And &B10 Then
-                                           MultiPumpPanel1.pump2Alarm = True
-                                       Else
-                                           MultiPumpPanel1.pump2Alarm = False
-                                       End If
-                                       If temp3 And &B100 Then
-                                           MultiPanelSwitch1.semaphorColor = Color.Yellow
-                                           MultiPanelSwitch1.isSemaphorBlinking = True
-                                       Else
-                                           MultiPanelSwitch1.semaphorColor = Color.Black
-                                           MultiPanelSwitch1.isSemaphorBlinking = False
-                                       End If
-                                       If temp3 And &B1000 Then
-                                           MultiPanelSwitch2.semaphorColor = Color.Yellow
-                                           MultiPanelSwitch2.isSemaphorBlinking = True
-                                       Else
-                                           MultiPanelSwitch2.semaphorColor = Color.Black
-                                           MultiPanelSwitch2.isSemaphorBlinking = False
-                                       End If
-
-                               End Sub)
-
-            Catch ex As Exception
-
-
-            End Try
+        While Not sbMst.Connected
 
         End While
 
+        Try
+            sbMst.UnitIdentifier = 1
+            Dim reading As Integer() = sbMst.ReadInputRegisters(270, 2)
+            Dim temp1 As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
+            reading = sbMst.ReadInputRegisters(218, 16)
+            Dim temp2 As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
+            Dim temp3 As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(15), reading(14)})
+
+
+            Me.BeginInvoke(Sub()
+
+                               If Math.Round(MultiAmmVoltmeter1.value, 1) <> Math.Round(temp1, 1) Then
+                                   MultiAmmVoltmeter1.value = temp1
+                               End If
+                               If Math.Round(MultiAmmVoltmeter2.value, 2) <> Math.Round(temp2, 2) Then
+                                   MultiAmmVoltmeter2.value = temp2
+                               End If
+                               If Math.Round(MultiAmmVoltmeter3.value, 1) <> Math.Round(temp3, 1) Then
+                                   MultiAmmVoltmeter3.value = temp3
+                               End If
+
+                           End Sub)
+
+
+            sbMst.UnitIdentifier = 2
+            Dim lettura = sbMst.ReadInputRegisters(1, 2)
+            temp1 = lettura(0)
+            Dim refreshStatusInizio As Integer = temp1
+            Dim refreshStatusFine As Integer = refreshStatusInizio
+            If MultiPumpPanel1.isPump1Running And Not MultiPumpPanel1.isPump2Running Then
+                refreshStatusFine = temp1 And &B11111100 Or &B1
+            ElseIf MultiPumpPanel1.isPump2Running And Not MultiPumpPanel1.isPump1Running Then
+                refreshStatusFine = temp1 And &B11111100 Or &B10
+            ElseIf MultiPumpPanel1.isPump2Running And MultiPumpPanel1.isPump1Running Then
+                refreshStatusFine = temp1 And &B11111100 Or &B11
+            Else
+                refreshStatusFine = temp1 And &B11111100
+            End If
+            If MultiPanelSwitch1.selectedPosition = 0 Then
+                refreshStatusFine = refreshStatusFine And &B11111011
+            Else
+                refreshStatusFine = refreshStatusFine Or &B100
+            End If
+            If MultiPanelSwitch2.selectedPosition = 0 Then
+                refreshStatusFine = refreshStatusFine And &B11110111
+            Else
+                refreshStatusFine = refreshStatusFine Or &B1000
+            End If
+
+            If refreshStatusFine <> refreshStatusInizio Then
+                sbMst.WriteSingleRegister(1, refreshStatusFine)
+            End If
+
+            Me.BeginInvoke(Sub()
+
+                               temp2 = lettura(1)
+                               If temp2 And &B1 Then
+                                   MultiPumpPanel1.pump1Alarm = True
+                               Else
+                                   MultiPumpPanel1.pump1Alarm = False
+                               End If
+                               If temp2 And &B10 Then
+                                   MultiPumpPanel1.pump2Alarm = True
+                               Else
+                                   MultiPumpPanel1.pump2Alarm = False
+                               End If
+
+                               If temp2 And &B100 Then
+                                   MultiPanelSwitch1.semaphorColor = Color.Yellow
+                                   MultiPanelSwitch1.isSemaphorBlinking = True
+                               Else
+                                   MultiPanelSwitch1.semaphorColor = Color.Black
+                                   MultiPanelSwitch1.isSemaphorBlinking = False
+                               End If
+                               If temp2 And &B1000 Then
+                                   MultiPanelSwitch2.semaphorColor = Color.Yellow
+                                   MultiPanelSwitch2.isSemaphorBlinking = True
+                               Else
+                                   MultiPanelSwitch2.semaphorColor = Color.Black
+                                   MultiPanelSwitch2.isSemaphorBlinking = False
+                               End If
+                           End Sub)
+
+
+        Catch
+
+
+        End Try
+
+
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        If Not backgroundworker1.IsBusy Then
+            backgroundworker1.RunWorkerAsync()
+        End If
     End Sub
 End Class

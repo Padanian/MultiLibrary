@@ -335,5 +335,15 @@
   <ItemGroup>
     <None Include="Resources\led-red-black.png" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NuGet.Package.Builder">
+      <Version>1.0.12</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
