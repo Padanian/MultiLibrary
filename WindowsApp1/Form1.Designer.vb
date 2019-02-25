@@ -27,13 +27,14 @@ Partial Class Form1
         Me.MultiPanelSwitch1 = New MultiLibrary.MultiPanelSwitch()
         Me.MultiPanelSwitch2 = New MultiLibrary.MultiPanelSwitch()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'MultiPumpPanel1
         '
         Me.MultiPumpPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.MultiPumpPanel1.hourCounterPump1 = 324
-        Me.MultiPumpPanel1.hourCounterPump2 = 324
+        Me.MultiPumpPanel1.hourCounterPump1 = 388
+        Me.MultiPumpPanel1.hourCounterPump2 = 388
         Me.MultiPumpPanel1.lblPumpText = "Mode"
         Me.MultiPumpPanel1.lbltext = "Switch"
         Me.MultiPumpPanel1.Location = New System.Drawing.Point(12, 243)
@@ -80,11 +81,21 @@ Partial Class Form1
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 10
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(389, 227)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(39, 13)
+        Me.Label1.TabIndex = 2
+        Me.Label1.Text = "Label1"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(624, 460)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.MultiPanelSwitch2)
         Me.Controls.Add(Me.MultiPanelSwitch1)
         Me.Controls.Add(Me.MultiPumpPanel1)
@@ -92,10 +103,12 @@ Partial Class Form1
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents MultiPumpPanel1 As MultiLibrary.MultiPumpPanel
     Friend WithEvents MultiPanelSwitch1 As MultiLibrary.MultiPanelSwitch
     Friend WithEvents MultiPanelSwitch2 As MultiLibrary.MultiPanelSwitch
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents Label1 As Label
 End Class

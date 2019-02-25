@@ -70,6 +70,7 @@ Public Class Form1
 
     Private Sub backgroundworker1_RunWorkerAsync(sender As Object, e As DoWorkEventArgs) Handles backgroundworker1.DoWork
 
+        Dim timestart As DateTime = DateTime.Now
         While Not sbMst.Connected
 
         End While
@@ -155,6 +156,10 @@ Public Class Form1
                                    MultiPanelSwitch2.semaphorColor = Color.Black
                                    MultiPanelSwitch2.isSemaphorBlinking = False
                                End If
+
+                               Dim timestop As DateTime = DateTime.Now
+                               Label1.Text = "Tempo di esecuzione..." & ((timestop.Second * 1000 + timestop.Millisecond) - (timestart.Second * 1000 + timestart.Millisecond)).ToString & "ms"
+
                            End Sub)
 
 
