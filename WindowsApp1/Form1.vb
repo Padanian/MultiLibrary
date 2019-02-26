@@ -34,9 +34,10 @@ Public Class Form1
 
         Dim qosLevels As Byte() = {MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE}
 
-        client.Subscribe({"Voltage"}, qosLevels)
-        Dim c As String = Guid.NewGuid().ToString
-        client.Connect(c, "hlatsjgt", "PljNZjm_PBOI", False, 9999)
+        'client.Subscribe({"Voltage"}, qosLevels)
+        'Dim c As String = Guid.NewGuid().ToString
+        'client.Connect(c, "hlatsjgt", "PljNZjm_PBOI", False, 9999)
+        'Dim result As UShort = client.Publish("Voltage", Encoding.UTF8.GetBytes("0"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, True)
 
 
         Try
@@ -95,7 +96,7 @@ Public Class Form1
             Dim temp2 As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
             Dim temp3 As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(15), reading(14)})
 
-            Dim result As UShort = client.Publish("Voltage", Encoding.UTF8.GetBytes(temp1))
+            'Dim result As UShort = client.Publish("Voltage", Encoding.UTF8.GetBytes(temp1.tostring), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, True)
 
             Me.BeginInvoke(Sub()
 

@@ -13,7 +13,7 @@ Public Class MultiPumpPanel
     Private m_SemaphorVisible As Boolean
     Private m_SemaphorBlinking As Boolean
 
-    Private pumpSettings As New mySettings
+    Private pumpSettings As New mypumpSettings
 
     Dim apen As New Pen(Color.LightGray, 1)
     Dim angleSwitchOnOff As Double = -3 / 4 * Pi
@@ -877,7 +877,7 @@ Public Class MultiPumpPanel
 
 End Class
 <Serializable>
-Class mySettings
+Class mypumpSettings
     Property m_Pump1StartedDateTime As DateTime
     Property m_Pump2StartedDateTime As DateTime
     Property m_nupLeadLagtime As Integer
