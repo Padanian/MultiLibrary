@@ -2,6 +2,10 @@
 Imports EasyModbus
 Imports System.IO.Ports
 Imports System.ComponentModel
+Imports uPLibrary.Networking.M2Mqtt
+Imports System.Net
+Imports System.Text
+Imports uPLibrary.Networking.M2Mqtt.Messages
 
 Public Class Form1
 
@@ -10,6 +14,8 @@ Public Class Form1
     Dim MultiAmmVoltmeter2 As New MultiAmmVoltmeter
     Dim MultiAmmVoltmeter3 As New MultiAmmVoltmeter
     Dim WithEvents backgroundworker1 As New BackgroundWorker
+    Dim client As MqttClient = New MqttClient("m24.cloudmqtt.com", 17241, False, Nothing, Nothing, MqttSslProtocols.None)
+
 
 
 
@@ -25,6 +31,12 @@ Public Class Form1
         MultiAmmVoltmeter3.minimum = 0
         MultiAmmVoltmeter3.maximum = 10
         MultiAmmVoltmeter3.value = MultiAmmVoltmeter3.minimum
+
+        Dim qosLevels As Byte() = {MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE}
+
+        client.Subscribe({"Voltage"}, qosLevels)
+        Dim c As String = Guid.NewGuid().ToString
+        client.Connect(c, "hlatsjgt", "PljNZjm_PBOI", False, 9999)
 
 
         Try
@@ -83,6 +95,7 @@ Public Class Form1
             Dim temp2 As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(1), reading(0)})
             Dim temp3 As Decimal = EasyModbus.ModbusClient.ConvertRegistersToFloat({reading(15), reading(14)})
 
+            Dim result As UShort = client.Publish("Voltage", Encoding.UTF8.GetBytes(temp1))
 
             Me.BeginInvoke(Sub()
 
@@ -163,7 +176,7 @@ Public Class Form1
                            End Sub)
 
 
-        Catch
+        Catch ex As Exception
 
 
         End Try
