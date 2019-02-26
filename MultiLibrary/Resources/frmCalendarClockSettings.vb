@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Forms
 Public Class frmCalendarClockSettings
-    Public Settings As Integer()
+    Public mgppSettings As Integer()
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
 
@@ -25,14 +25,14 @@ Public Class frmCalendarClockSettings
                 If (F1Stop < F2Start Or F2Start = 0) And (F2Start < F2Stop Or (F2Start = 0 And F2Stop = 0)) Then
                     If chkF3.Checked Then
                         If (F2Stop < F3Start Or F2Start = 0) And (F3Start < F3Stop Or (F3Start = 0 And F3Start = 0)) Then
-                            Settings = {F1Start, F1Stop, F2Start, F2Stop, F3Start, F3Stop}
+                            mgppSettings = {F1Start, F1Stop, F2Start, F2Stop, F3Start, F3Stop}
                             Me.DialogResult = System.Windows.Forms.DialogResult.OK
                             Me.Close()
                         Else
                             Exit Sub
                         End If
                     Else
-                        Settings = {F1Start, F1Stop, F2Start, F2Stop, F3Start, F3Stop}
+                        mgppSettings = {F1Start, F1Stop, F2Start, F2Stop, F3Start, F3Stop}
                         Me.DialogResult = System.Windows.Forms.DialogResult.OK
                         Me.Close()
                     End If
@@ -40,7 +40,7 @@ Public Class frmCalendarClockSettings
                     Exit Sub
                 End If
             Else
-                Settings = {F1Start, F1Stop, F2Start, F2Stop, F3Start, F3Stop}
+                mgppSettings = {F1Start, F1Stop, F2Start, F2Stop, F3Start, F3Stop}
                 Me.DialogResult = System.Windows.Forms.DialogResult.OK
                 Me.Close()
 
@@ -100,26 +100,26 @@ Public Class frmCalendarClockSettings
 
     Private Sub frmCalendarClockSettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            If Not Settings.SequenceEqual({0, 0, 0, 0, 0, 0}) Then
+            If Not mgppSettings.SequenceEqual({0, 0, 0, 0, 0, 0}) Then
                 Dim midnight = New DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
-                If Settings(0) = 0 And Settings(1) = 0 And Settings(2) = 0 And Settings(3) = 0 Then
-                    dtpF1Start.Value = midnight.AddHours(Settings(4) \ 12).AddMinutes((Settings(4) Mod 12) * 5)
-                    dtpF1Stop.Value = midnight.AddHours(Settings(5) \ 12).AddMinutes((Settings(5) Mod 12) * 5)
-                ElseIf Settings(0) = 0 And Settings(1) = 0 Then
+                If mgppSettings(0) = 0 And mgppSettings(1) = 0 And mgppSettings(2) = 0 And mgppSettings(3) = 0 Then
+                    dtpF1Start.Value = midnight.AddHours(mgppSettings(4) \ 12).AddMinutes((mgppSettings(4) Mod 12) * 5)
+                    dtpF1Stop.Value = midnight.AddHours(mgppSettings(5) \ 12).AddMinutes((mgppSettings(5) Mod 12) * 5)
+                ElseIf mgppSettings(0) = 0 And mgppSettings(1) = 0 Then
                     chkF2.Checked = True
-                    dtpF1Start.Value = midnight.AddHours(Settings(2) \ 12).AddMinutes((Settings(2) Mod 12) * 5)
-                    dtpF1Stop.Value = midnight.AddHours(Settings(3) \ 12).AddMinutes((Settings(3) Mod 12) * 5)
-                    dtpF2Start.Value = midnight.AddHours(Settings(4) \ 12).AddMinutes((Settings(4) Mod 12) * 5)
-                    dtpF2Stop.Value = midnight.AddHours(Settings(5) \ 12).AddMinutes((Settings(5) Mod 12) * 5)
+                    dtpF1Start.Value = midnight.AddHours(mgppSettings(2) \ 12).AddMinutes((mgppSettings(2) Mod 12) * 5)
+                    dtpF1Stop.Value = midnight.AddHours(mgppSettings(3) \ 12).AddMinutes((mgppSettings(3) Mod 12) * 5)
+                    dtpF2Start.Value = midnight.AddHours(mgppSettings(4) \ 12).AddMinutes((mgppSettings(4) Mod 12) * 5)
+                    dtpF2Stop.Value = midnight.AddHours(mgppSettings(5) \ 12).AddMinutes((mgppSettings(5) Mod 12) * 5)
                 Else
                     chkF2.Checked = True
                     chkF3.Checked = True
-                    dtpF1Start.Value = midnight.AddHours(Settings(0) \ 12).AddMinutes((Settings(0) Mod 12) * 5)
-                    dtpF1Stop.Value = midnight.AddHours(Settings(1) \ 12).AddMinutes((Settings(1) Mod 12) * 5)
-                    dtpF2Start.Value = midnight.AddHours(Settings(2) \ 12).AddMinutes((Settings(2) Mod 12) * 5)
-                    dtpF2Stop.Value = midnight.AddHours(Settings(3) \ 12).AddMinutes((Settings(3) Mod 12) * 5)
-                    dtpF3Start.Value = midnight.AddHours(Settings(4) \ 12).AddMinutes((Settings(4) Mod 12) * 5)
-                    dtpF3Stop.Value = midnight.AddHours(Settings(5) \ 12).AddMinutes((Settings(5) Mod 12) * 5)
+                    dtpF1Start.Value = midnight.AddHours(mgppSettings(0) \ 12).AddMinutes((mgppSettings(0) Mod 12) * 5)
+                    dtpF1Stop.Value = midnight.AddHours(mgppSettings(1) \ 12).AddMinutes((mgppSettings(1) Mod 12) * 5)
+                    dtpF2Start.Value = midnight.AddHours(mgppSettings(2) \ 12).AddMinutes((mgppSettings(2) Mod 12) * 5)
+                    dtpF2Stop.Value = midnight.AddHours(mgppSettings(3) \ 12).AddMinutes((mgppSettings(3) Mod 12) * 5)
+                    dtpF3Start.Value = midnight.AddHours(mgppSettings(4) \ 12).AddMinutes((mgppSettings(4) Mod 12) * 5)
+                    dtpF3Stop.Value = midnight.AddHours(mgppSettings(5) \ 12).AddMinutes((mgppSettings(5) Mod 12) * 5)
                 End If
             End If
         Catch

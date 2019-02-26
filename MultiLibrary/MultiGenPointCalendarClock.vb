@@ -26,20 +26,20 @@ Public Class MultiGenPointCalendarClock
         Dim myform As New frmCalendarClockSettings
         myform.StartPosition = FormStartPosition.Manual
         myform.Location = New Point(Cursor.Position.X, Cursor.Position.Y)
-        myform.Settings = Settings
+        myform.mgppSettings = mgppSettings
 
 
         myform.ShowDialog()
 
 
         If myform.DialogResult = DialogResult.OK Then
-            Settings = myform.Settings
+            mgppSettings = myform.mgppSettings
 
             Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 
             Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mgpcc"
             Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
-            bf.Serialize(fStream, Settings) ' write to file
+            bf.Serialize(fStream, mgppSettings) ' write to file
             fStream.Close()
 
 
@@ -78,14 +78,14 @@ Public Class MultiGenPointCalendarClock
             i += 0.5
         Next
 
-        If Settings(0) <> Settings(1) Then
-            For i = Stepping(Settings(0)) To Stepping(Settings(1)) Step pi / 288
+        If mgppSettings(0) <> mgppSettings(1) Then
+            For i = Stepping(mgppSettings(0)) To Stepping(mgppSettings(1)) Step pi / 288
                 x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
                 y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
                 x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
                 y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
 
-                If i = Stepping(Settings(0)) Then
+                If i = Stepping(mgppSettings(0)) Then
                     e.Graphics.DrawLine(b1pen, x1, y1, x2, y2)
                     i += pi / 72
                 Else e.Graphics.DrawLine(b2pen, x1, y1, x2, y2)
@@ -95,14 +95,14 @@ Public Class MultiGenPointCalendarClock
 
         End If
 
-        If Settings(2) <> Settings(3) Then
-            For i = Stepping(Settings(2)) To Stepping(Settings(3)) Step pi / 288
+        If mgppSettings(2) <> mgppSettings(3) Then
+            For i = Stepping(mgppSettings(2)) To Stepping(mgppSettings(3)) Step pi / 288
                 x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
                 y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
                 x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
                 y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
 
-                If i = Stepping(Settings(2)) Then
+                If i = Stepping(mgppSettings(2)) Then
                     e.Graphics.DrawLine(b1pen, x1, y1, x2, y2)
                     i += pi / 72
                 Else e.Graphics.DrawLine(b2pen, x1, y1, x2, y2)
@@ -112,14 +112,14 @@ Public Class MultiGenPointCalendarClock
 
         End If
 
-        If Settings(4) <> Settings(5) Then
-            For i = Stepping(Settings(4)) To Stepping(Settings(5)) Step pi / 288
+        If mgppSettings(4) <> mgppSettings(5) Then
+            For i = Stepping(mgppSettings(4)) To Stepping(mgppSettings(5)) Step pi / 288
                 x1 = Convert.ToInt32(radius * Math.Cos(i) + centreX)
                 y1 = Convert.ToInt32(radius * Math.Sin(i) + centreY)
                 x2 = Convert.ToInt32(7 / 8 * radius * Math.Cos(i) + centreX)
                 y2 = Convert.ToInt32(7 / 8 * radius * Math.Sin(i) + centreY)
 
-                If i = Stepping(Settings(4)) Then
+                If i = Stepping(mgppSettings(4)) Then
                     e.Graphics.DrawLine(b1pen, x1, y1, x2, y2)
                     i += pi / 72
                 Else e.Graphics.DrawLine(b2pen, x1, y1, x2, y2)
@@ -142,36 +142,36 @@ Public Class MultiGenPointCalendarClock
         If File.Exists(filename) Then
 
             Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
-            Settings = bf.Deserialize(fStream)
+            mgppSettings = bf.Deserialize(fStream)
             fStream.Close()
         Else
-            Settings = {0, 0, 0, 0, 0, 0}
+            mgppSettings = {0, 0, 0, 0, 0, 0}
 
             Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
-            bf.Serialize(fStream, Settings) ' write to file
+            bf.Serialize(fStream, mgppSettings) ' write to file
             fStream.Close()
         End If
 
     End Sub
-    Public Property Settings As Integer()
+    Public Property mgppSettings As Integer()
         Get
-            Settings = m_settings
+            mgppSettings = m_settings
         End Get
-        Set(Settings As Integer())
-            If Settings.Count = 6 Then
-                Array.Sort(Settings)
-                m_settings = Settings
+        Set(mgppSettings As Integer())
+            If mgppSettings.Count = 6 Then
+                Array.Sort(mgppSettings)
+                m_settings = mgppSettings
                 Try
                     Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
                     Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mgpcc"
                     Dim fStream As New FileStream(filename, FileMode.OpenOrCreate)
-                    bf.Serialize(fStream, Settings) ' write to file
+                    bf.Serialize(fStream, mgppSettings) ' write to file
                     fStream.Close()
                 Catch
                 End Try
 
                 Me.Refresh()
-                End If
+            End If
         End Set
     End Property
 
@@ -198,9 +198,9 @@ Public Class MultiGenPointCalendarClock
                 Dim i = f * 2 * pi / 288 - pi / 2
                 x = Convert.ToInt32(18 / 16 * radius * Math.Cos(i) + centreX)
                 y = Convert.ToInt32(18 / 16 * radius * Math.Sin(i) + centreY)
-                If (f >= Settings(0) And f <= Settings(1)) Or
-                    (f >= Settings(2) And f <= Settings(3)) Or
-                    (f >= Settings(4) And f <= Settings(5)) Then
+                If (f >= mgppSettings(0) And f <= mgppSettings(1)) Or
+                    (f >= mgppSettings(2) And f <= mgppSettings(3)) Or
+                    (f >= mgppSettings(4) And f <= mgppSettings(5)) Then
                     pbLed.Image = My.Resources.ledgreen
                     m_isOn = True
                 Else

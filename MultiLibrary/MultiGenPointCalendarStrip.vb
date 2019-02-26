@@ -27,25 +27,25 @@
             End With
             Me.Controls.Add(lbl)
         Next
-        e.Graphics.DrawLine(lpen, Settings(0), 25, Settings(1), 25)
-        e.Graphics.DrawLine(lpen, Settings(2), 25, Settings(3), 25)
-        e.Graphics.DrawLine(lpen, Settings(4), 25, Settings(5), 25)
+        e.Graphics.DrawLine(lpen, mgppSettings(0), 25, mgppSettings(1), 25)
+        e.Graphics.DrawLine(lpen, mgppSettings(2), 25, mgppSettings(3), 25)
+        e.Graphics.DrawLine(lpen, mgppSettings(4), 25, mgppSettings(5), 25)
 
 
 
     End Sub
     Public Sub New()
         InitializeComponent()
-        Settings = {0, 0, 0, 0, 0, 0}
+        mgppSettings = {0, 0, 0, 0, 0, 0}
     End Sub
-    Public Property Settings As Integer()
+    Public Property mgppSettings As Integer()
         Get
-            Settings = m_settings
+            mgppSettings = m_settings
         End Get
-        Set(Settings As Integer())
-            If Settings.Count = 6 Then
-                Array.Sort(Settings)
-                m_settings = Settings
+        Set(mgppSettings As Integer())
+            If mgppSettings.Count = 6 Then
+                Array.Sort(mgppSettings)
+                m_settings = mgppSettings
                 Me.Refresh()
             End If
         End Set

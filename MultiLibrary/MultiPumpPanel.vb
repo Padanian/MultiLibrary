@@ -13,7 +13,7 @@ Public Class MultiPumpPanel
     Private m_SemaphorVisible As Boolean
     Private m_SemaphorBlinking As Boolean
 
-    Private mySettings As New Settings
+    Private pumpSettings As New mySettings
 
     Dim apen As New Pen(Color.LightGray, 1)
     Dim angleSwitchOnOff As Double = -3 / 4 * Pi
@@ -100,18 +100,18 @@ Public Class MultiPumpPanel
         If IO.File.Exists(filename) Then
 
             Dim fStream As New IO.FileStream(filename, IO.FileMode.OpenOrCreate)
-            mySettings = bf.Deserialize(fStream)
+            pumpSettings = bf.Deserialize(fStream)
             fStream.Close()
 
-            m_Pump1StartedDateTime = mySettings.m_Pump1StartedDateTime
-            m_Pump2StartedDateTime = mySettings.m_Pump2StartedDateTime
-            m_nupLeadLagtime = mySettings.m_nupLeadLagtime
-            m_hourCounterPump1 = mySettings.m_hourCounterPump1
-            m_hourCounterPump2 = mySettings.m_hourCounterPump2
-            m_nupRitardi = mySettings.m_nupRitardi
-            m_chkTestRotation = mySettings.m_chkTestRotation
-            m_selectedPositionOnOffSwitch = mySettings.m_selectedPositionOnOffSwitch
-            m_selectedPositionPumpSwitch = mySettings.m_selectedPositionPumpSwitch
+            m_Pump1StartedDateTime = pumpSettings.m_Pump1StartedDateTime
+            m_Pump2StartedDateTime = pumpSettings.m_Pump2StartedDateTime
+            m_nupLeadLagtime = pumpSettings.m_nupLeadLagtime
+            m_hourCounterPump1 = pumpSettings.m_hourCounterPump1
+            m_hourCounterPump2 = pumpSettings.m_hourCounterPump2
+            m_nupRitardi = pumpSettings.m_nupRitardi
+            m_chkTestRotation = pumpSettings.m_chkTestRotation
+            m_selectedPositionOnOffSwitch = pumpSettings.m_selectedPositionOnOffSwitch
+            m_selectedPositionPumpSwitch = pumpSettings.m_selectedPositionPumpSwitch
 
             If m_selectedPositionOnOffSwitch = 0 Then
                 For Each ctl In Me.Controls
@@ -140,19 +140,19 @@ Public Class MultiPumpPanel
             m_selectedPositionOnOffSwitch = 0
             m_selectedPositionPumpSwitch = 1
 
-            mySettings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
-            mySettings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
-            mySettings.m_nupLeadLagtime = m_nupLeadLagtime
-            mySettings.m_hourCounterPump1 = m_hourCounterPump1
-            mySettings.m_hourCounterPump2 = m_hourCounterPump2
-            mySettings.m_nupRitardi = m_nupRitardi
-            mySettings.m_chkTestRotation = m_chkTestRotation
-            mySettings.m_selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
-            mySettings.m_selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
+            pumpSettings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+            pumpSettings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+            pumpSettings.m_nupLeadLagtime = m_nupLeadLagtime
+            pumpSettings.m_hourCounterPump1 = m_hourCounterPump1
+            pumpSettings.m_hourCounterPump2 = m_hourCounterPump2
+            pumpSettings.m_nupRitardi = m_nupRitardi
+            pumpSettings.m_chkTestRotation = m_chkTestRotation
+            pumpSettings.m_selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
+            pumpSettings.m_selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
 
 
             Dim fStream As New IO.FileStream(filename, IO.FileMode.OpenOrCreate)
-            bf.Serialize(fStream, mySettings) ' write to file
+            bf.Serialize(fStream, pumpSettings) ' write to file
             fStream.Close()
         End If
 
@@ -854,30 +854,30 @@ Public Class MultiPumpPanel
     End Sub
     Private Sub mySettingsSave()
 
-        If mySettings.m_Pump1StartedDateTime <> #01/01/0001 12:00AM# Then
-            mySettings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
-            mySettings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
-            mySettings.m_nupLeadLagtime = m_nupLeadLagtime
-            mySettings.m_hourCounterPump1 = m_hourCounterPump1
-            mySettings.m_hourCounterPump2 = m_hourCounterPump2
-            mySettings.m_nupRitardi = m_nupRitardi
-            mySettings.m_chkTestRotation = m_chkTestRotation
-            mySettings.m_selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
-            mySettings.m_selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
+        If pumpSettings.m_Pump1StartedDateTime <> #01/01/0001 12:00AM# Then
+            pumpSettings.m_Pump1StartedDateTime = m_Pump1StartedDateTime
+            pumpSettings.m_Pump2StartedDateTime = m_Pump2StartedDateTime
+            pumpSettings.m_nupLeadLagtime = m_nupLeadLagtime
+            pumpSettings.m_hourCounterPump1 = m_hourCounterPump1
+            pumpSettings.m_hourCounterPump2 = m_hourCounterPump2
+            pumpSettings.m_nupRitardi = m_nupRitardi
+            pumpSettings.m_chkTestRotation = m_chkTestRotation
+            pumpSettings.m_selectedPositionOnOffSwitch = m_selectedPositionOnOffSwitch
+            pumpSettings.m_selectedPositionPumpSwitch = m_selectedPositionPumpSwitch
 
 
             Dim bf As New System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
 
             Dim filename As String = Application.LocalUserAppDataPath & "\" & Me.Name & ".mpp"
             Dim fStream As New IO.FileStream(filename, IO.FileMode.OpenOrCreate)
-            bf.Serialize(fStream, mySettings) ' write to file
+            bf.Serialize(fStream, pumpSettings) ' write to file
             fStream.Close()
         End If
     End Sub
 
 End Class
 <Serializable>
-Class Settings
+Class mySettings
     Property m_Pump1StartedDateTime As DateTime
     Property m_Pump2StartedDateTime As DateTime
     Property m_nupLeadLagtime As Integer
